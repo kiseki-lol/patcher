@@ -157,6 +157,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Config.h" />
     <ClInclude Include="Patches.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="RobloxMFCClasses.h" />

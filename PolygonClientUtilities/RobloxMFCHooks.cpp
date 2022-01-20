@@ -1,31 +1,46 @@
 #include "pch.h"
+#include "Config.h"
 #include "RobloxMFCHooks.h"
 
 static HANDLE handle;
 static std::ofstream jobLog;
 
+static bool hasAuthUrlArg = false;
+static bool hasAuthTicketArg = false;
 static bool hasJoinArg = false;
 static bool hasJobId = false;
 
+static std::wstring authenticationUrl;
+static std::wstring authenticationTicket;
 static std::wstring joinScriptUrl;
 static std::string jobId;
 
 // 2010: 0x00452900;
 // 2011: 0x004613C0;
 
-CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)0x00452900;
+CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 {
     if (!CRobloxApp__InitInstance(_this))
         return FALSE;
 
+    if (hasAuthUrlArg && hasAuthTicketArg && !authenticationUrl.empty() && !authenticationTicket.empty())
+    {
+        // TODO: implement this
+    }
+
     if (hasJoinArg && !joinScriptUrl.empty())
     {
         try
         {
+            // TODO: use CApp__CreateGame instead
             CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
             CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
+            
+            // CApp__CreateGame(NULL, L"", L"44340105256");
+            // CApp__RobloxAuthenticate(_this->app, L"http://polygondev.pizzaboxer.xyz/", L"test");
+            // CRobloxApp__CreateDocument(_this);
         }
         catch (std::runtime_error& exception)
         {
@@ -40,7 +55,7 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 // 2010: 0x00450AC0;
 // 2011: 0x0045EE50;
 
-CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)0x00450AC0;
+CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
 
 void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* _this, void*, const char* pszParam, BOOL bFlag, BOOL bLast)
 {
@@ -56,6 +71,26 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         return;
     }
 
+    if (hasAuthUrlArg && authenticationUrl.empty())
+    {
+        int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
+        authenticationUrl.resize(size);
+        MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), &authenticationUrl[0], size);
+
+        CCommandLineInfo__ParseLast(_this, bLast);
+        return;
+    }
+
+    if (hasAuthTicketArg && authenticationTicket.empty())
+    {
+        int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
+        authenticationTicket.resize(size);
+        MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), &authenticationTicket[0], size);
+
+        CCommandLineInfo__ParseLast(_this, bLast);
+        return;
+    }
+
     if (hasJobId && jobId.empty())
     {
         jobId = std::string(pszParam);
@@ -66,6 +101,20 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         handle = CreateFileA("CONOUT$", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
         SetStdHandle(STD_OUTPUT_HANDLE, handle);
 
+        CCommandLineInfo__ParseLast(_this, bLast);
+        return;
+    }
+
+    if (bFlag && _stricmp(pszParam, "a") == 0)
+    {
+        hasAuthUrlArg = true;
+        CCommandLineInfo__ParseLast(_this, bLast);
+        return;
+    }
+
+    if (bFlag && _stricmp(pszParam, "t") == 0)
+    {
+        hasAuthTicketArg = true;
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
@@ -90,7 +139,7 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 // 2010: 0x0059F340;
 // 2011: 0x005B25E0;
 
-StandardOut__print_t StandardOut__print = (StandardOut__print_t)0x0059F340;
+StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARDOUT__PRINT;
 
 void __fastcall StandardOut__print_hook(void* _this, void*, int type, const std::string& message)
 {
