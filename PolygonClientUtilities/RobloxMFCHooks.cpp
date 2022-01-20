@@ -15,9 +15,6 @@ static std::wstring authenticationTicket;
 static std::wstring joinScriptUrl;
 static std::string jobId;
 
-// 2010: 0x00452900;
-// 2011: 0x004613C0;
-
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
@@ -36,7 +33,7 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
         {
             // TODO: use CApp__CreateGame instead
             CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
-            CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
+            // CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
             
             // CApp__CreateGame(NULL, L"", L"44340105256");
             // CApp__RobloxAuthenticate(_this->app, L"http://polygondev.pizzaboxer.xyz/", L"test");
@@ -51,9 +48,6 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 
     return TRUE;
 }
-
-// 2010: 0x00450AC0;
-// 2011: 0x0045EE50;
 
 CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
 
@@ -91,6 +85,7 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         return;
     }
 
+#ifdef ARBITERBUILD
     if (hasJobId && jobId.empty())
     {
         jobId = std::string(pszParam);
@@ -104,6 +99,7 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
+#endif
 
     if (bFlag && _stricmp(pszParam, "a") == 0)
     {
@@ -126,19 +122,19 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         return;
     }
 
+#ifdef ARBITERBUILD
     if (bFlag && _stricmp(pszParam, "jobId") == 0)
     {
         hasJobId = true;
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
+#endif
 
     CRobloxCommandLineInfo__ParseParam(_this, pszParam, bFlag, bLast);
 }
 
-// 2010: 0x0059F340;
-// 2011: 0x005B25E0;
-
+#ifdef ARBITERBUILD
 StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARDOUT__PRINT;
 
 void __fastcall StandardOut__print_hook(void* _this, void*, int type, const std::string& message)
@@ -167,3 +163,4 @@ void __fastcall StandardOut__print_hook(void* _this, void*, int type, const std:
 
     StandardOut__print(_this, type, message);
 }
+#endif
