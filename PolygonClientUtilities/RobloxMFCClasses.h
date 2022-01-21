@@ -1,40 +1,40 @@
 #pragma once
 
 #include "Config.h"
+
 #include <oaidl.h>
 
 class CWorkspace;
 
+// 2010 struct definitions:
+// 0x47E010: CWorkspace->DoExecScript()
+// 0x47EC10: CWorkspace->ExecUrlScript()
+
 const auto CWorkspace__ExecUrlScript = (HRESULT(__stdcall*)(CWorkspace * workspace, LPCWSTR, VARIANTARG, VARIANTARG, VARIANTARG, VARIANTARG, LPVOID))ADDRESS_CWORKSPACE__EXECURLSCRIPT;
 
-class CRobloxDoc
+struct CRobloxDoc
 {
-private:
 	void* padding1[40];
-public:
 	CWorkspace* workspace;
 };
 
-class CApp;
+struct CApp;
 
 const auto CApp__CreateGame = (CWorkspace * (__thiscall*)(CApp * _this, LPCWSTR, LPCWSTR))ADDRESS_CAPP__CREATEGAME;
 const auto CApp__RobloxAuthenticate = (void * (__thiscall*)(CApp * _this, LPCWSTR, LPCWSTR))ADDRESS_CAPP__ROBLOXAUTHENTICATE;
 
-class CRobloxApp
-{
-private:
-	void* padding1[124];
-public:
-	CApp* app;
-};
+struct CRobloxApp;
+
+// 2010 struct definitions:
+// 0x405D20: CRobloxApp->CreateDocument()
+// 0x44F6F0: CRobloxApp->ExitInstance()
+// 0x452900: CRobloxApp->InitInstance()
 
 const auto CRobloxApp__CreateDocument = (CRobloxDoc * (__thiscall*)(CRobloxApp * _this))ADDRESS_CROBLOXAPP__CREATEDOCUMENT;
 
-class CCommandLineInfo
+struct CCommandLineInfo
 {
-private:
 	void* padding1[3];
-public:
 	BOOL m_bRunAutomated;
 };
 

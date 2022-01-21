@@ -1,11 +1,12 @@
 #pragma once
 
-#define MFC2011
+#define MFC2010
 #define ARBITERBUILD
 
 // RobloxApp (2010)
 #ifdef MFC2010
 #define ADDRESS_STANDARDOUT__PRINT                 0x0059F340
+#define ADDRESS_HTTP__TRUSTCHECK                   0x005A2680
 #define ADDRESS_CAPP__CREATEGAME                   0x00405D20
 #define ADDRESS_CAPP__ROBLOXAUTHENTICATE           0x00408060
 #define ADDRESS_CROBLOXAPP__INITINSTANCE           0x00452900

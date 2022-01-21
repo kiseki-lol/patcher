@@ -12,6 +12,11 @@ extern CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam;
 
 void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* _this, void*, const char* pszParam, BOOL bFlag, BOOL bLast);
 
+typedef void(__thiscall* Http__trustCheck_t)(const char* url);
+extern Http__trustCheck_t Http__trustCheck;
+
+BOOL __fastcall Http__trustCheck_hook(const char* url);
+
 #ifdef ARBITERBUILD
 typedef void(__thiscall* StandardOut__print_t)(void* _this, int type, const std::string& message);
 extern StandardOut__print_t StandardOut__print;

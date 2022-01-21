@@ -1,9 +1,11 @@
 #include "pch.h"
 #include "Config.h"
 #include "RobloxMFCHooks.h"
+#include "LUrlParser.h"
 
 static HANDLE handle;
-static std::ofstream jobLog;
+static std::ofstream jobOutputLog;
+static std::ofstream jobHttpLog;
 
 static bool hasAuthUrlArg = false;
 static bool hasAuthTicketArg = false;
@@ -24,7 +26,7 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 
     if (hasAuthUrlArg && hasAuthTicketArg && !authenticationUrl.empty() && !authenticationTicket.empty())
     {
-        // TODO: implement this
+        // TODO: implement this using CApp__RobloxAuthenticate
     }
 
     if (hasJoinArg && !joinScriptUrl.empty())
@@ -33,7 +35,7 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
         {
             // TODO: use CApp__CreateGame instead
             CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
-            // CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
+            CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
             
             // CApp__CreateGame(NULL, L"", L"44340105256");
             // CApp__RobloxAuthenticate(_this->app, L"http://polygondev.pizzaboxer.xyz/", L"test");
@@ -89,7 +91,8 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
     if (hasJobId && jobId.empty())
     {
         jobId = std::string(pszParam);
-        jobLog = std::ofstream(jobId + std::string(".txt"));
+        jobOutputLog = std::ofstream(jobId + std::string("-Output.txt"));
+        jobHttpLog = std::ofstream(jobId + std::string("-Http.txt"));
 
         AllocConsole();
         freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
@@ -134,6 +137,57 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
     CRobloxCommandLineInfo__ParseParam(_this, pszParam, bFlag, bLast);
 }
 
+Http__trustCheck_t Http__trustCheck = (Http__trustCheck_t)ADDRESS_HTTP__TRUSTCHECK;
+
+BOOL __fastcall Http__trustCheck_hook(const char* url)
+{
+    const std::vector<std::string> allowedHosts
+    {
+        "polygon.pizzaboxer.xyz",
+        "polygondev.pizzaboxer.xyz",
+        "polygonapi.pizzaboxer.xyz",
+
+        "roblox.com",
+        "www.roblox.com",
+        "assetdelivery.roblox.com",
+
+        "tadah.rocks",
+        "www.tadah.rocks"
+    };
+
+    const std::vector<std::string> allowedSchemes
+    {
+        "http",
+        "https",
+        "ftp",
+    };
+
+    const std::vector<std::string> allowedEmbeddedSchemes
+    {
+        "javascript",
+        "jscript",
+        "res",
+    };
+
+    LUrlParser::ParseURL parsedUrl = LUrlParser::ParseURL::parseURL(url);
+
+    if (!parsedUrl.isValid()) 
+        return false;
+
+    jobHttpLog << url << std::endl;
+
+    if (std::string("about:blank") == url) 
+        return true;
+
+    if (std::find(allowedSchemes.begin(), allowedSchemes.end(), parsedUrl.scheme_) != allowedSchemes.end())
+        return std::find(allowedHosts.begin(), allowedHosts.end(), parsedUrl.host_) != allowedHosts.end();
+
+    if (std::find(allowedEmbeddedSchemes.begin(), allowedEmbeddedSchemes.end(), parsedUrl.scheme_) != allowedEmbeddedSchemes.end())
+        return true;
+
+    return false;
+}
+
 #ifdef ARBITERBUILD
 StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARDOUT__PRINT;
 
@@ -142,19 +196,19 @@ void __fastcall StandardOut__print_hook(void* _this, void*, int type, const std:
     switch (type)
     {
         case 1: // RBX::MESSAGE_OUTPUT:
-            jobLog << "[RBX::MESSAGE_OUTPUT]     " << message.c_str() << std::endl;
+            jobOutputLog << "[RBX::MESSAGE_OUTPUT]     " << message.c_str() << std::endl;
             SetConsoleTextAttribute(handle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
             break;
         case 0: // RBX::MESSAGE_INFO:
-            jobLog << "[RBX::MESSAGE_INFO]       " << message.c_str() << std::endl;
+            jobOutputLog << "[RBX::MESSAGE_INFO]       " << message.c_str() << std::endl;
             SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
             break;
         case 2: // RBX::MESSAGE_WARNING:
-            jobLog << "[RBX::MESSAGE_WARNING]    " << message.c_str() << std::endl;
+            jobOutputLog << "[RBX::MESSAGE_WARNING]    " << message.c_str() << std::endl;
             SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN);
             break;
         case 3: // RBX::MESSAGE_ERROR:
-            jobLog << "[RBX::MESSAGE_ERROR]      " << message.c_str() << std::endl;
+            jobOutputLog << "[RBX::MESSAGE_ERROR]      " << message.c_str() << std::endl;
             SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
             break;
     }

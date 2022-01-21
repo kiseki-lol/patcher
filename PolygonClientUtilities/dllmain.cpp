@@ -4,6 +4,7 @@
 #include "RobloxMFCHooks.h"
 
 START_PATCH_LIST()
+ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
 #ifdef ADDRESS_CROBLOXAPP__INITINSTANCE
 ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
 #endif
@@ -15,8 +16,11 @@ ADD_PATCH(StandardOut__print, StandardOut__print_hook)
 #endif
 END_PATCH_LIST()
 
-// To be added to game imports
+// DLLs for release will be attached with VMProtect, so this isn't necessary
+// Arbiter will still use Stud_PE for ease in swapping DLLs
+#ifdef ARBITERBUILD
 void __declspec(dllexport) doNothing() {}
+#endif
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
