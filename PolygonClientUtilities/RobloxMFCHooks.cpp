@@ -182,49 +182,41 @@ BOOL __fastcall Http__trustCheck_hook(const char* url)
 #ifdef ARBITERBUILD
 StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARDOUT__PRINT;
 
-void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string& message)
+void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string* message)
 {
     StandardOut__print(_this, type, message);
 
-    // so there's a slight issue here
-    // when the dll is compiled as release, the message's location is sometimes offset by 8 bytes
-    // 
-    // here's when it works properly:
-    // https://media.discordapp.net/attachments/377894067712950275/934077740192235520/x32dbg_U1Y4T8xnev.png
-    // the message pointer location of [EBP+0xC] (0x0019F8DC) and value (0x0019F8E0) have a valid string as seen on the stack
-    //
-    // and here's when it doesn't work properly:
-    // https://cdn.discordapp.com/attachments/377894067712950275/934080068110655568/unknown.png
-    // the pointer location of [EBP+0xC] (0x0019FD2C) just points to nothing (0x04A88C70)
-    // however the pointer location with an actual valid string is just 8 bytes ahead (0x0019FD34)
-    // wtf??
-
-#ifndef NDEBUG
     if (Logger::handle)
     {
+#ifdef NDEBUG
+        int bytePtr = (int)message;
+        bytePtr += 4;
+        std::string* message = (std::string*)bytePtr;
+#endif
+
         switch (type)
         {
         case 1: // RBX::MESSAGE_OUTPUT:
-            // Logger::Log(LogType::Output, std::string("[MESSAGE_OUTPUT]     ") + message);
+            Logger::Log(LogType::Output, std::string("[MESSAGE_OUTPUT]     ") + *message);
             SetConsoleTextAttribute(Logger::handle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
             break;
         case 0: // RBX::MESSAGE_INFO:
-            // Logger::Log(LogType::Output, std::string("[MESSAGE_INFO]       ") + message);
+            Logger::Log(LogType::Output, std::string("[MESSAGE_INFO]       ") + *message);
             SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
             break;
         case 2: // RBX::MESSAGE_WARNING:
-            // Logger::Log(LogType::Output, std::string("[MESSAGE_WARNING]    ") + message);
+            Logger::Log(LogType::Output, std::string("[MESSAGE_WARNING]    ") + *message);
             SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN);
             break;
         case 3: // RBX::MESSAGE_ERROR:
-            // Logger::Log(LogType::Output, std::string("[MESSAGE_ERROR]      ") + message);
+            Logger::Log(LogType::Output, std::string("[MESSAGE_ERROR]      ") + *message);
             SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
             break;
         }
-        printf("%s\n", message.c_str());
+
+        printf("%s\n", message->c_str());
         SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     }
-#endif
 }
 
 // Network__RakNetAddressToString_t Network__RakNetAddressToString = (Network__RakNetAddressToString_t)ADDRESS_NETWORK__RAKNETADDRESSTOSTRING;
