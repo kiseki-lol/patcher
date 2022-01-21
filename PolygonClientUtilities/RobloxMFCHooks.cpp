@@ -1,12 +1,8 @@
 #include "pch.h"
-#include "Config.h"
 #include "RobloxMFCHooks.h"
+#include "Logger.h"
+#include "Config.h"
 #include "LUrlParser.h"
-
-static HANDLE handle;
-static std::ofstream jobOutputLog;
-static std::ofstream jobHttpLog;
-
 static bool hasAuthUrlArg = false;
 static bool hasAuthTicketArg = false;
 static bool hasJoinArg = false;
@@ -91,13 +87,7 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
     if (hasJobId && jobId.empty())
     {
         jobId = std::string(pszParam);
-        jobOutputLog = std::ofstream(jobId + std::string("-Output.txt"));
-        jobHttpLog = std::ofstream(jobId + std::string("-Http.txt"));
-
-        AllocConsole();
-        freopen_s((FILE**)stdout, "CONOUT$", "w", stdout);
-        handle = CreateFileA("CONOUT$", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
-        SetStdHandle(STD_OUTPUT_HANDLE, handle);
+        Logger::Initialize(jobId);
 
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
@@ -174,7 +164,9 @@ BOOL __fastcall Http__trustCheck_hook(const char* url)
     if (!parsedUrl.isValid()) 
         return false;
 
-    jobHttpLog << url << std::endl;
+#ifdef ARBITERBUILD
+    Logger::Log(LogType::Http, url);
+#endif
 
     if (std::string("about:blank") == url) 
         return true;
@@ -196,24 +188,24 @@ void __fastcall StandardOut__print_hook(void* _this, void*, int type, const std:
     switch (type)
     {
         case 1: // RBX::MESSAGE_OUTPUT:
-            jobOutputLog << "[RBX::MESSAGE_OUTPUT]     " << message.c_str() << std::endl;
-            SetConsoleTextAttribute(handle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+            Logger::Log(LogType::Output, std::string("[MESSAGE_OUTPUT]     ") + message);
+            SetConsoleTextAttribute(Logger::handle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
             break;
         case 0: // RBX::MESSAGE_INFO:
-            jobOutputLog << "[RBX::MESSAGE_INFO]       " << message.c_str() << std::endl;
-            SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+            Logger::Log(LogType::Output, std::string("[MESSAGE_INFO]       ") + message);
+            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
             break;
         case 2: // RBX::MESSAGE_WARNING:
-            jobOutputLog << "[RBX::MESSAGE_WARNING]    " << message.c_str() << std::endl;
-            SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN);
+            Logger::Log(LogType::Output, std::string("[MESSAGE_WARNING]    ") + message);
+            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN);
             break;
         case 3: // RBX::MESSAGE_ERROR:
-            jobOutputLog << "[RBX::MESSAGE_ERROR]      " << message.c_str() << std::endl;
-            SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
+            Logger::Log(LogType::Output, std::string("[MESSAGE_ERROR]      ") + message);
+            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
             break;
     }
     printf("%s\n", message.c_str());
-    SetConsoleTextAttribute(handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+    SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 
     StandardOut__print(_this, type, message);
 }
