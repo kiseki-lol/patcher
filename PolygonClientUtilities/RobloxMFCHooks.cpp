@@ -1,13 +1,15 @@
 #include "pch.h"
 #include "RobloxMFCHooks.h"
-#include "Logger.h"
 #include "Config.h"
+#include "Util.h"
+#include "Logger.h"
 #include "LUrlParser.h"
 
 static bool hasAuthUrlArg = false;
 static bool hasAuthTicketArg = false;
 static bool hasJoinArg = false;
 static bool hasJobId = false;
+static bool setJobId = false;
 
 static std::wstring authenticationUrl;
 static std::wstring authenticationTicket;
@@ -19,6 +21,7 @@ static std::string jobId;
 Http__trustCheck_t Http__trustCheck = (Http__trustCheck_t)ADDRESS_HTTP__TRUSTCHECK;
 Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64 = (Crypt__verifySignatureBase64_t)ADDRESS_CRYPT__VERIFYSIGNATUREBASE64;
 #ifdef ARBITERBUILD
+DataModel__getJobId_t DataModel__getJobId = (DataModel__getJobId_t)ADDRESS_DATAMODEL__GETJOBID;
 StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARDOUT__PRINT;
 // Network__RakNetAddressToString_t Network__RakNetAddressToString = (Network__RakNetAddressToString_t)ADDRESS_NETWORK__RAKNETADDRESSTOSTRING;
 #endif
@@ -31,34 +34,6 @@ CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobl
 
 BOOL __fastcall Http__trustCheck_hook(const char* url)
 {
-    const std::vector<std::string> allowedHosts
-    {
-        "polygon.pizzaboxer.xyz",
-        "polygondev.pizzaboxer.xyz",
-        "polygonapi.pizzaboxer.xyz",
-
-        "roblox.com",
-        "www.roblox.com",
-        "assetdelivery.roblox.com",
-
-        "tadah.rocks",
-        "www.tadah.rocks"
-    };
-
-    const std::vector<std::string> allowedSchemes
-    {
-        "http",
-        "https",
-        "ftp",
-    };
-
-    const std::vector<std::string> allowedEmbeddedSchemes
-    {
-        "javascript",
-        "jscript",
-        "res",
-    };
-
     LUrlParser::ParseURL parsedUrl = LUrlParser::ParseURL::parseURL(url);
 
     if (!parsedUrl.isValid())
@@ -71,10 +46,10 @@ BOOL __fastcall Http__trustCheck_hook(const char* url)
     if (std::string("about:blank") == url)
         return true;
 
-    if (std::find(allowedSchemes.begin(), allowedSchemes.end(), parsedUrl.scheme_) != allowedSchemes.end())
-        return std::find(allowedHosts.begin(), allowedHosts.end(), parsedUrl.host_) != allowedHosts.end();
+    if (std::find(Util::allowedSchemes.begin(), Util::allowedSchemes.end(), parsedUrl.scheme_) != Util::allowedSchemes.end())
+        return std::find(Util::allowedHosts.begin(), Util::allowedHosts.end(), parsedUrl.host_) != Util::allowedHosts.end();
 
-    if (std::find(allowedEmbeddedSchemes.begin(), allowedEmbeddedSchemes.end(), parsedUrl.scheme_) != allowedEmbeddedSchemes.end())
+    if (std::find(Util::allowedEmbeddedSchemes.begin(), Util::allowedEmbeddedSchemes.end(), parsedUrl.scheme_) != Util::allowedEmbeddedSchemes.end())
         return true;
 
     return false;
@@ -98,6 +73,28 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, char
 }
 
 #ifdef ARBITERBUILD
+int __fastcall DataModel__getJobId_hook(char* _this, void*, int a2)
+{
+    // this only sets the job id when game.jobId is called by lua
+    // so the gameserver script must call game.jobId at the beginning for this to take effect
+    // also, this only applies to the first datamodel that is created
+
+    if (!setJobId && hasJobId && !jobId.empty())
+    {
+        int jobIdPtr = (int)_this + STRUCTOFFSET_DATAMODEL__JOBID;
+#ifdef NDEBUG
+        jobIdPtr += 4;
+#endif
+
+        std::string* jobIdValue = (std::string*)jobIdPtr;
+        jobIdValue->assign(jobId);
+
+        setJobId = true;
+    }
+
+    return DataModel__getJobId(_this, a2);
+}
+
 void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string* message)
 {
     StandardOut__print(_this, type, message);
@@ -107,11 +104,10 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 #ifdef NDEBUG
         // for some reason, the location of the message pointer is offset 4 bytes when compiled as release
         // i assume doing this is safe? most of the examples ive seen use reinterpret_cast but this seems to work fine
-        int messagePtr = (int)message;
-        messagePtr += 4;
+        int messagePtr = (int)message + 4;
         std::string* message = (std::string*)messagePtr;
-
 #endif
+
         switch (type)
         {
         case 1: // RBX::MESSAGE_OUTPUT:
@@ -131,7 +127,6 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
             SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
             break;
         }
-
         printf("%s\n", message->c_str());
         SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
     }
