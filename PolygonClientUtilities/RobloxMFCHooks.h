@@ -20,10 +20,10 @@ extern Http__trustCheck_t Http__trustCheck;
 BOOL __fastcall Http__trustCheck_hook(const char* url);
 
 #ifdef ARBITERBUILD
-typedef void(__thiscall* StandardOut__print_t)(void* _this, int type, const std::string& message);
+typedef void(__thiscall* StandardOut__print_t)(int _this, int type, std::string& message);
 extern StandardOut__print_t StandardOut__print;
 
-void __fastcall StandardOut__print_hook(void* _this, void*, int type, const std::string& message);
+void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string& message);
 
 // typedef void(__thiscall* Network__RakNetAddressToString_t)(int raknetAddress, bool writePort, char portDelineator);
 // extern Network__RakNetAddressToString_t Network__RakNetAddressToString;
