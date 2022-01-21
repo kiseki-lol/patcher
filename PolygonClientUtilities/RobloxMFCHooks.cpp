@@ -14,9 +14,137 @@ static std::wstring authenticationTicket;
 static std::wstring joinScriptUrl;
 static std::string jobId;
 
+// Functions //
+
+Http__trustCheck_t Http__trustCheck = (Http__trustCheck_t)ADDRESS_HTTP__TRUSTCHECK;
+Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64 = (Crypt__verifySignatureBase64_t)ADDRESS_CRYPT__VERIFYSIGNATUREBASE64;
+#ifdef ARBITERBUILD
+StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARDOUT__PRINT;
+// Network__RakNetAddressToString_t Network__RakNetAddressToString = (Network__RakNetAddressToString_t)ADDRESS_NETWORK__RAKNETADDRESSTOSTRING;
+#endif
 #if defined(MFC2010) || defined(MFC2011)
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
+CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
+#endif
 
+// Hook Definitions //
+
+BOOL __fastcall Http__trustCheck_hook(const char* url)
+{
+    const std::vector<std::string> allowedHosts
+    {
+        "polygon.pizzaboxer.xyz",
+        "polygondev.pizzaboxer.xyz",
+        "polygonapi.pizzaboxer.xyz",
+
+        "roblox.com",
+        "www.roblox.com",
+        "assetdelivery.roblox.com",
+
+        "tadah.rocks",
+        "www.tadah.rocks"
+    };
+
+    const std::vector<std::string> allowedSchemes
+    {
+        "http",
+        "https",
+        "ftp",
+    };
+
+    const std::vector<std::string> allowedEmbeddedSchemes
+    {
+        "javascript",
+        "jscript",
+        "res",
+    };
+
+    LUrlParser::ParseURL parsedUrl = LUrlParser::ParseURL::parseURL(url);
+
+    if (!parsedUrl.isValid())
+        return false;
+
+#ifdef ARBITERBUILD
+    Logger::Log(LogType::Http, url);
+#endif
+
+    if (std::string("about:blank") == url)
+        return true;
+
+    if (std::find(allowedSchemes.begin(), allowedSchemes.end(), parsedUrl.scheme_) != allowedSchemes.end())
+        return std::find(allowedHosts.begin(), allowedHosts.end(), parsedUrl.host_) != allowedHosts.end();
+
+    if (std::find(allowedEmbeddedSchemes.begin(), allowedEmbeddedSchemes.end(), parsedUrl.scheme_) != allowedEmbeddedSchemes.end())
+        return true;
+
+    return false;
+}
+
+void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, char a2, int a3, int a4, int a5, int a6, int a7, int a8, char a9, int a10, int a11, int a12, int a13, int a14, int a15)
+{
+    // the actual function signature is (HCRYPTPROV* _this, std::string message, std::string signatureBase64)
+    // but for some reason it throws a memory access violation when you pass the parameters back into the function, without even modifying them
+    // each char represents the beginning of new std::string (with the int parameters, that totalls to a length of 24 bytes)
+    // the signature length is stored in a14 though so we can just use that
+
+    if (a14 > 1024)
+    {
+        std::ostringstream error;
+        error << "Signature too large.  " << a14 << " > 1024";
+        throw std::runtime_error(error.str());
+    }
+
+    Crypt__verifySignatureBase64(_this, a2, a3, a4, a5, a6, a7, a8, a9, a10, a11, a12, a13, a14, a15);
+}
+
+#ifdef ARBITERBUILD
+void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string* message)
+{
+    StandardOut__print(_this, type, message);
+
+    if (Logger::handle)
+    {
+#ifdef NDEBUG
+        // for some reason, the location of the message pointer is offset 4 bytes when compiled as release
+        // i assume doing this is safe? most of the examples ive seen use reinterpret_cast but this seems to work fine
+        int messagePtr = (int)message;
+        messagePtr += 4;
+        std::string* message = (std::string*)messagePtr;
+
+#endif
+        switch (type)
+        {
+        case 1: // RBX::MESSAGE_OUTPUT:
+            Logger::Log(LogType::Output, std::string("[MESSAGE_OUTPUT]     ") + *message);
+            SetConsoleTextAttribute(Logger::handle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+            break;
+        case 0: // RBX::MESSAGE_INFO:
+            Logger::Log(LogType::Output, std::string("[MESSAGE_INFO]       ") + *message);
+            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+            break;
+        case 2: // RBX::MESSAGE_WARNING:
+            Logger::Log(LogType::Output, std::string("[MESSAGE_WARNING]    ") + *message);
+            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN);
+            break;
+        case 3: // RBX::MESSAGE_ERROR:
+            Logger::Log(LogType::Output, std::string("[MESSAGE_ERROR]      ") + *message);
+            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
+            break;
+        }
+
+        printf("%s\n", message->c_str());
+        SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+    }
+}
+
+// std::string __fastcall Network__RakNetAddressToString_hook(int raknetAddress, bool writePort, char portDelineator)
+// {
+//    Network__RakNetAddressToString(raknetAddress, writePort, portDelineator);
+//    return std::string("hi");
+// }
+#endif
+
+#if defined(MFC2010) || defined(MFC2011)
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 {
     if (!CRobloxApp__InitInstance(_this))
@@ -44,8 +172,6 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 
     return TRUE;
 }
-
-CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
 
 void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* _this, void*, const char* pszParam, BOOL bFlag, BOOL bLast)
 {
@@ -124,106 +250,4 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 
     CRobloxCommandLineInfo__ParseParam(_this, pszParam, bFlag, bLast);
 }
-#endif
-
-Http__trustCheck_t Http__trustCheck = (Http__trustCheck_t)ADDRESS_HTTP__TRUSTCHECK;
-
-BOOL __fastcall Http__trustCheck_hook(const char* url)
-{
-    const std::vector<std::string> allowedHosts
-    {
-        "polygon.pizzaboxer.xyz",
-        "polygondev.pizzaboxer.xyz",
-        "polygonapi.pizzaboxer.xyz",
-
-        "roblox.com",
-        "www.roblox.com",
-        "assetdelivery.roblox.com",
-
-        "tadah.rocks",
-        "www.tadah.rocks"
-    };
-
-    const std::vector<std::string> allowedSchemes
-    {
-        "http",
-        "https",
-        "ftp",
-    };
-
-    const std::vector<std::string> allowedEmbeddedSchemes
-    {
-        "javascript",
-        "jscript",
-        "res",
-    };
-
-    LUrlParser::ParseURL parsedUrl = LUrlParser::ParseURL::parseURL(url);
-
-    if (!parsedUrl.isValid()) 
-        return false;
-
-#ifdef ARBITERBUILD
-    Logger::Log(LogType::Http, url);
-#endif
-
-    if (std::string("about:blank") == url) 
-        return true;
-
-    if (std::find(allowedSchemes.begin(), allowedSchemes.end(), parsedUrl.scheme_) != allowedSchemes.end())
-        return std::find(allowedHosts.begin(), allowedHosts.end(), parsedUrl.host_) != allowedHosts.end();
-
-    if (std::find(allowedEmbeddedSchemes.begin(), allowedEmbeddedSchemes.end(), parsedUrl.scheme_) != allowedEmbeddedSchemes.end())
-        return true;
-
-    return false;
-}
-
-#ifdef ARBITERBUILD
-StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARDOUT__PRINT;
-
-void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string* message)
-{
-    StandardOut__print(_this, type, message);
-
-    if (Logger::handle)
-    {
-#ifdef NDEBUG
-        int bytePtr = (int)message;
-        bytePtr += 4;
-        std::string* message = (std::string*)bytePtr;
-#endif
-
-        switch (type)
-        {
-        case 1: // RBX::MESSAGE_OUTPUT:
-            Logger::Log(LogType::Output, std::string("[MESSAGE_OUTPUT]     ") + *message);
-            SetConsoleTextAttribute(Logger::handle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-            break;
-        case 0: // RBX::MESSAGE_INFO:
-            Logger::Log(LogType::Output, std::string("[MESSAGE_INFO]       ") + *message);
-            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-            break;
-        case 2: // RBX::MESSAGE_WARNING:
-            Logger::Log(LogType::Output, std::string("[MESSAGE_WARNING]    ") + *message);
-            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN);
-            break;
-        case 3: // RBX::MESSAGE_ERROR:
-            Logger::Log(LogType::Output, std::string("[MESSAGE_ERROR]      ") + *message);
-            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
-            break;
-        }
-
-        printf("%s\n", message->c_str());
-        SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-    }
-}
-
-// Network__RakNetAddressToString_t Network__RakNetAddressToString = (Network__RakNetAddressToString_t)ADDRESS_NETWORK__RAKNETADDRESSTOSTRING;
-
-// std::string __fastcall Network__RakNetAddressToString_hook(int raknetAddress, bool writePort, char portDelineator)
-// {
-//    Network__RakNetAddressToString(raknetAddress, writePort, portDelineator);
-//    return std::string("hi");
-// }
 #endif

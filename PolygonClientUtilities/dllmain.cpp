@@ -5,13 +5,14 @@
 
 START_PATCH_LIST()
 ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
-#ifdef ARBITERBUILD
-ADD_PATCH(StandardOut__print, StandardOut__print_hook)
-// ADD_PATCH(Network__RakNetAddressToString, Network__RakNetAddressToString_hook)
-#endif
+ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)
 #if defined(MFC2010) || defined(MFC2011)
 ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
 ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
+#endif
+#ifdef ARBITERBUILD
+ADD_PATCH(StandardOut__print, StandardOut__print_hook)
+// ADD_PATCH(Network__RakNetAddressToString, Network__RakNetAddressToString_hook)
 #endif
 END_PATCH_LIST()
 
