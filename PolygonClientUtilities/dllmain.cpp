@@ -5,19 +5,18 @@
 
 START_PATCH_LIST()
 ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
-#ifdef ADDRESS_CROBLOXAPP__INITINSTANCE
-ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
-#endif
-#ifdef ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM
-ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
-#endif
 #ifdef ARBITERBUILD
 ADD_PATCH(StandardOut__print, StandardOut__print_hook)
+// ADD_PATCH(Network__RakNetAddressToString, Network__RakNetAddressToString_hook)
+#endif
+#if defined(MFC2010) || defined(MFC2011)
+ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
+ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
 #endif
 END_PATCH_LIST()
 
-// DLLs for release will be attached with VMProtect, so this isn't necessary
-// Arbiter will still use Stud_PE for ease in swapping DLLs
+// DLLs for release will be loaded with VMProtect, so this isn't necessary
+// Arbiter will still use Stud_PE for ease in swapping DLLs however
 #ifdef ARBITERBUILD
 void __declspec(dllexport) doNothing() {}
 #endif

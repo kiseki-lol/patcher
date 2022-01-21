@@ -4,6 +4,7 @@
 
 #include <oaidl.h>
 
+#if defined(MFC2010) || defined(MFC2011)
 class CWorkspace;
 
 // 2010 struct definitions:
@@ -41,3 +42,4 @@ struct CCommandLineInfo
 class CRobloxCommandLineInfo : public CCommandLineInfo {};
 
 const auto CCommandLineInfo__ParseLast = (void(__thiscall*)(CCommandLineInfo * _this, BOOL bLast))ADDRESS_CCOMMANDLINEINFO__PARSELAST;
+#endif

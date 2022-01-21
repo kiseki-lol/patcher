@@ -3,6 +3,7 @@
 #include "Logger.h"
 #include "Config.h"
 #include "LUrlParser.h"
+
 static bool hasAuthUrlArg = false;
 static bool hasAuthTicketArg = false;
 static bool hasJoinArg = false;
@@ -13,6 +14,7 @@ static std::wstring authenticationTicket;
 static std::wstring joinScriptUrl;
 static std::string jobId;
 
+#if defined(MFC2010) || defined(MFC2011)
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
@@ -32,10 +34,6 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
             // TODO: use CApp__CreateGame instead
             CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
             CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
-            
-            // CApp__CreateGame(NULL, L"", L"44340105256");
-            // CApp__RobloxAuthenticate(_this->app, L"http://polygondev.pizzaboxer.xyz/", L"test");
-            // CRobloxApp__CreateDocument(_this);
         }
         catch (std::runtime_error& exception)
         {
@@ -126,6 +124,7 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 
     CRobloxCommandLineInfo__ParseParam(_this, pszParam, bFlag, bLast);
 }
+#endif
 
 Http__trustCheck_t Http__trustCheck = (Http__trustCheck_t)ADDRESS_HTTP__TRUSTCHECK;
 
@@ -185,6 +184,8 @@ StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARD
 
 void __fastcall StandardOut__print_hook(void* _this, void*, int type, const std::string& message)
 {
+    if (!Logger::handle) return;
+
     switch (type)
     {
         case 1: // RBX::MESSAGE_OUTPUT:
@@ -209,4 +210,12 @@ void __fastcall StandardOut__print_hook(void* _this, void*, int type, const std:
 
     StandardOut__print(_this, type, message);
 }
+
+// Network__RakNetAddressToString_t Network__RakNetAddressToString = (Network__RakNetAddressToString_t)ADDRESS_NETWORK__RAKNETADDRESSTOSTRING;
+
+// std::string __fastcall Network__RakNetAddressToString_hook(int raknetAddress, bool writePort, char portDelineator)
+// {
+//    Network__RakNetAddressToString(raknetAddress, writePort, portDelineator);
+//    return std::string("hi");
+// }
 #endif
