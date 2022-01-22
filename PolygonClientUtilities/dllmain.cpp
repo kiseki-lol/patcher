@@ -13,8 +13,6 @@ ADD_PATCH(StandardOut__print, StandardOut__print_hook)
 #endif
 #if defined(MFC2010) || defined(MFC2011)
 // ADD_PATCH(CApp__CreateGame, CApp__CreateGame_hook)
-ADD_PATCH(CRobloxApp__CreateDocument, CRobloxApp__CreateDocument_hook)
-ADD_PATCH(CWorkspace__ExecUrlScript, CWorkspace__ExecUrlScript_hook)
 ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
 ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
 #endif

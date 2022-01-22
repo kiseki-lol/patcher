@@ -15,8 +15,6 @@ typedef void(__thiscall* StandardOut__print_t)(int _this, int type, std::string*
 #endif
 #if defined(MFC2010) || defined(MFC2011)
 // typedef INT(__thiscall* CApp__CreateGame_t)(CApp* _this, int a2, LPCWSTR a3);
-typedef void(__thiscall* CWorkspace__ExecUrlScript_t)(CWorkspace* workspace, LPCWSTR url, VARIANTARG arg1, VARIANTARG arg2, VARIANTARG arg3, VARIANTARG arg4, LPVOID voidptr);
-typedef CRobloxDoc*(__thiscall* CRobloxApp__CreateDocument_t)(CRobloxApp* _this);
 typedef BOOL(__thiscall* CRobloxApp__InitInstance_t)(CRobloxApp* _this);
 typedef void(__thiscall* CRobloxCommandLineInfo__ParseParam_t)(CRobloxCommandLineInfo* _this, const char* pszParam, BOOL bFlag, BOOL bLast);
 #endif
@@ -32,8 +30,6 @@ extern StandardOut__print_t StandardOut__print;
 #endif
 #if defined(MFC2010) || defined(MFC2011)
 // extern CApp__CreateGame_t CApp__CreateGame;
-extern CWorkspace__ExecUrlScript_t CWorkspace__ExecUrlScript;
-extern CRobloxApp__CreateDocument_t CRobloxApp__CreateDocument;
 extern CRobloxApp__InitInstance_t CRobloxApp__InitInstance;
 extern CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam;
 #endif
@@ -49,8 +45,6 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 #endif
 #if defined(MFC2010) || defined(MFC2011)
 // INT  __fastcall CApp__CreateGame_hook(CApp* _this, void*, int a2, LPCWSTR a3);
-void  __fastcall CWorkspace__ExecUrlScript_hook(CWorkspace* _this, void*, LPCWSTR url, VARIANTARG arg1, VARIANTARG arg2, VARIANTARG arg3, VARIANTARG arg4, LPVOID voidptr);
-CRobloxDoc* __fastcall CRobloxApp__CreateDocument_hook(CRobloxApp* _this);
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this);
 void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* _this, void*, const char* pszParam, BOOL bFlag, BOOL bLast);
 #endif
