@@ -4,6 +4,14 @@
 
 #include <oaidl.h>
 
+/* struct DataModel
+{
+	void* padding1[CLASSPADDING_DATAMODEL__JOBID];
+	std::string* jobId;
+}; */
+
+class DataModel;
+
 #if defined(MFC2010) || defined(MFC2011)
 class CWorkspace;
 
@@ -15,15 +23,12 @@ const auto CWorkspace__ExecUrlScript = (HRESULT(__stdcall*)(CWorkspace * workspa
 
 struct CRobloxDoc
 {
-	void* padding1[40];
+	void* padding1[CLASSPADDING_CROBLOXDOC__WORKSPACE];
 	CWorkspace* workspace;
 };
 
 // padding1[4] = offset of 0x10
-// padding1[40] = offset of 0xA0 (160)
-// possible options
-// padding1[46] = offset of 0xB8
-// padding1[84] = offset of 0x150
+// padding1[40] = offset of 0xA0
 struct CApp;
 
 // const auto CApp__CreateGame = (CWorkspace * (__thiscall*)(CApp * _this, void*, int, LPCWSTR))ADDRESS_CAPP__CREATEGAME;

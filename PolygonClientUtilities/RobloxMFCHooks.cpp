@@ -74,7 +74,7 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, char
 }
 
 #ifdef ARBITERBUILD
-int __fastcall DataModel__getJobId_hook(char* _this, void*, int a2)
+int __fastcall DataModel__getJobId_hook(DataModel* _this, void*, int a2)
 {
     // this only sets the job id when game.jobId is called by lua
     // so the gameserver script must call game.jobId at the beginning for this to take effect
@@ -87,8 +87,7 @@ int __fastcall DataModel__getJobId_hook(char* _this, void*, int a2)
         jobIdPtr += 4;
 #endif
 
-        std::string* jobIdValue = (std::string*)jobIdPtr;
-        jobIdValue->assign(jobId);
+        ((std::string*)jobIdPtr)->assign(jobId);
 
         setJobId = true;
     }

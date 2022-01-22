@@ -3,10 +3,20 @@
 #define MFC2010
 #define ARBITERBUILD
 
+// when ARBITERBUILD is defined, the following changes occur:
+// DataModel->getJobId is hooked
+// StandardOut->print is hooked
+// Network::RakNetAddressToString is hooked
+// -jobId arg becomes available
+// HTTP requests and output messages are logged to a file
+
 // RobloxApp (2010)
 #ifdef MFC2010
 #define CLASSLOCATION_CROBLOXAPP                   0x00BFF898
 #define CLASSLOCATION_CAPP                         0x00405D20
+
+#define CLASSPADDING_CROBLOXDOC__WORKSPACE         40
+#define CLASSPADDING_DATAMODEL__JOBID              730
 
 #define STRUCTOFFSET_DATAMODEL__JOBID              2912      
 
@@ -28,6 +38,8 @@
 #ifdef MFC2011
 #define CLASSLOCATION_CROBLOXAPP                   0x00CBA8A0
 #define CLASSLOCATION_CAPP                         0x00406D80
+
+#define CLASSPADDING_CROBLOXDOC__WORKSPACE         45
 
 #define STRUCTOFFSET_DATAMODEL__JOBID              2956      
 
