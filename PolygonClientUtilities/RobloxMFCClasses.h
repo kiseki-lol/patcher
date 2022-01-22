@@ -11,7 +11,7 @@ class CWorkspace;
 // 0x47E010: CWorkspace->DoExecScript()
 // 0x47EC10: CWorkspace->ExecUrlScript()
 
-const auto CWorkspace__ExecUrlScript = (HRESULT(__stdcall*)(CWorkspace * workspace, LPCWSTR, VARIANTARG, VARIANTARG, VARIANTARG, VARIANTARG, LPVOID))ADDRESS_CWORKSPACE__EXECURLSCRIPT;
+// const auto CWorkspace__ExecUrlScript = (HRESULT(__stdcall*)(CWorkspace * workspace, LPCWSTR, VARIANTARG, VARIANTARG, VARIANTARG, VARIANTARG, LPVOID))ADDRESS_CWORKSPACE__EXECURLSCRIPT;
 
 struct CRobloxDoc
 {
@@ -21,10 +21,12 @@ struct CRobloxDoc
 
 // padding1[4] = offset of 0x10
 // padding1[40] = offset of 0xA0
-
+// possible options
+// padding1[46] = offset of 0xB8
+// padding1[84] = offset of 0x150
 struct CApp;
 
-// const auto CApp__CreateGame = (CWorkspace * (__thiscall*)(CApp * _this, LPCWSTR, LPCWSTR))ADDRESS_CAPP__CREATEGAME;
+// const auto CApp__CreateGame = (CWorkspace * (__thiscall*)(CApp * _this, void*, int, LPCWSTR))ADDRESS_CAPP__CREATEGAME;
 const auto CApp__RobloxAuthenticate = (void * (__thiscall*)(CApp * _this, void*, LPCWSTR, LPCWSTR))ADDRESS_CAPP__ROBLOXAUTHENTICATE;
 
 struct CRobloxApp;
@@ -34,7 +36,7 @@ struct CRobloxApp;
 // 0x44F6F0: CRobloxApp->ExitInstance()
 // 0x452900: CRobloxApp->InitInstance()
 
-const auto CRobloxApp__CreateDocument = (CRobloxDoc * (__thiscall*)(CRobloxApp * _this))ADDRESS_CROBLOXAPP__CREATEDOCUMENT;
+// const auto CRobloxApp__CreateDocument = (CRobloxDoc * (__thiscall*)(CRobloxApp * _this))ADDRESS_CROBLOXAPP__CREATEDOCUMENT;
 
 struct CCommandLineInfo
 {

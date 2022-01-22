@@ -26,7 +26,9 @@ StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARD
 // Network__RakNetAddressToString_t Network__RakNetAddressToString = (Network__RakNetAddressToString_t)ADDRESS_NETWORK__RAKNETADDRESSTOSTRING;
 #endif
 #if defined(MFC2010) || defined(MFC2011)
-CApp__CreateGame_t CApp__CreateGame = (CApp__CreateGame_t)ADDRESS_CAPP__CREATEGAME;
+// CApp__CreateGame_t CApp__CreateGame = (CApp__CreateGame_t)ADDRESS_CAPP__CREATEGAME;
+CWorkspace__ExecUrlScript_t CWorkspace__ExecUrlScript = (CWorkspace__ExecUrlScript_t)ADDRESS_CWORKSPACE__EXECURLSCRIPT;
+CRobloxApp__CreateDocument_t CRobloxApp__CreateDocument = (CRobloxApp__CreateDocument_t)ADDRESS_CROBLOXAPP__CREATEDOCUMENT;
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
 #endif
@@ -141,13 +143,28 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 #endif
 
 #if defined(MFC2010) || defined(MFC2011)
-INT __fastcall CApp__CreateGame_hook(CApp* _this, void*, int a2, int* a3)
+/* INT __fastcall CApp__CreateGame_hook(CApp* _this, void*, int a2, LPCWSTR a3)
 {
-    printf("\n");
-    printf("Pointer location of CApp: %p\n", &_this);
-    printf("Pointer value of CApp: %p\n", _this);
-    // CApp__RobloxAuthenticate(_this, NULL, L"http://polygondev.pizzaboxer.xyz/login/negotiate.ashx", L"0");
     return CApp__CreateGame(_this, a2, a3);
+} */
+
+void __fastcall CWorkspace__ExecUrlScript_hook(CWorkspace* workspace, void*, LPCWSTR url, VARIANTARG arg1, VARIANTARG arg2, VARIANTARG arg3, VARIANTARG arg4, LPVOID voidptr)
+{
+    printf("CWorkspace::ExecUrlScript called\n");
+    CWorkspace__ExecUrlScript(workspace, url, arg1, arg2, arg3, arg4, voidptr);
+    printf("Pointer location of CWorkspace: %p\n", &workspace);
+    printf("Pointer value of CWorkspace: %p\n", workspace);
+    printf("\n");
+}
+
+CRobloxDoc* __fastcall CRobloxApp__CreateDocument_hook(CRobloxApp* _this)
+{
+    printf("CRobloxApp::CreateDocument called\n");
+    CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
+    printf("Pointer location of CRobloxDoc: %p\n", &document);
+    printf("Pointer value of CRobloxDoc: %p\n", document);
+    printf("\n");
+    return document;
 }
 
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
@@ -162,21 +179,23 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
         CApp__RobloxAuthenticate(app, NULL, authenticationUrl.c_str(), authenticationTicket.c_str());
     }
 
-    // printf("Pointer location of CRobloxApp: %p\n", &_this);
-    // printf("Pointer value of CRobloxApp: %p\n", _this);
-    // printf("Pointer location of CRobloxDoc: %p\n", document);
-    // printf("Pointer location of CWorkspace: %p\n", &document->workspace);
-
-    // printf("Pointer location of CApp: %p\n", &app);
-    // printf("Pointer value of CApp: %p\n", app);
-
     if (hasJoinArg && !joinScriptUrl.empty())
     {
         try
         {
             // TODO: use CApp__CreateGame instead
-            CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
-            CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
+            CRobloxDoc* document = CRobloxApp__CreateDocument_hook(_this);
+            CWorkspace* workspace = document->workspace;
+
+            // CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
+            CWorkspace__ExecUrlScript_hook(workspace, nullptr, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
+            
+            printf("InitInstance - Pointer location of CRobloxDoc: %p\n", &document);
+            printf("InitInstance - Pointer value of CRobloxDoc: %p\n", document);
+            printf("\n");
+            printf("InitInstance - Pointer location of CWorkspace: %p\n", &workspace);
+            printf("InitInstance - Pointer value of CWorkspace: %p\n", workspace);
+            printf("\n");
         }
         catch (std::runtime_error& exception)
         {
