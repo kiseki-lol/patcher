@@ -26,6 +26,7 @@ StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARD
 // Network__RakNetAddressToString_t Network__RakNetAddressToString = (Network__RakNetAddressToString_t)ADDRESS_NETWORK__RAKNETADDRESSTOSTRING;
 #endif
 #if defined(MFC2010) || defined(MFC2011)
+CApp__CreateGame_t CApp__CreateGame = (CApp__CreateGame_t)ADDRESS_CAPP__CREATEGAME;
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
 #endif
@@ -140,15 +141,34 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 #endif
 
 #if defined(MFC2010) || defined(MFC2011)
+INT __fastcall CApp__CreateGame_hook(CApp* _this, void*, int a2, int* a3)
+{
+    printf("\n");
+    printf("Pointer location of CApp: %p\n", &_this);
+    printf("Pointer value of CApp: %p\n", _this);
+    // CApp__RobloxAuthenticate(_this, NULL, L"http://polygondev.pizzaboxer.xyz/login/negotiate.ashx", L"0");
+    return CApp__CreateGame(_this, a2, a3);
+}
+
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 {
     if (!CRobloxApp__InitInstance(_this))
         return FALSE;
 
+    CApp* app = reinterpret_cast<CApp*>(CLASSLOCATION_CAPP);
+
     if (hasAuthUrlArg && hasAuthTicketArg && !authenticationUrl.empty() && !authenticationTicket.empty())
     {
-        // TODO: implement this using CApp__RobloxAuthenticate
+        CApp__RobloxAuthenticate(app, NULL, authenticationUrl.c_str(), authenticationTicket.c_str());
     }
+
+    // printf("Pointer location of CRobloxApp: %p\n", &_this);
+    // printf("Pointer value of CRobloxApp: %p\n", _this);
+    // printf("Pointer location of CRobloxDoc: %p\n", document);
+    // printf("Pointer location of CWorkspace: %p\n", &document->workspace);
+
+    // printf("Pointer location of CApp: %p\n", &app);
+    // printf("Pointer value of CApp: %p\n", app);
 
     if (hasJoinArg && !joinScriptUrl.empty())
     {
@@ -205,6 +225,8 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 #ifdef ARBITERBUILD
     if (hasJobId && jobId.empty())
     {
+        // command line args are parsed AFTER CRobloxApp::InitInstance is run, so the logger will too be initialized after
+
         jobId = std::string(pszParam);
         Logger::Initialize(jobId);
 

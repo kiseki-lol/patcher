@@ -19,10 +19,13 @@ struct CRobloxDoc
 	CWorkspace* workspace;
 };
 
+// padding1[4] = offset of 0x10
+// padding1[40] = offset of 0xA0
+
 struct CApp;
 
-const auto CApp__CreateGame = (CWorkspace * (__thiscall*)(CApp * _this, LPCWSTR, LPCWSTR))ADDRESS_CAPP__CREATEGAME;
-const auto CApp__RobloxAuthenticate = (void * (__thiscall*)(CApp * _this, LPCWSTR, LPCWSTR))ADDRESS_CAPP__ROBLOXAUTHENTICATE;
+// const auto CApp__CreateGame = (CWorkspace * (__thiscall*)(CApp * _this, LPCWSTR, LPCWSTR))ADDRESS_CAPP__CREATEGAME;
+const auto CApp__RobloxAuthenticate = (void * (__thiscall*)(CApp * _this, void*, LPCWSTR, LPCWSTR))ADDRESS_CAPP__ROBLOXAUTHENTICATE;
 
 struct CRobloxApp;
 
