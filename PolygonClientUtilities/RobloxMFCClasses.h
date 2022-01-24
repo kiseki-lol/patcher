@@ -4,13 +4,13 @@
 
 #include <oaidl.h>
 
-/* struct DataModel
+struct DataModel
 {
 	void* padding1[CLASSPADDING_DATAMODEL__JOBID];
-	std::string* jobId;
-}; */
+	std::string jobId;
+};
 
-class DataModel;
+// class DataModel;
 
 #if defined(MFC2010) || defined(MFC2011)
 class CWorkspace;

@@ -82,13 +82,7 @@ int __fastcall DataModel__getJobId_hook(DataModel* _this, void*, int a2)
 
     if (!setJobId && hasJobId && !jobId.empty())
     {
-        int jobIdPtr = (int)_this + STRUCTOFFSET_DATAMODEL__JOBID;
-#ifdef NDEBUG
-        jobIdPtr += 4;
-#endif
-
-        ((std::string*)jobIdPtr)->assign(jobId);
-
+        _this->jobId = jobId;
         setJobId = true;
     }
 
@@ -102,10 +96,9 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
     if (Logger::handle)
     {
 #ifdef NDEBUG
-        // for some reason, the location of the message pointer is offset 4 bytes when compiled as release
-        // i assume doing this is safe? most of the examples ive seen use reinterpret_cast but this seems to work fine
+        // i have absolutely no clue why but the location of the message pointer is offset 4 bytes when the dll compiled as release
         int messagePtr = (int)message + 4;
-        std::string* message = (std::string*)messagePtr;
+        std::string* message = reinterpret_cast<std::string*>(messagePtr);
 #endif
 
         switch (type)
@@ -132,10 +125,9 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
     }
 }
 
-// std::string __fastcall Network__RakNetAddressToString_hook(int raknetAddress, bool writePort, char portDelineator)
+// std::string __fastcall Network__RakNetAddressToString_hook(const int raknetAddress, char portDelineator)
 // {
-//    Network__RakNetAddressToString(raknetAddress, writePort, portDelineator);
-//    return std::string("hi");
+//     return Network__RakNetAddressToString(raknetAddress, portDelineator);
 // }
 #endif
 
@@ -163,6 +155,13 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
         {
             // TODO: use CApp__CreateGame instead
             CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
+
+            printf("address of document: %p\n", document);
+            printf("\n");
+            printf("address of &document->workspace: %p\n", &document->workspace);
+            printf("address of document->workspace: %p\n", document->workspace);
+            printf("\n");
+
             CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
         }
         catch (std::runtime_error& exception)

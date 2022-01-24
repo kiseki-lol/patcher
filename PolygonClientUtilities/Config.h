@@ -16,9 +16,9 @@
 #define CLASSLOCATION_CAPP                         0x00405D20
 
 #define CLASSPADDING_CROBLOXDOC__WORKSPACE         40
-#define CLASSPADDING_DATAMODEL__JOBID              730
+#define CLASSPADDING_DATAMODEL__JOBID              729 // when compiled as debug, this must be 728
 
-#define STRUCTOFFSET_DATAMODEL__JOBID              2912      
+// #define STRUCTOFFSET_DATAMODEL__JOBID              2912      
 
 #define ADDRESS_DATAMODEL__GETJOBID                0x005CACC0
 #define ADDRESS_STANDARDOUT__PRINT                 0x0059F340
@@ -40,8 +40,9 @@
 #define CLASSLOCATION_CAPP                         0x00406D80
 
 #define CLASSPADDING_CROBLOXDOC__WORKSPACE         45
+#define CLASSPADDING_DATAMODEL__JOBID              740 // when compiled as debug, this must be 739
 
-#define STRUCTOFFSET_DATAMODEL__JOBID              2956      
+// #define STRUCTOFFSET_DATAMODEL__JOBID              2956      
 
 #define ADDRESS_DATAMODEL__GETJOBID                0x005E70C0
 #define ADDRESS_STANDARDOUT__PRINT                 0x005B25E0
@@ -56,3 +57,35 @@
 #define ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM 0x0045EE50
 #define ADDRESS_CCOMMANDLINEINFO__PARSELAST        0x0081354A
 #endif
+
+
+// RakNet definitions
+// these are extracted from the 2016 source, but they're probably shifted 2 up compared to 2010 and 2011
+// some of these probably dont even exist in 2010 and 2011
+// i'll check later
+
+#define ID_TEACH_DESCRIPTOR_DICTIONARIES 130
+#define ID_DATA 131
+#define ID_REQUEST_MARKER 132
+#define ID_PHYSICS 133
+#define ID_PHYSICS_TOUCHES 134
+#define ID_CHAT_ALL 135
+#define ID_CHAT_TEAM 136
+#define ID_REPORT_ABUSE 137
+#define ID_SUBMIT_TICKET 138
+#define ID_CHAT_GAME 139
+#define ID_CHAT_PLAYER 140
+#define ID_CLUSTER 141
+#define ID_PROTOCAL_MISMATCH 142
+#define ID_SPAWN_NAME 143
+#define ID_PROTOCOL_SYNC 144
+#define ID_SCHEMA_SYNC 145
+#define ID_PLACEID_VERIFICATION 146
+#define ID_DICTIONARY_FORMAT 147
+#define ID_HASH_MISMATCH 148
+#define ID_SECURITYKEY_MISMATCH  149
+#define ID_REQUEST_STATS 150
+
+#define RR_STOP_PROCESSING_AND_DEALLOCATE 0
+#define RR_CONTINUE_PROCESSING 1
+#define RR_STOP_PROCESSING 2

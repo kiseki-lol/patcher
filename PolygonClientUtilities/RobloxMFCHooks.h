@@ -9,7 +9,7 @@ typedef void(__thiscall* Crypt__verifySignatureBase64_t)(HCRYPTPROV* _this, char
 #ifdef ARBITERBUILD
 typedef INT(__thiscall* DataModel__getJobId_t)(DataModel* _this, int a2);
 typedef void(__thiscall* StandardOut__print_t)(int _this, int type, std::string* message);
-// typedef void(__thiscall* Network__RakNetAddressToString_t)(int raknetAddress, bool writePort, char portDelineator);
+// typedef std::string(__thiscall* Network__RakNetAddressToString_t)(const int raknetAddress, char portDelineator);
 #endif
 #if defined(MFC2010) || defined(MFC2011)
 // typedef INT(__thiscall* CApp__CreateGame_t)(CApp* _this, int a2, LPCWSTR a3);
@@ -39,7 +39,7 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, char
 #ifdef ARBITERBUILD
 INT  __fastcall DataModel__getJobId_hook(DataModel* _this, void*, int a2);
 void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string* message);
-// std::string __fastcall Network__RakNetAddressToString_hook(int raknetAddress, bool writePort, char portDelineator);
+// std::string  __fastcall Network__RakNetAddressToString_hook(const int raknetAddress, char portDelineator);
 #endif
 #if defined(MFC2010) || defined(MFC2011)
 // INT  __fastcall CApp__CreateGame_hook(CApp* _this, void*, int a2, LPCWSTR a3);
