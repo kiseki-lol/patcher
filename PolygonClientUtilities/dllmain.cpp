@@ -2,6 +2,7 @@
 #include "Config.h"
 #include "Patches.h"
 #include "RobloxMFCHooks.h"
+#include "Logger.h" // remove when testing is done
 
 START_PATCH_LIST()
 ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
@@ -28,6 +29,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
     {
+#ifdef PLAYER2012
+        Logger::Initialize("player2012Test");
+#endif
         LONG error = Patches::Apply();
         if (error != NO_ERROR)
         {

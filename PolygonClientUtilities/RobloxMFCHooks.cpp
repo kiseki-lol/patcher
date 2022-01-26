@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "RobloxMFCHooks.h"
+#include "Patches.h"
 #include "Config.h"
 #include "Util.h"
 #include "Logger.h"
@@ -51,7 +52,7 @@ BOOL __fastcall Http__trustCheck_hook(const char* url)
         return std::find(Util::allowedHosts.begin(), Util::allowedHosts.end(), parsedUrl.host_) != Util::allowedHosts.end();
 
     if (std::find(Util::allowedEmbeddedSchemes.begin(), Util::allowedEmbeddedSchemes.end(), parsedUrl.scheme_) != Util::allowedEmbeddedSchemes.end())
-        return true;
+        return true; 
 
     return false;
 }
@@ -76,6 +77,7 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, char
 #ifdef ARBITERBUILD
 int __fastcall DataModel__getJobId_hook(DataModel* _this, void*, int a2)
 {
+    // the actual function signature is (DataModel* _this)
     // this only sets the job id when game.jobId is called by lua
     // so the gameserver script must call game.jobId at the beginning for this to take effect
     // also, this only applies to the first datamodel that is created
@@ -132,9 +134,18 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 #endif
 
 #if defined(MFC2010) || defined(MFC2011)
-/* INT __fastcall CApp__CreateGame_hook(CApp* _this, void*, int a2, LPCWSTR a3)
+/* INT __fastcall CApp__CreateGame_hook(CApp* _this, void*, int* a2, LPCWSTR a3)
 {
-    return CApp__CreateGame(_this, a2, a3);
+    printf("CApp::CreateGame called\n");
+    // printf("Location of _this: %p\n", _this);
+    // printf("Location of a2: %p\n", a2);
+    // printf("Location of a3: %p\n", a3);
+
+    // int result = (int)CApp__CreateGame(_this, a2, a3);
+    // int result = (int)CApp__CreateGame(_this, a2, L"44340105256");
+    int result = (int)CApp__CreateGame(_this, a2, L"44340105256");
+
+    return result;
 } */
 
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
@@ -146,29 +157,27 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 
     if (hasAuthUrlArg && hasAuthTicketArg && !authenticationUrl.empty() && !authenticationTicket.empty())
     {
-        CApp__RobloxAuthenticate(app, NULL, authenticationUrl.c_str(), authenticationTicket.c_str());
+        CApp__RobloxAuthenticate(app, nullptr, authenticationUrl.c_str(), authenticationTicket.c_str());
     }
 
     if (hasJoinArg && !joinScriptUrl.empty())
     {
-        try
-        {
-            // TODO: use CApp__CreateGame instead
+        // try
+        // {
+            // so... i would've wanted to just use CApp::CreateGame instead but there's a few issues
+            // in the typelib, CreateGame is exposed as being IApp::CreateGame(string p) - 'p' is "44340105256"
+            // however internally the function is actually CApp::CreateGame(int something, LPCWSTR p)
+            // it's obvious that 'something' is a pointer to a class but i have no clue what the class is
+            // until i figure out wtf its supposed to be we've gotta stick to doing CRobloxApp::CreateDocument for now
+
             CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
-
-            printf("address of document: %p\n", document);
-            printf("\n");
-            printf("address of &document->workspace: %p\n", &document->workspace);
-            printf("address of document->workspace: %p\n", document->workspace);
-            printf("\n");
-
             CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
-        }
-        catch (std::runtime_error& exception)
-        {
-            MessageBoxA(nullptr, exception.what(), nullptr, MB_ICONERROR);
-            return FALSE;
-        }
+        // }
+        // catch (std::runtime_error& exception)
+        // {
+        //    MessageBoxA(nullptr, exception.what(), nullptr, MB_ICONERROR);
+        //    return FALSE;
+        // }
     }
 
     return TRUE;

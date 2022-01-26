@@ -12,7 +12,7 @@ typedef void(__thiscall* StandardOut__print_t)(int _this, int type, std::string*
 // typedef std::string(__thiscall* Network__RakNetAddressToString_t)(const int raknetAddress, char portDelineator);
 #endif
 #if defined(MFC2010) || defined(MFC2011)
-// typedef INT(__thiscall* CApp__CreateGame_t)(CApp* _this, int a2, LPCWSTR a3);
+// typedef INT(__thiscall* CApp__CreateGame_t)(CApp* _this, int *a2, LPCWSTR a3);
 typedef BOOL(__thiscall* CRobloxApp__InitInstance_t)(CRobloxApp* _this);
 typedef void(__thiscall* CRobloxCommandLineInfo__ParseParam_t)(CRobloxCommandLineInfo* _this, const char* pszParam, BOOL bFlag, BOOL bLast);
 #endif
@@ -42,7 +42,7 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 // std::string  __fastcall Network__RakNetAddressToString_hook(const int raknetAddress, char portDelineator);
 #endif
 #if defined(MFC2010) || defined(MFC2011)
-// INT  __fastcall CApp__CreateGame_hook(CApp* _this, void*, int a2, LPCWSTR a3);
+// INT  __fastcall CApp__CreateGame_hook(CApp* _this, void*, int *a2, LPCWSTR a3);
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this);
 void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* _this, void*, const char* pszParam, BOOL bFlag, BOOL bLast);
 #endif

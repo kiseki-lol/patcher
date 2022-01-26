@@ -10,14 +10,12 @@ struct DataModel
 	std::string jobId;
 };
 
-// class DataModel;
-
 #if defined(MFC2010) || defined(MFC2011)
-class CWorkspace;
-
 // 2010 struct definitions:
 // 0x47E010: CWorkspace->DoExecScript()
 // 0x47EC10: CWorkspace->ExecUrlScript()
+
+class CWorkspace;
 
 const auto CWorkspace__ExecUrlScript = (HRESULT(__stdcall*)(CWorkspace * workspace, LPCWSTR, VARIANTARG, VARIANTARG, VARIANTARG, VARIANTARG, LPVOID))ADDRESS_CWORKSPACE__EXECURLSCRIPT;
 
@@ -27,19 +25,17 @@ struct CRobloxDoc
 	CWorkspace* workspace;
 };
 
-// padding1[4] = offset of 0x10
-// padding1[40] = offset of 0xA0
 struct CApp;
 
-// const auto CApp__CreateGame = (CWorkspace * (__thiscall*)(CApp * _this, void*, int, LPCWSTR))ADDRESS_CAPP__CREATEGAME;
-const auto CApp__RobloxAuthenticate = (void * (__thiscall*)(CApp * _this, void*, LPCWSTR, LPCWSTR))ADDRESS_CAPP__ROBLOXAUTHENTICATE;
-
-struct CRobloxApp;
+// const auto CApp__CreateGame = (CWorkspace * (__thiscall*)(CApp * _this, int, LPCWSTR))ADDRESS_CAPP__CREATEGAME;
+const auto CApp__RobloxAuthenticate = (void * (__thiscall*)(CApp * _this, LPVOID, LPCWSTR, LPCWSTR))ADDRESS_CAPP__ROBLOXAUTHENTICATE;
 
 // 2010 struct definitions:
 // 0x405D20: CRobloxApp->CreateDocument()
 // 0x44F6F0: CRobloxApp->ExitInstance()
 // 0x452900: CRobloxApp->InitInstance()
+
+struct CRobloxApp;
 
 const auto CRobloxApp__CreateDocument = (CRobloxDoc * (__thiscall*)(CRobloxApp * _this))ADDRESS_CROBLOXAPP__CREATEDOCUMENT;
 

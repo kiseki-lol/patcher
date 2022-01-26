@@ -6,6 +6,7 @@ const std::vector<std::string> Util::allowedHosts
     "polygon.pizzaboxer.xyz",
     "polygondev.pizzaboxer.xyz",
     "polygonapi.pizzaboxer.xyz",
+    "clientsettingsapi.pizzaboxer.xyz",
 
     "roblox.com",
     "www.roblox.com",
