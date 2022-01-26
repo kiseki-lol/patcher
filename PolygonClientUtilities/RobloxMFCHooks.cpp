@@ -144,6 +144,7 @@ BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const
     {
         hasJobId = true;
         jobId = argslist["-jobId"];
+        Logger::Initialize(jobId);
 
         // now we have to reconstruct the args to exclude the -jobId arg
         std::stringstream argsrecon;

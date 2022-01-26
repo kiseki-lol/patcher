@@ -60,6 +60,13 @@
 #define ADDRESS_CCOMMANDLINEINFO__PARSELAST        0x0081354A
 #endif
 
+// RobloxApp/RobloxPlayer (2012)
+#ifdef MFC2012
+#define ADDRESS_HTTP__TRUSTCHECK                   0x006D5D20
+#define ADDRESS_CRYPT__VERIFYSIGNATUREBASE64       0x009B1D20
+#endif
+
+// RobloxPlayerBeta (2012)
 #ifdef PLAYER2012
 // so 2012's a bit different
 // VMProtect likes to offset the memory locations randomly on startup

@@ -4,11 +4,13 @@
 
 #include <oaidl.h>
 
+#ifdef ARBITERBUILD
 struct DataModel
 {
 	void* padding1[CLASSPADDING_DATAMODEL__JOBID];
 	std::string jobId;
 };
+#endif
 
 #if defined(MFC2010) || defined(MFC2011)
 // 2010 struct definitions:
