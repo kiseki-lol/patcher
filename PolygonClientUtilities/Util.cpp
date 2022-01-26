@@ -29,3 +29,28 @@ const std::vector<std::string> Util::allowedEmbeddedSchemes
     "jscript",
     "res"
 };
+
+std::map<std::string, std::string> Util::parseArgs(std::string args)
+{
+    std::map<std::string, std::string> map;
+
+    std::string::size_type key_pos = 0;
+    std::string::size_type key_end;
+    std::string::size_type val_pos;
+    std::string::size_type val_end;
+
+    while ((key_end = args.find(' ', key_pos)) != std::string::npos)
+    {
+        if ((val_pos = args.find_first_not_of(" -", key_end)) == std::string::npos)
+            break;
+
+        val_end = args.find(" -", val_pos);
+        map.emplace(args.substr(key_pos, key_end - key_pos), args.substr(val_pos, val_end - val_pos));
+
+        key_pos = val_end;
+        if (key_pos != std::string::npos)
+            ++key_pos;
+    }
+
+    return map;
+}

@@ -10,6 +10,9 @@ typedef void(__thiscall* Crypt__verifySignatureBase64_t)(HCRYPTPROV* _this, char
 typedef INT(__thiscall* DataModel__getJobId_t)(DataModel* _this, int a2);
 typedef void(__thiscall* StandardOut__print_t)(int _this, int type, std::string* message);
 // typedef std::string(__thiscall* Network__RakNetAddressToString_t)(const int raknetAddress, char portDelineator);
+#ifdef PLAYER2012
+typedef BOOL(__thiscall* Application__ParseArguments_t)(int _this, int a2, const char* argv);
+#endif
 #endif
 #if defined(MFC2010) || defined(MFC2011)
 // typedef INT(__thiscall* CApp__CreateGame_t)(CApp* _this, int *a2, LPCWSTR a3);
@@ -25,6 +28,9 @@ extern Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64;
 extern DataModel__getJobId_t DataModel__getJobId;
 extern StandardOut__print_t StandardOut__print;
 // extern Network__RakNetAddressToString_t Network__RakNetAddressToString;
+#ifdef PLAYER2012
+extern Application__ParseArguments_t Application__ParseArguments;
+#endif
 #endif
 #if defined(MFC2010) || defined(MFC2011)
 // extern CApp__CreateGame_t CApp__CreateGame;
@@ -40,6 +46,9 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, char
 INT  __fastcall DataModel__getJobId_hook(DataModel* _this, void*, int a2);
 void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string* message);
 // std::string  __fastcall Network__RakNetAddressToString_hook(const int raknetAddress, char portDelineator);
+#ifdef PLAYER2012
+BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const char* argv);
+#endif
 #endif
 #if defined(MFC2010) || defined(MFC2011)
 // INT  __fastcall CApp__CreateGame_hook(CApp* _this, void*, int *a2, LPCWSTR a3);

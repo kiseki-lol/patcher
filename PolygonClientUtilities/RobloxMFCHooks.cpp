@@ -31,6 +31,9 @@ StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARD
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
 #endif
+#ifdef PLAYER2012
+Application__ParseArguments_t Application__ParseArguments = (Application__ParseArguments_t)ADDRESS_APPLICATION__PARSEARGUMENTS;
+#endif
 
 // Hook Definitions //
 
@@ -131,6 +134,31 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 // {
 //     return Network__RakNetAddressToString(raknetAddress, portDelineator);
 // }
+
+#ifdef PLAYER2012
+BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const char* argv)
+{
+    std::map<std::string, std::string> argslist = Util::parseArgs(argv);
+
+    if (argslist.count("-jobId"))
+    {
+        hasJobId = true;
+        jobId = argslist["-jobId"];
+
+        // now we have to reconstruct the args to exclude the -jobId arg
+        std::stringstream argsrecon;
+        for (auto const& arg : argslist)
+        {
+            if (arg.first == "-jobId") continue;
+            argsrecon << arg.first << " " << arg.second << " ";
+        }
+        const std::string tmp = argsrecon.str();
+        argv = tmp.c_str();
+    }
+
+    return Application__ParseArguments(_this, a2, argv);
+}
+#endif
 #endif
 
 #if defined(MFC2010) || defined(MFC2011)
