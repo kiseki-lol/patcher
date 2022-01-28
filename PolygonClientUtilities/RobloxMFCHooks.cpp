@@ -29,7 +29,7 @@ StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARD
 Application__ParseArguments_t Application__ParseArguments = (Application__ParseArguments_t)ADDRESS_APPLICATION__PARSEARGUMENTS;
 #endif
 #endif
-#if (defined(MFC2010) || defined(MFC2011)) && (defined(PLAYERBUILD) || defined(ARBITERBUILD))
+#if defined(MFC2010) || defined(MFC2011)
 // CApp__CreateGame_t CApp__CreateGame = (CApp__CreateGame_t)ADDRESS_CAPP__CREATEGAME;
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
@@ -162,7 +162,7 @@ BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const
 #endif
 #endif
 
-#if (defined(MFC2010) || defined(MFC2011)) && (defined(PLAYERBUILD) || defined(ARBITERBUILD))
+#if defined(MFC2010) || defined(MFC2011)
 /* INT __fastcall CApp__CreateGame_hook(CApp* _this, void*, int* a2, LPCWSTR a3)
 {
     printf("CApp::CreateGame called\n");

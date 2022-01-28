@@ -15,7 +15,7 @@ ADD_PATCH(StandardOut__print, StandardOut__print_hook)
 ADD_PATCH(Application__ParseArguments, Application__ParseArguments_hook)
 #endif
 #endif
-#if (defined(MFC2010) || defined(MFC2011)) && (defined(PLAYERBUILD) || defined(ARBITERBUILD))
+#if defined(MFC2010) || defined(MFC2011)
 // ADD_PATCH(CApp__CreateGame, CApp__CreateGame_hook)
 ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
 ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
