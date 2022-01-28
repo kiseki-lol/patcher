@@ -25,14 +25,14 @@ Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64 = (Crypt__verifySign
 DataModel__getJobId_t DataModel__getJobId = (DataModel__getJobId_t)ADDRESS_DATAMODEL__GETJOBID;
 StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARDOUT__PRINT;
 // Network__RakNetAddressToString_t Network__RakNetAddressToString = (Network__RakNetAddressToString_t)ADDRESS_NETWORK__RAKNETADDRESSTOSTRING;
+#ifdef PLAYER2012
+Application__ParseArguments_t Application__ParseArguments = (Application__ParseArguments_t)ADDRESS_APPLICATION__PARSEARGUMENTS;
+#endif
 #endif
 #if defined(MFC2010) || defined(MFC2011)
 // CApp__CreateGame_t CApp__CreateGame = (CApp__CreateGame_t)ADDRESS_CAPP__CREATEGAME;
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
-#endif
-#ifdef PLAYER2012
-Application__ParseArguments_t Application__ParseArguments = (Application__ParseArguments_t)ADDRESS_APPLICATION__PARSEARGUMENTS;
 #endif
 
 // Hook Definitions //
@@ -147,14 +147,14 @@ BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const
         Logger::Initialize(jobId);
 
         // now we have to reconstruct the args to exclude the -jobId arg
-        std::stringstream argsrecon;
-        for (auto const& arg : argslist)
-        {
-            if (arg.first == "-jobId") continue;
-            argsrecon << arg.first << " " << arg.second << " ";
-        }
-        const std::string tmp = argsrecon.str();
-        argv = tmp.c_str();
+        // i'm being really lazy here, so don't do this
+        // i'm just gonna erase everything that comes after the -jobId arg
+        // thats gonna cause issues if the joinscript params are after the jobId arg,
+        // but really it shouldn't matter because the arbiter always starts it up in the correct order
+
+        char* pch = (char*)strstr(argv, " -jobId");
+        if (pch != NULL)
+            strncpy_s(pch, strlen(pch) + 1, "", 0);
     }
 
     return Application__ParseArguments(_this, a2, argv);
