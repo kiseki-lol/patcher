@@ -39,11 +39,11 @@ CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobl
 
 BOOL __fastcall Http__trustCheck_hook(const char* url)
 {
-    if (strlen(url) == 7)
+    if (strlen(url) == 7 && !Util::isASCII(url))
     {
         // so the client does this really fucking stupid thing where if it opens an ie window,
         // it passes a char**, and not a char*
-        // no idea if thats a detours quirk or if thats how its just actually handled
+        // no idea if thats a detours quirk (i doubt it) or if thats how its just actually handled
         // practically no url is ever going to be seven characters long so it doesn't really matter
 
         url = *(char**)url;

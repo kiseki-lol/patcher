@@ -54,3 +54,11 @@ std::map<std::string, std::string> Util::parseArgs(std::string args)
 
     return map;
 }
+
+// https://stackoverflow.com/questions/48212992/how-to-find-out-if-there-is-any-non-ascii-character-in-a-string-with-a-file-path
+bool Util::isASCII(const std::string& s)
+{
+    return !std::any_of(s.begin(), s.end(), [](char c) {
+        return static_cast<unsigned char>(c) > 127;
+    });
+}
