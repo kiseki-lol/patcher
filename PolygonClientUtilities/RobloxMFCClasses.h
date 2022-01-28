@@ -12,7 +12,7 @@ struct DataModel
 };
 #endif
 
-#if defined(MFC2010) || defined(MFC2011)
+#if (defined(MFC2010) || defined(MFC2011)) && (defined(PLAYERBUILD) || defined(ARBITERBUILD))
 // 2010 struct definitions:
 // 0x47E010: CWorkspace->DoExecScript()
 // 0x47EC10: CWorkspace->ExecUrlScript()

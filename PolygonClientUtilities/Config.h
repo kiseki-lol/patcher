@@ -1,7 +1,8 @@
 #pragma once
 
-#define MFC2010
-#define ARBITERBUILD
+#define MFC2011
+#define PLAYERBUILD
+// #define ARBITERBUILD
 
 // when ARBITERBUILD is defined, the following changes occur:
 // DataModel->getJobId is hooked

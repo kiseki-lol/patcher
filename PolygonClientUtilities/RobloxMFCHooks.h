@@ -14,7 +14,7 @@ typedef void(__thiscall* StandardOut__print_t)(int _this, int type, std::string*
 typedef BOOL(__thiscall* Application__ParseArguments_t)(int _this, int a2, const char* argv);
 #endif
 #endif
-#if defined(MFC2010) || defined(MFC2011)
+#if (defined(MFC2010) || defined(MFC2011)) && (defined(PLAYERBUILD) || defined(ARBITERBUILD))
 // typedef INT(__thiscall* CApp__CreateGame_t)(CApp* _this, int *a2, LPCWSTR a3);
 typedef BOOL(__thiscall* CRobloxApp__InitInstance_t)(CRobloxApp* _this);
 typedef void(__thiscall* CRobloxCommandLineInfo__ParseParam_t)(CRobloxCommandLineInfo* _this, const char* pszParam, BOOL bFlag, BOOL bLast);
@@ -32,7 +32,7 @@ extern StandardOut__print_t StandardOut__print;
 extern Application__ParseArguments_t Application__ParseArguments;
 #endif
 #endif
-#if defined(MFC2010) || defined(MFC2011)
+#if (defined(MFC2010) || defined(MFC2011)) && (defined(PLAYERBUILD) || defined(ARBITERBUILD))
 // extern CApp__CreateGame_t CApp__CreateGame;
 extern CRobloxApp__InitInstance_t CRobloxApp__InitInstance;
 extern CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam;
@@ -50,7 +50,7 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const char* argv);
 #endif
 #endif
-#if defined(MFC2010) || defined(MFC2011)
+#if (defined(MFC2010) || defined(MFC2011)) && (defined(PLAYERBUILD) || defined(ARBITERBUILD))
 // INT  __fastcall CApp__CreateGame_hook(CApp* _this, void*, int *a2, LPCWSTR a3);
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this);
 void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* _this, void*, const char* pszParam, BOOL bFlag, BOOL bLast);
