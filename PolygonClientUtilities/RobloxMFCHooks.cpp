@@ -189,6 +189,7 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
         CApp__RobloxAuthenticate(app, nullptr, authenticationUrl.c_str(), authenticationTicket.c_str());
     }
 
+#ifdef PLAYERBUILD
     if (hasJoinArg && !joinScriptUrl.empty())
     {
         try
@@ -208,12 +209,14 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
             return FALSE;
         }
     }
+#endif
 
     return TRUE;
 }
 
 void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* _this, void*, const char* pszParam, BOOL bFlag, BOOL bLast)
 {
+#ifdef PLAYERBUILD
     if (hasJoinArg && joinScriptUrl.empty())
     {
         int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
@@ -225,6 +228,7 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
+#endif
 
     if (hasAuthUrlArg && authenticationUrl.empty())
     {
@@ -273,12 +277,14 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         return;
     }
 
+#ifdef PLAYERBUILD
     if (bFlag && _stricmp(pszParam, "j") == 0)
     {
         hasJoinArg = true;
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
+#endif
 
 #ifdef ARBITERBUILD
     if (bFlag && _stricmp(pszParam, "jobId") == 0)
