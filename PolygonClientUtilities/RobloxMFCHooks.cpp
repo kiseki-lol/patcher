@@ -146,7 +146,7 @@ BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const
         jobId = argslist["-jobId"];
         Logger::Initialize(jobId);
 
-        // now we have to reconstruct the args to exclude the -jobId arg
+        // now we have to exclude the -jobId arg from argv
         // i'm being really lazy here, so don't do this
         // i'm just gonna erase everything that comes after the -jobId arg
         // thats gonna cause issues if the joinscript params are after the jobId arg,
@@ -191,8 +191,8 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 
     if (hasJoinArg && !joinScriptUrl.empty())
     {
-        // try
-        // {
+        try
+        {
             // so... i would've wanted to just use CApp::CreateGame instead but there's a few issues
             // in the typelib, CreateGame is exposed as being IApp::CreateGame(string p) - 'p' is "44340105256"
             // however internally the function is actually CApp::CreateGame(int something, LPCWSTR p)
@@ -201,12 +201,12 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 
             CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
             CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
-        // }
-        // catch (std::runtime_error& exception)
-        // {
-        //    MessageBoxA(nullptr, exception.what(), nullptr, MB_ICONERROR);
-        //    return FALSE;
-        // }
+        }
+        catch (std::runtime_error& exception)
+        {
+            // MessageBoxA(nullptr, exception.what(), nullptr, MB_ICONERROR);
+            return FALSE;
+        }
     }
 
     return TRUE;

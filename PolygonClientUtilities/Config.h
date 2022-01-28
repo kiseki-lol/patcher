@@ -1,6 +1,6 @@
 #pragma once
 
-#define PLAYER2012
+#define MFC2010
 #define ARBITERBUILD
 
 // when ARBITERBUILD is defined, the following changes occur:
@@ -93,6 +93,11 @@
 #define ADDRESS_APPLICATION__PARSEARGUMENTS        Patches::GetAddressByOffset(0x00004E60)
 #endif
 
+// RobloxStudioBeta (2012)
+#ifdef STUDIO2012
+#define ADDRESS_HTTP__TRUSTCHECK                   Patches::GetAddressByOffset(0x001931A0)
+#define ADDRESS_CRYPT__VERIFYSIGNATUREBASE64       Patches::GetAddressByOffset(0x004CD250)
+#endif
 
 // RakNet definitions
 // these are extracted from the 2016 source, but they're probably shifted 2 up compared to 2010 and 2011
