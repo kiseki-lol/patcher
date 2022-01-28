@@ -24,9 +24,9 @@ END_PATCH_LIST()
 
 // DLLs for release will be loaded with VMProtect, so this isn't necessary
 // Arbiter will still use Stud_PE for ease in swapping DLLs however
-#ifdef ARBITERBUILD
-void __declspec(dllexport) doNothing() {}
-#endif
+// #ifdef ARBITERBUILD
+void __declspec(dllexport) import() {}
+// #endif
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {

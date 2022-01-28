@@ -1,6 +1,7 @@
 #pragma once
 
 #define MFC2010
+#define PLAYERBUILD
 #define ARBITERBUILD
 
 // when ARBITERBUILD is defined, the following changes occur:
