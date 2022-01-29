@@ -20,13 +20,16 @@ ADD_PATCH(Application__ParseArguments, Application__ParseArguments_hook)
 ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
 ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
 #endif
+#ifdef DEBUG_SERVERREPLICATOR__PROCESSPACKET
+ADD_PATCH(ServerReplicator__processPacket, ServerReplicator__processPacket_hook)
+#endif
 END_PATCH_LIST()
 
 // DLLs for release will be loaded with VMProtect, so this isn't necessary
 // Arbiter will still use Stud_PE for ease in swapping DLLs however
-// #ifdef ARBITERBUILD
+#ifdef ARBITERBUILD
 void __declspec(dllexport) import() {}
-// #endif
+#endif
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {

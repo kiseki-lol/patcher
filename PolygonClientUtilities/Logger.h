@@ -13,5 +13,6 @@ public:
 	static HANDLE handle;
 	static void Initialize(const std::string jobId);
 	static void Log(LogType type, const std::string message);
+	static void Print(int type, const std::string message);
 	static std::string UtcTime();
 };

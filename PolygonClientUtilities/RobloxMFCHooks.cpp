@@ -34,6 +34,9 @@ Application__ParseArguments_t Application__ParseArguments = (Application__ParseA
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
 #endif
+#ifdef DEBUG_SERVERREPLICATOR__PROCESSPACKET
+ServerReplicator__processPacket_t ServerReplicator__processPacket = (ServerReplicator__processPacket_t)ADDRESS_SERVERREPLICATOR__PROCESSPACKET;
+#endif
 
 // Hook Definitions //
 
@@ -116,27 +119,7 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
         std::string* message = reinterpret_cast<std::string*>(messagePtr);
 #endif
 
-        switch (type)
-        {
-        case 1: // RBX::MESSAGE_OUTPUT:
-            Logger::Log(LogType::Output, std::string("[MESSAGE_OUTPUT]     ") + *message);
-            SetConsoleTextAttribute(Logger::handle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-            break;
-        case 0: // RBX::MESSAGE_INFO:
-            Logger::Log(LogType::Output, std::string("[MESSAGE_INFO]       ") + *message);
-            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-            break;
-        case 2: // RBX::MESSAGE_WARNING:
-            Logger::Log(LogType::Output, std::string("[MESSAGE_WARNING]    ") + *message);
-            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN);
-            break;
-        case 3: // RBX::MESSAGE_ERROR:
-            Logger::Log(LogType::Output, std::string("[MESSAGE_ERROR]      ") + *message);
-            SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
-            break;
-        }
-        printf("%s\n", message->c_str());
-        SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+        Logger::Print(type, *message);
     }
 }
 
@@ -306,5 +289,32 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 #endif
 
     CRobloxCommandLineInfo__ParseParam(_this, pszParam, bFlag, bLast);
+}
+#endif
+
+#ifdef DEBUG_SERVERREPLICATOR__PROCESSPACKET
+INT __fastcall ServerReplicator__processPacket_hook(int _this, void*, Packet* packet)
+{    
+    if ((unsigned char)packet->data[0] == ID_SUBMIT_TICKET)
+    {
+        printf("ServerReplicator::processPacket received ID_SUBMIT_TICKET\n");
+    }
+
+    /* switch ((unsigned char)packet->data[0])
+    {
+    case ID_SUBMIT_TICKET:
+        // printf("ServerReplicator::processPacket called: ID_SUBMIT_TICKET\n");
+        return ServerReplicator__processPacket(_this, packet);
+
+    default:
+        if (true)
+        {
+            Logger::Print(2, "Player not authenticated s");
+            return RR_STOP_PROCESSING_AND_DEALLOCATE;
+        }
+        return ServerReplicator__processPacket(_this, packet);
+    } */
+
+    return ServerReplicator__processPacket(_this, packet);
 }
 #endif

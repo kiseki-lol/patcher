@@ -10,6 +10,14 @@ struct DataModel
 	void* padding1[CLASSPADDING_DATAMODEL__JOBID];
 	std::string jobId;
 };
+
+struct Packet
+{
+	void* padding1[7];
+	unsigned int length;
+	void* padding2[1];
+	unsigned char* data;
+};
 #endif
 
 #if defined(MFC2010) || defined(MFC2011)

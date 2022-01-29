@@ -19,23 +19,8 @@ typedef BOOL(__thiscall* Application__ParseArguments_t)(int _this, int a2, const
 typedef BOOL(__thiscall* CRobloxApp__InitInstance_t)(CRobloxApp* _this);
 typedef void(__thiscall* CRobloxCommandLineInfo__ParseParam_t)(CRobloxCommandLineInfo* _this, const char* pszParam, BOOL bFlag, BOOL bLast);
 #endif
-
-// Externals //
-
-extern Http__trustCheck_t Http__trustCheck;
-extern Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64;
-#ifdef ARBITERBUILD
-extern DataModel__getJobId_t DataModel__getJobId;
-extern StandardOut__print_t StandardOut__print;
-// extern Network__RakNetAddressToString_t Network__RakNetAddressToString;
-#ifdef PLAYER2012
-extern Application__ParseArguments_t Application__ParseArguments;
-#endif
-#endif
-#if defined(MFC2010) || defined(MFC2011)
-// extern CApp__CreateGame_t CApp__CreateGame;
-extern CRobloxApp__InitInstance_t CRobloxApp__InitInstance;
-extern CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam;
+#ifdef DEBUG_SERVERREPLICATOR__PROCESSPACKET
+typedef int(__thiscall* ServerReplicator__processPacket_t)(int _this, Packet* packet);
 #endif
 
 // Hook Declarations //
@@ -54,4 +39,28 @@ BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const
 // INT  __fastcall CApp__CreateGame_hook(CApp* _this, void*, int *a2, LPCWSTR a3);
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this);
 void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* _this, void*, const char* pszParam, BOOL bFlag, BOOL bLast);
+#endif
+#ifdef DEBUG_SERVERREPLICATOR__PROCESSPACKET
+INT  __fastcall ServerReplicator__processPacket_hook(int _this, void*, Packet* packet);
+#endif
+
+// Externals //
+
+extern Http__trustCheck_t Http__trustCheck;
+extern Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64;
+#ifdef ARBITERBUILD
+extern DataModel__getJobId_t DataModel__getJobId;
+extern StandardOut__print_t StandardOut__print;
+// extern Network__RakNetAddressToString_t Network__RakNetAddressToString;
+#ifdef PLAYER2012
+extern Application__ParseArguments_t Application__ParseArguments;
+#endif
+#endif
+#if defined(MFC2010) || defined(MFC2011)
+// extern CApp__CreateGame_t CApp__CreateGame;
+extern CRobloxApp__InitInstance_t CRobloxApp__InitInstance;
+extern CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam;
+#endif
+#ifdef DEBUG_SERVERREPLICATOR__PROCESSPACKET
+extern ServerReplicator__processPacket_t ServerReplicator__processPacket;
 #endif

@@ -44,6 +44,33 @@ void Logger::Log(LogType type, const std::string message)
     }    
 }
 
+void Logger::Print(int type, const std::string message)
+{
+    if (!Logger::handle) return;
+
+    switch (type)
+    {
+    case 1: // RBX::MESSAGE_OUTPUT:
+        Logger::Log(LogType::Output, std::string("[MESSAGE_OUTPUT]     ") + message);
+        SetConsoleTextAttribute(Logger::handle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+        break;
+    case 0: // RBX::MESSAGE_INFO:
+        Logger::Log(LogType::Output, std::string("[MESSAGE_INFO]       ") + message);
+        SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+        break;
+    case 2: // RBX::MESSAGE_WARNING:
+        Logger::Log(LogType::Output, std::string("[MESSAGE_WARNING]    ") + message);
+        SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN);
+        break;
+    case 3: // RBX::MESSAGE_ERROR:
+        Logger::Log(LogType::Output, std::string("[MESSAGE_ERROR]      ") + message);
+        SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_INTENSITY);
+        break;
+    }
+    printf("%s\n", message.c_str());
+    SetConsoleTextAttribute(Logger::handle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+}
+
 std::string Logger::UtcTime()
 {
     std::stringstream time;

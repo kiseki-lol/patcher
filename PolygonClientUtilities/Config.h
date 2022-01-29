@@ -4,6 +4,9 @@
 #define PLAYERBUILD
 #define ARBITERBUILD
 
+// when PLAYERBUILD is defined, the following changes occur for 2010 and 2012 only:
+// the -jobId arg is parsed
+
 // when ARBITERBUILD is defined, the following changes occur:
 // DataModel->getJobId is hooked
 // StandardOut->print is hooked
@@ -21,6 +24,9 @@
 #define ADDRESS_HTTP__TRUSTCHECK                   0x005A2680
 #define ADDRESS_CRYPT__VERIFYSIGNATUREBASE64       0x0079ECF0
 
+#define ADDRESS_SERVERREPLICATOR__PROCESSPACKET    0x00507420
+#define ADDRESS_RAKNET__BITSTREAM                  0x004DBF00
+
 // MFC specific definitions
 #define CLASSLOCATION_CROBLOXAPP                   0x00BFF898
 #define CLASSLOCATION_CAPP                         0x00405D20
@@ -34,6 +40,10 @@
 #define ADDRESS_CWORKSPACE__EXECURLSCRIPT          0x0047EC10
 #define ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM 0x00450AC0
 #define ADDRESS_CCOMMANDLINEINFO__PARSELAST        0x007A80A0
+
+// RakNet packet definitions
+#define ID_REQUEST_CHARACTER                       96
+#define ID_SUBMIT_TICKET                           104
 #endif
 
 // RobloxApp (2011)
@@ -59,6 +69,9 @@
 #define ADDRESS_CWORKSPACE__EXECURLSCRIPT          0x0049FC90
 #define ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM 0x0045EE50
 #define ADDRESS_CCOMMANDLINEINFO__PARSELAST        0x0081354A
+
+#define ID_DATA                                    129
+#define ID_SUBMIT_TICKET                           135
 #endif
 
 // RobloxApp/RobloxPlayer (2012)
@@ -105,7 +118,41 @@
 // some of these probably dont even exist in 2010 and 2011
 // i'll check later
 
-#define ID_TEACH_DESCRIPTOR_DICTIONARIES 130
+// TODO: move all of these to an enum (2012 and newer are offset by +2)
+
+// Stock RakNet definitions
+// #define ID_CONNECTION_REQUEST_ACCEPTED 14
+// #define ID_CONNECTION_ATTEMPT_FAILED 15
+// #define ID_ALREADY_CONNECTED 16
+// #define ID_NEW_INCOMING_CONNECTION 17
+// #define ID_NO_FREE_INCOMING_CONNECTIONS 18
+// #define ID_DISCONNECTION_NOTIFICATION 19
+// #define ID_CONNECTION_LOST 20
+// #define ID_CONNECTION_BANNED 21
+// #define ID_INVALID_PASSWORD 22
+// #define ID_INCOMPATIBLE_PROTOCOL_VERSION 23
+// #define ID_TIMESTAMP 27
+
+// ROBLOX-specific RakNet definitions
+// #define ID_SET_GLOBALS 127
+// #define ID_TEACH_DESCRIPTOR_DICTIONARIES 128
+// #define ID_DATA 129
+// #define ID_REQUEST_MARKER 130
+// #define ID_SUBMIT_TICKET 135
+
+// according to the 2016 source, here's all the enums that practically do the same thing in Replicator.cpp:
+// ID_PHYSICS_TOUCHES
+// ID_SCHEMA_SYNC
+// ID_TEACH_DESCRIPTOR_DICTIONARIES
+// ID_DATA
+// ID_CLUSTER
+// ID_SET_GLOBALS
+
+// in the 2016 source there's an extra enum between ID_SUBMIT_TICKET and ID_REQUEST_MARKER
+// in 2011, ID_REQUEST_MARKER is 130 and ID_SUBMIT_TICKET is 135
+// but in the 2016 source, ID_REQUEST_MARKER is 132 and ID_SUBMIT_TICKET is 138
+
+/* #define ID_TEACH_DESCRIPTOR_DICTIONARIES 130
 #define ID_DATA 131
 #define ID_REQUEST_MARKER 132
 #define ID_PHYSICS 133
@@ -125,7 +172,7 @@
 #define ID_DICTIONARY_FORMAT 147
 #define ID_HASH_MISMATCH 148
 #define ID_SECURITYKEY_MISMATCH  149
-#define ID_REQUEST_STATS 150
+#define ID_REQUEST_STATS 150 */
 
 #define RR_STOP_PROCESSING_AND_DEALLOCATE 0
 #define RR_CONTINUE_PROCESSING 1
