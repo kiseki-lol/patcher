@@ -4,6 +4,8 @@
 #define PLAYERBUILD
 #define ARBITERBUILD
 
+#define DEBUG_SERVERREPLICATOR__PROCESSPACKET
+
 // when PLAYERBUILD is defined, the following changes occur for 2010 and 2012 only:
 // the -jobId arg is parsed
 
@@ -42,7 +44,9 @@
 #define ADDRESS_CCOMMANDLINEINFO__PARSELAST        0x007A80A0
 
 // RakNet packet definitions
+#define ID_TIMESTAMP                               25
 #define ID_REQUEST_CHARACTER                       96
+#define ID_DATA                                    98
 #define ID_SUBMIT_TICKET                           104
 #endif
 

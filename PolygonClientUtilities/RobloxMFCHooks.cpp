@@ -295,10 +295,37 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 #ifdef DEBUG_SERVERREPLICATOR__PROCESSPACKET
 INT __fastcall ServerReplicator__processPacket_hook(int _this, void*, Packet* packet)
 {    
-    if ((unsigned char)packet->data[0] == ID_SUBMIT_TICKET)
+    switch ((unsigned char)packet->data[0])
     {
-        printf("ServerReplicator::processPacket received ID_SUBMIT_TICKET\n");
+    case ID_TIMESTAMP:
+        printf("ServerReplicator::processPacket received ID_TIMESTAMP with length %d\n", packet->length);
+        break;
+
+    case ID_REQUEST_CHARACTER:
+        printf("ServerReplicator::processPacket received ID_REQUEST_CHARACTER with length %d\n", packet->length);
+        break;
+
+    case ID_DATA:
+        printf("ServerReplicator::processPacket received ID_DATA with length %d\n", packet->length);
+        break;
+
+    case ID_SUBMIT_TICKET:
+        printf("ServerReplicator::processPacket received ID_SUBMIT_TICKET with length %d\n", packet->length);
+        break;
+
+    default:
+        printf("ServerReplicator::processPacket received packet %d with length %d\n", packet->data[0], packet->length);
+        break;
     }
+
+    /* if ((unsigned char)packet->data[0] == ID_SUBMIT_TICKET)
+    {
+        printf("ServerReplicator::processPacket received ID_SUBMIT_TICKET with length %d\n", packet->length);
+    }
+    else
+    {
+        printf("ServerReplicator::processPacket received packet %d with length %d\n", packet->data[0], packet->length);
+    } */
 
     /* switch ((unsigned char)packet->data[0])
     {
