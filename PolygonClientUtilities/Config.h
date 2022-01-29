@@ -74,8 +74,18 @@
 #define ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM 0x0045EE50
 #define ADDRESS_CCOMMANDLINEINFO__PARSELAST        0x0081354A
 
+#define ID_TIMESTAMP                               27
+
+#define ID_SET_GLOBALS                             127
+// guess: #define ID_TEACH_DESCRIPTOR_DICTIONARIES 128
 #define ID_DATA                                    129
+#define ID_REQUEST_MARKER                          130
+#define ID_PHYSICS                                 131
+#define ID_CHAT_ALL                                132
+#define ID_CHAT_TEAM                               133
+#define ID_REPORT_ABUSE                            134
 #define ID_SUBMIT_TICKET                           135
+#define ID_CHAT_GAME                               136
 #endif
 
 // RobloxApp/RobloxPlayer (2012)
@@ -116,67 +126,6 @@
 #define ADDRESS_HTTP__TRUSTCHECK                   Patches::GetAddressByOffset(0x001931A0)
 #define ADDRESS_CRYPT__VERIFYSIGNATUREBASE64       Patches::GetAddressByOffset(0x004CD250)
 #endif
-
-// RakNet definitions
-// these are extracted from the 2016 source, but they're probably shifted 2 up compared to 2010 and 2011
-// some of these probably dont even exist in 2010 and 2011
-// i'll check later
-
-// TODO: move all of these to an enum (2012 and newer are offset by +2)
-
-// Stock RakNet definitions
-// #define ID_CONNECTION_REQUEST_ACCEPTED 14
-// #define ID_CONNECTION_ATTEMPT_FAILED 15
-// #define ID_ALREADY_CONNECTED 16
-// #define ID_NEW_INCOMING_CONNECTION 17
-// #define ID_NO_FREE_INCOMING_CONNECTIONS 18
-// #define ID_DISCONNECTION_NOTIFICATION 19
-// #define ID_CONNECTION_LOST 20
-// #define ID_CONNECTION_BANNED 21
-// #define ID_INVALID_PASSWORD 22
-// #define ID_INCOMPATIBLE_PROTOCOL_VERSION 23
-// #define ID_TIMESTAMP 27
-
-// ROBLOX-specific RakNet definitions
-// #define ID_SET_GLOBALS 127
-// #define ID_TEACH_DESCRIPTOR_DICTIONARIES 128
-// #define ID_DATA 129
-// #define ID_REQUEST_MARKER 130
-// #define ID_SUBMIT_TICKET 135
-
-// according to the 2016 source, here's all the enums that practically do the same thing in Replicator.cpp:
-// ID_PHYSICS_TOUCHES
-// ID_SCHEMA_SYNC
-// ID_TEACH_DESCRIPTOR_DICTIONARIES
-// ID_DATA
-// ID_CLUSTER
-// ID_SET_GLOBALS
-
-// in the 2016 source there's an extra enum between ID_SUBMIT_TICKET and ID_REQUEST_MARKER
-// in 2011, ID_REQUEST_MARKER is 130 and ID_SUBMIT_TICKET is 135
-// but in the 2016 source, ID_REQUEST_MARKER is 132 and ID_SUBMIT_TICKET is 138
-
-/* #define ID_TEACH_DESCRIPTOR_DICTIONARIES 130
-#define ID_DATA 131
-#define ID_REQUEST_MARKER 132
-#define ID_PHYSICS 133
-#define ID_PHYSICS_TOUCHES 134
-#define ID_CHAT_ALL 135
-#define ID_CHAT_TEAM 136
-#define ID_REPORT_ABUSE 137
-#define ID_SUBMIT_TICKET 138
-#define ID_CHAT_GAME 139
-#define ID_CHAT_PLAYER 140
-#define ID_CLUSTER 141
-#define ID_PROTOCAL_MISMATCH 142
-#define ID_SPAWN_NAME 143
-#define ID_PROTOCOL_SYNC 144
-#define ID_SCHEMA_SYNC 145
-#define ID_PLACEID_VERIFICATION 146
-#define ID_DICTIONARY_FORMAT 147
-#define ID_HASH_MISMATCH 148
-#define ID_SECURITYKEY_MISMATCH  149
-#define ID_REQUEST_STATS 150 */
 
 #define RR_STOP_PROCESSING_AND_DEALLOCATE 0
 #define RR_CONTINUE_PROCESSING 1
