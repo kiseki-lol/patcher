@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Logger.h"
 
-#pragma warning(disable : 4996)
+//#pragma warning(disable : 4996)
 
 HANDLE Logger::handle;
 std::ofstream Logger::outputLog;

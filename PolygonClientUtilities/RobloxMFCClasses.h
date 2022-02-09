@@ -18,6 +18,16 @@ struct Packet
 	void* padding2[1];
 	unsigned char* data;
 };
+
+struct ConcurrentRakPeer {};
+struct RakPeerInterface {};
+
+struct ServerReplicator
+{
+	void* padding1[1869]; // offset of 0 -> 7476
+	bool padding2;        // offset of 7476 -> 7477
+	bool isAuthenticated; // offset of 7477 -> 7478
+};
 #endif
 
 #if defined(MFC2010) || defined(MFC2011)

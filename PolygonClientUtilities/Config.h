@@ -1,17 +1,18 @@
 #pragma once
 
-#define MFC2010
+#define MFC2011
 #define PLAYERBUILD
 #define ARBITERBUILD
 
-#define DEBUG_SERVERREPLICATOR__PROCESSPACKET
+// #define DEBUG_SERVERREPLICATOR__PROCESSPACKET
 
 // when PLAYERBUILD is defined, the following changes occur for 2010 and 2012 only:
 // the -jobId arg is parsed
 
 // when ARBITERBUILD is defined, the following changes occur:
-// DataModel->getJobId is hooked
-// StandardOut->print is hooked
+// DataModel::getJobId is hooked
+// DataModel::~DataModel is hooked
+// StandardOut::print is hooked
 // Network::RakNetAddressToString is hooked
 // -jobId arg becomes available
 // HTTP requests and output messages are logged to a file
@@ -25,9 +26,8 @@
 #define ADDRESS_NETWORK__RAKNETADDRESSTOSTRING     0x004FC1A0
 #define ADDRESS_HTTP__TRUSTCHECK                   0x005A2680
 #define ADDRESS_CRYPT__VERIFYSIGNATUREBASE64       0x0079ECF0
-
+#define ADDRESS_SERVERREPLICATOR__SENDTOP          0x00506910
 #define ADDRESS_SERVERREPLICATOR__PROCESSPACKET    0x00507420
-#define ADDRESS_RAKNET__BITSTREAM                  0x004DBF00
 
 // MFC specific definitions
 #define CLASSLOCATION_CROBLOXAPP                   0x00BFF898
@@ -45,6 +45,7 @@
 
 // RakNet packet definitions
 #define ID_TIMESTAMP                               25
+#define ID_SET_GLOBALS                             95
 #define ID_REQUEST_CHARACTER                       96
 #define ID_DATA                                    98
 #define ID_SUBMIT_TICKET                           104
@@ -55,10 +56,13 @@
 #define CLASSPADDING_DATAMODEL__JOBID              740 // when compiled as debug, this must be 739
 
 #define ADDRESS_DATAMODEL__GETJOBID                0x005E70C0
+#define ADDRESS_DATAMODEL__DESTRUCT                0x006002A0
 #define ADDRESS_STANDARDOUT__PRINT                 0x005B25E0
 #define ADDRESS_NETWORK__RAKNETADDRESSTOSTRING     0x0
 #define ADDRESS_HTTP__TRUSTCHECK                   0x005B7050
 #define ADDRESS_CRYPT__VERIFYSIGNATUREBASE64       0x00809EC0
+#define ADDRESS_SERVERREPLICATOR__SENDTOP          0x00513E80
+#define ADDRESS_SERVERREPLICATOR__PROCESSTICKET    0x00514B60
 
 // MFC specific definitions
 #define CLASSLOCATION_CROBLOXAPP                   0x00CBA8A0
@@ -74,10 +78,8 @@
 #define ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM 0x0045EE50
 #define ADDRESS_CCOMMANDLINEINFO__PARSELAST        0x0081354A
 
-#define ID_TIMESTAMP                               27
-
+// RakNet definitions
 #define ID_SET_GLOBALS                             127
-// guess: #define ID_TEACH_DESCRIPTOR_DICTIONARIES 128
 #define ID_DATA                                    129
 #define ID_REQUEST_MARKER                          130
 #define ID_PHYSICS                                 131

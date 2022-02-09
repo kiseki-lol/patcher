@@ -11,6 +11,10 @@ ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)
 ADD_PATCH(DataModel__getJobId, DataModel__getJobId_hook)
 ADD_PATCH(StandardOut__print, StandardOut__print_hook)
 // ADD_PATCH(Network__RakNetAddressToString, Network__RakNetAddressToString_hook)
+#ifdef MFC2011
+ADD_PATCH(ServerReplicator__sendTop, ServerReplicator__sendTop_hook)
+ADD_PATCH(ServerReplicator__processTicket, ServerReplicator__processTicket_hook)
+#endif
 #ifdef PLAYER2012
 ADD_PATCH(Application__ParseArguments, Application__ParseArguments_hook)
 #endif

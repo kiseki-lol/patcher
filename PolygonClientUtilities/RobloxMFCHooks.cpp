@@ -3,8 +3,10 @@
 #include "Patches.h"
 #include "Config.h"
 #include "Util.h"
-#include "Logger.h"
 #include "LUrlParser.h"
+#ifdef ARBITERBUILD
+#include "Logger.h"
+#endif
 
 static bool hasAuthUrlArg = false;
 static bool hasAuthTicketArg = false;
@@ -17,6 +19,8 @@ static std::wstring authenticationTicket;
 static std::wstring joinScriptUrl;
 static std::string jobId;
 
+static std::map<ServerReplicator*, RakPeerInterface*> rakPeers;
+
 // Functions //
 
 Http__trustCheck_t Http__trustCheck = (Http__trustCheck_t)ADDRESS_HTTP__TRUSTCHECK;
@@ -25,6 +29,10 @@ Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64 = (Crypt__verifySign
 DataModel__getJobId_t DataModel__getJobId = (DataModel__getJobId_t)ADDRESS_DATAMODEL__GETJOBID;
 StandardOut__print_t StandardOut__print = (StandardOut__print_t)ADDRESS_STANDARDOUT__PRINT;
 // Network__RakNetAddressToString_t Network__RakNetAddressToString = (Network__RakNetAddressToString_t)ADDRESS_NETWORK__RAKNETADDRESSTOSTRING;
+#ifdef MFC2011
+ServerReplicator__sendTop_t ServerReplicator__sendTop = (ServerReplicator__sendTop_t)ADDRESS_SERVERREPLICATOR__SENDTOP;
+ServerReplicator__processTicket_t ServerReplicator__processTicket = (ServerReplicator__processTicket_t)ADDRESS_SERVERREPLICATOR__PROCESSTICKET;
+#endif
 #ifdef PLAYER2012
 Application__ParseArguments_t Application__ParseArguments = (Application__ParseArguments_t)ADDRESS_APPLICATION__PARSEARGUMENTS;
 #endif
@@ -128,6 +136,47 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 //     return Network__RakNetAddressToString(raknetAddress, portDelineator);
 // }
 
+#ifdef MFC2011
+void __fastcall ServerReplicator__sendTop_hook(ServerReplicator* _this, void*, RakPeerInterface* peer)
+{
+    if (_this->isAuthenticated)
+    {
+        // printf("ServerReplicator::sendTop called: player is authenticated\n");
+        ServerReplicator__sendTop(_this, peer);
+    }
+    else if (rakPeers.find(_this) == rakPeers.end())
+    {
+        // printf("ServerReplicator::sendTop called: player is not authenticated\n");
+        rakPeers.insert(std::pair<ServerReplicator*, RakPeerInterface*>(_this, peer));
+    }
+}
+
+void __fastcall ServerReplicator__processTicket_hook(ServerReplicator* _this, void*, Packet* packet)
+{
+    ServerReplicator__processTicket(_this, packet);
+
+    // THIS IS TEMPORARY
+    // i literally cant find a way to obtain rakpeerinterface from _this, like it's really damn hard
+    // so i'm cheating on doing that by getting rakpeerinterface from the first sendtop call,
+    // throwing that into a lookup table and then using that here
+
+    auto pos = rakPeers.find(_this);
+    if (pos == rakPeers.end())
+    {
+        // printf("ServerReplicator::sendTop called: could not find rakpeer for %08X\n", (int)_this);
+    }
+    else if (_this->isAuthenticated)
+    {
+        // printf("ServerReplicator::sendTop called: Value of peer: %08X - associated with %08X\n", (int)pos->second, (int)_this);
+        ServerReplicator__sendTop_hook(_this, nullptr, pos->second);
+    }
+    else
+    {
+        // printf("ServerReplicator::sendTop called: player is not authenticated\n");
+    }
+}
+#endif
+
 #ifdef PLAYER2012
 BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const char* argv)
 {
@@ -196,7 +245,7 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
             CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
             CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
         }
-        catch (std::runtime_error& exception)
+        catch (std::runtime_error)// & exception)
         {
             // MessageBoxA(nullptr, exception.what(), nullptr, MB_ICONERROR);
             return FALSE;
