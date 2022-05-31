@@ -161,16 +161,23 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="MFCCommandLine.h" />
+    <ClInclude Include="PlayerCommandLine.h" />
+    <ClInclude Include="RCCOutput.h" />
+    <ClInclude Include="ReplicatorSecurity.h" />
+    <ClInclude Include="TrustCheck.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="LUrlParser.h" />
     <ClInclude Include="Patches.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="RobloxMFCClasses.h" />
-    <ClInclude Include="RobloxMFCHooks.h" />
+    <ClInclude Include="Classes.h" />
+    <ClInclude Include="Hooks.h" />
     <ClInclude Include="Util.h" />
+    <ClInclude Include="VerifySignatureBase64.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="MFCCommandLine.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="LUrlParser.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
@@ -183,8 +190,13 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="RobloxMFCHooks.cpp" />
+    <ClCompile Include="PlayerCommandLine.cpp" />
+    <ClCompile Include="RCCOutput.cpp" />
+    <ClCompile Include="ReplicatorSecurity.cpp" />
+    <ClCompile Include="Hooks.cpp" />
+    <ClCompile Include="TrustCheck.cpp" />
     <ClCompile Include="Util.cpp" />
+    <ClCompile Include="VerifySignatureBase64.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

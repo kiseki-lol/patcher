@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Config.h"
-
 #include <oaidl.h>
 
 #ifdef ARBITERBUILD

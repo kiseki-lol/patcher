@@ -75,6 +75,6 @@ std::string Logger::UtcTime()
 {
     std::stringstream time;
     std::time_t now = std::time(NULL);
-    time << std::put_time(std::localtime(&now), "%F %T");
+    // time << std::put_time(std::localtime(&now), "%F %T");
     return time.str();
 }
