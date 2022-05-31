@@ -1,8 +1,8 @@
 #pragma once
 
-#define MFC2010
+#define PLAYER2012
 #define PLAYERBUILD
-#define ARBITERBUILD
+// #define ARBITERBUILD
 
 // #define DEBUG_SERVERREPLICATOR__PROCESSPACKET
 
@@ -82,6 +82,9 @@
 #define ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM 0x0045EE50
 #define ADDRESS_CCOMMANDLINEINFO__PARSELAST        0x0081354A
 
+// Player specific definitions
+#define ADDRESS_APPLICATION__PARSEARGUMENTS        0x0
+
 // RakNet definitions
 #define ID_SET_GLOBALS                             127
 #define ID_DATA                                    129
@@ -115,6 +118,20 @@
 // with that offset, the address you'd have to put for your trust check hook will be 0x00DF20A0 - 0x00BF0000 = 0x002020A0
 // and you just put that address into the function
 
+// MFC specific definitions
+#define CLASSLOCATION_CROBLOXAPP                   0x0
+#define CLASSLOCATION_CAPP                         0x0
+
+#define CLASSPADDING_CROBLOXDOC__WORKSPACE         40
+
+#define ADDRESS_CAPP__CREATEGAME                   0x0
+#define ADDRESS_CAPP__ROBLOXAUTHENTICATE           0x0
+#define ADDRESS_CROBLOXAPP__INITINSTANCE           0x0
+#define ADDRESS_CROBLOXAPP__CREATEDOCUMENT         0x0
+#define ADDRESS_CWORKSPACE__EXECURLSCRIPT          0x0
+#define ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM 0x0
+#define ADDRESS_CCOMMANDLINEINFO__PARSELAST        0x0
+
 #define CLASSPADDING_DATAMODEL__JOBID              763 // when compiled as debug, this must be 762
 
 #define ADDRESS_DATAMODEL__GETJOBID                Patches::GetAddressByOffset(0x002079A0)
@@ -122,6 +139,8 @@
 #define ADDRESS_NETWORK__RAKNETADDRESSTOSTRING     0x0
 #define ADDRESS_HTTP__TRUSTCHECK                   Patches::GetAddressByOffset(0x002020A0)
 #define ADDRESS_CRYPT__VERIFYSIGNATUREBASE64       Patches::GetAddressByOffset(0x00526330)
+#define ADDRESS_SERVERREPLICATOR__SENDTOP          0x0
+#define ADDRESS_SERVERREPLICATOR__PROCESSTICKET    0x0
 
 // Player specific definitions
 #define ADDRESS_APPLICATION__PARSEARGUMENTS        Patches::GetAddressByOffset(0x00004E60)

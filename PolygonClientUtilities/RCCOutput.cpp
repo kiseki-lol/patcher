@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "RCCOutput.h"
+#include "Patches.h"
 
 HANDLE outputHandle;
 

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "VerifySignatureBase64.h"
+#include "Patches.h"
 
 Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64 = (Crypt__verifySignatureBase64_t)ADDRESS_CRYPT__VERIFYSIGNATUREBASE64;
 

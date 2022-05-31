@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PlayerCommandLine.h"
+#include "Patches.h"
 #include "Util.h"
 
 Application__ParseArguments_t Application__ParseArguments = (Application__ParseArguments_t)ADDRESS_APPLICATION__PARSEARGUMENTS;

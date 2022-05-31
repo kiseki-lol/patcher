@@ -3,7 +3,6 @@
 #include "Config.h"
 #include <oaidl.h>
 
-#ifdef ARBITERBUILD
 struct DataModel
 {
 	void* padding1[CLASSPADDING_DATAMODEL__JOBID];
@@ -27,9 +26,7 @@ struct ServerReplicator
 	bool padding2;        // offset of 7476 -> 7477
 	bool isAuthenticated; // offset of 7477 -> 7478
 };
-#endif
 
-#if defined(MFC2010) || defined(MFC2011)
 // 2010 struct definitions:
 // 0x47E010: CWorkspace->DoExecScript()
 // 0x47EC10: CWorkspace->ExecUrlScript()
@@ -67,4 +64,3 @@ struct CCommandLineInfo
 class CRobloxCommandLineInfo : public CCommandLineInfo {};
 
 const auto CCommandLineInfo__ParseLast = (void(__thiscall*)(CCommandLineInfo * _this, BOOL bLast))ADDRESS_CCOMMANDLINEINFO__PARSELAST;
-#endif
