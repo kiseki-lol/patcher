@@ -24,6 +24,12 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
         CApp__RobloxAuthenticate(app, nullptr, authenticationUrl.c_str(), authenticationTicket.c_str());
     }
 
+    // DataModel* datamodel = reinterpret_cast<DataModel*>(CLASSLOCATION_CAPP);
+
+    // printf("Attempting to create DataModel...\n");
+    // char* v27;
+    // DataModel__createDataModel((int)&v27, 1);
+
 #ifdef PLAYERBUILD
     if (hasJoinArg && !joinScriptUrl.empty())
     {

@@ -9,6 +9,16 @@ struct DataModel
 	std::string jobId;
 };
 
+struct Http
+{
+	void* padding1[1];
+	std::string alternateUrl;
+	void* padding2[4];
+	std::string url;
+};
+
+// const auto DataModel__createDataModel = (void * (__thiscall*)(int a1, char a2))ADDRESS_DATAMODEL__CREATEDATAMODEL;
+
 struct Packet
 {
 	void* padding1[7];

@@ -62,3 +62,10 @@ bool Util::isASCII(const std::string& s)
         return static_cast<unsigned char>(c) > 127;
     });
 }
+
+// https://stackoverflow.com/questions/313970/how-to-convert-an-instance-of-stdstring-to-lower-case
+std::string Util::toLower(std::string s)
+{
+    std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
+    return s;
+}
