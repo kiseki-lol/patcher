@@ -62,6 +62,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
     {
+#ifdef ARBITERBUILD
+        InitializeOutput();
+#endif
+
         LONG error = Patches::Apply();
         if (error != NO_ERROR)
         {

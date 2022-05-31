@@ -5,7 +5,7 @@
 #include "Util.h"
 #include "LUrlParser.h"
 #ifdef ARBITERBUILD
-#include "Logger.h"
+// #include "Logger.h"
 #endif
 
 static bool hasJobId = false;

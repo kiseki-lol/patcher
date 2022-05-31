@@ -166,7 +166,6 @@
     <ClInclude Include="RCCOutput.h" />
     <ClInclude Include="ReplicatorSecurity.h" />
     <ClInclude Include="TrustCheck.h" />
-    <ClInclude Include="Logger.h" />
     <ClInclude Include="LUrlParser.h" />
     <ClInclude Include="Patches.h" />
     <ClInclude Include="pch.h" />
@@ -178,7 +177,6 @@
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="MFCCommandLine.cpp" />
-    <ClCompile Include="Logger.cpp" />
     <ClCompile Include="LUrlParser.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
