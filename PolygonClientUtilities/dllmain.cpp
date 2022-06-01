@@ -3,7 +3,6 @@
 #include "Patches.h"
 //#include "RobloxMFCHooks.h"
 
-#include "DebugGame.h"
 #include "DebugScriptContext.h"
 // #include "TestHttpGetPost.h"
 #include "TrustCheck.h"
@@ -26,7 +25,6 @@
 #endif
 
 START_PATCH_LIST()
-ADD_PATCH(Game__construct, Game__construct_hook)
 // ADD_PATCH(ScriptContext__execute, ScriptContext__execute_hook)
 // ADD_PATCH(Http_httpGetPostWinInet, Http_httpGetPostWinInet_hook)
 

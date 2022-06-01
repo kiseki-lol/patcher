@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "RCCOutput.h"
-#include "DebugGame.h"
 #include "Patches.h"
 
 HANDLE outputHandle;
@@ -36,16 +35,9 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
     message = reinterpret_cast<std::string*>(messagePtr);
 #endif
 
-    /* if (message->compare("MakeDatamodel") == 0)
-    {
-        printf("Attempting to create DataModel...\n");
-        DataModel__createDataModel(true);
-    } */
-
-    if (message->compare("NewGame") == 0)
+    if (message->compare("NewGame") == 0 || message->compare("NewGame2") == 0)
     {
         printf("\n");
-
         printf("Attempting to create new Game...\n");
 
         Game* game = new Game();
@@ -57,29 +49,14 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
         }
         else
         {
-            // int datamodel = game[4];
             printf("Successfully created new Game! (%p)\n", game);
-            // printf("Address of DataModel: %08X\n", game->dataModel);
-            // printf("Attempting to set DataModel Job ID to 'deez nuts'...\n");
-            // game->dataModel->jobId = "deez nuts";
-            printf("Length of DataModel Job ID: %d\n", game->dataModel->jobId.length());
 
-            printf("Attempting to create service provider...\n");
+            game->dataModel->jobId = "deez nuts";
+            auto scriptContext = ServiceProvider__createScriptContext(game->dataModel.get());
 
-            void* dataModelPointer = game->dataModel.get();
-            printf("Address of dataModelPointer: %p\n", dataModelPointer);
-
-            printf("Calling ServiceProvider::create<ScriptContext>()...\n");
-            void* scriptContext = ServiceProvider__createScriptContext(dataModelPointer);
-            printf("Address of scriptContext: %p\n", scriptContext);
-
-            printf("Calling ScriptContext::execute()...\n");
-            // void* arg;
-            // ScriptContext__execute(scriptContext, &arg, 1, "print('hi')", "hi", 0);
-            ScriptContext__execute(scriptContext, 1, "print('hi')", "hi");
-
-            // printf("Calling ScriptContext::setTimeout()...\n");
-            // ScriptContext__setTimeout(scriptContext, 5);
+            ScriptContext__execute(scriptContext, 5, "print(\"hi this should be inside the dll's created datamodel i think\")", "hi");
+            ScriptContext__execute(scriptContext, 5, "print(\"job id: \" .. game.jobId)", "hi");
+            ScriptContext__execute(scriptContext, 5, "printidentity()", "hi");
 
             printf("\n");
         }
