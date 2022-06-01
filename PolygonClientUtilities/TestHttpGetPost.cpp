@@ -25,9 +25,7 @@ void __fastcall Http_httpGetPostWinInet_hook(Http* _this, void*, bool isPost, in
 	printf("\n");
 
 	printf("Location of _this+40: %08X\n", (int)_this + 40);
-	printf("Location of _this->url: %p\n", &_this->url);
-
-	printf("\n"); */
+	printf("Location of _this->url: %p\n", &_this->url); */
 
 	printf("Requested url: %s\n", _this->url.c_str());
 
@@ -41,16 +39,10 @@ void __fastcall Http_httpGetPostWinInet_hook(Http* _this, void*, bool isPost, in
 			std::string assetUrl = "https://assetdelivery.roblox.com/v1/asset/?" + parsedUrl.query_;
 			printf("Should swap URL with: %s\n", assetUrl.c_str());
 
-			// yep... same access violation i got in polygonutil.dll..........
-			// yaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaayyyyyyyyyyyyyyyyyyyyyy
-			_this->url = assetUrl;
+			std::string test = assetUrl;
+			_this->url = test;
 		}
 	}
-
-	// printf("Host: %s\n", parsedUrl.host_.c_str());
-	// printf("Path: %s\n", parsedUrl.path_.c_str());
-	// printf("Query: %s\n", parsedUrl.query_.c_str());
-	// printf("Fragment: %s\n", parsedUrl.fragment_.c_str());
 
 	printf("\n");
 

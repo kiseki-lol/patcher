@@ -72,9 +72,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
+    <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
+    <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -162,6 +164,7 @@
   <ItemGroup>
     <ClInclude Include="Config.h" />
     <ClInclude Include="DebugDatamodel.h" />
+    <ClInclude Include="DebugGame.h" />
     <ClInclude Include="MFCCommandLine.h" />
     <ClInclude Include="PlayerCommandLine.h" />
     <ClInclude Include="RCCOutput.h" />
@@ -178,6 +181,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DebugDatamodel.cpp" />
+    <ClCompile Include="DebugGame.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="MFCCommandLine.cpp" />
     <ClCompile Include="LUrlParser.cpp">

@@ -66,6 +66,9 @@
     <ClInclude Include="TestHttpGetPost.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
+    <ClInclude Include="DebugGame.h">
+      <Filter>Header Files\Hooks</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp">
@@ -108,6 +111,9 @@
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
     <ClCompile Include="TestHttpGetPost.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugGame.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
   </ItemGroup>

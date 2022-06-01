@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "RCCOutput.h"
+#include "DebugGame.h"
 #include "Patches.h"
 
 HANDLE outputHandle;
@@ -34,6 +35,25 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
     int messagePtr = (int)message + 4;
     message = reinterpret_cast<std::string*>(messagePtr);
 #endif
+
+    /* if (message->compare("MakeDatamodel") == 0)
+    {
+        printf("Attempting to create DataModel...\n");
+        DataModel__createDataModel(true);
+    } */
+
+    if (message->compare("NewGame") == 0)
+    {
+        printf("Attempting to create new Game...\n");
+        int v2;
+        void* v3;
+        void* v4;
+        
+        // v3 = operator new(104u);
+        v3 = new Game();
+        v4 = Game__initializeConstruct(v3, 0);
+        v2 = Game__construct_hook((Game*)v4);
+    }
 
     switch (type)
     {

@@ -19,7 +19,7 @@
 
 // RobloxApp (2010)
 #ifdef MFC2010
-#define CLASSPADDING_DATAMODEL__JOBID              729 // when compiled as debug, this must be 728
+#define CLASSPADDING_DATAMODEL__JOBID              728
 
 #define ADDRESS_DATAMODEL__GETJOBID                0x005CACC0
 #define ADDRESS_STANDARDOUT__PRINT                 0x0059F340
@@ -60,7 +60,7 @@
 
 // RobloxApp (2011)
 #ifdef MFC2011
-#define CLASSPADDING_DATAMODEL__JOBID              740 // when compiled as debug, this must be 739
+#define CLASSPADDING_DATAMODEL__JOBID              739
 
 #define ADDRESS_DATAMODEL__GETJOBID                0x005E70C0
 #define ADDRESS_DATAMODEL__DESTRUCT                0x006002A0
@@ -135,7 +135,7 @@
 #define ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM 0x0
 #define ADDRESS_CCOMMANDLINEINFO__PARSELAST        0x0
 
-#define CLASSPADDING_DATAMODEL__JOBID              763 // when compiled as debug, this must be 762
+#define CLASSPADDING_DATAMODEL__JOBID              762
 
 #define ADDRESS_DATAMODEL__GETJOBID                Patches::GetAddressByOffset(0x002079A0)
 #define ADDRESS_STANDARDOUT__PRINT                 Patches::GetAddressByOffset(0x0023A8C0)
@@ -158,3 +158,9 @@
 #define RR_STOP_PROCESSING_AND_DEALLOCATE 0
 #define RR_CONTINUE_PROCESSING 1
 #define RR_STOP_PROCESSING 2
+
+#ifdef NDEBUG
+#define PADDING_STRUCT 1
+#else
+#define PADDING_STRUCT 0
+#endif
