@@ -60,13 +60,13 @@
     <ClInclude Include="RCCOutput.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="DebugDatamodel.h">
-      <Filter>Header Files\Hooks</Filter>
-    </ClInclude>
     <ClInclude Include="TestHttpGetPost.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
     <ClInclude Include="DebugGame.h">
+      <Filter>Header Files\Hooks</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugScriptContext.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
   </ItemGroup>
@@ -107,13 +107,13 @@
     <ClCompile Include="RCCOutput.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="DebugDatamodel.cpp">
-      <Filter>Source Files\Hooks</Filter>
-    </ClCompile>
     <ClCompile Include="TestHttpGetPost.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
     <ClCompile Include="DebugGame.cpp">
+      <Filter>Source Files\Hooks</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugScriptContext.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
   </ItemGroup>

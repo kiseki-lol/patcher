@@ -163,8 +163,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
-    <ClInclude Include="DebugDatamodel.h" />
     <ClInclude Include="DebugGame.h" />
+    <ClInclude Include="DebugScriptContext.h" />
     <ClInclude Include="MFCCommandLine.h" />
     <ClInclude Include="PlayerCommandLine.h" />
     <ClInclude Include="RCCOutput.h" />
@@ -180,8 +180,8 @@
     <ClInclude Include="VerifySignatureBase64.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DebugDatamodel.cpp" />
     <ClCompile Include="DebugGame.cpp" />
+    <ClCompile Include="DebugScriptContext.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="MFCCommandLine.cpp" />
     <ClCompile Include="LUrlParser.cpp">

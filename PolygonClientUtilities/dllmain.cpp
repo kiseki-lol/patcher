@@ -4,6 +4,7 @@
 //#include "RobloxMFCHooks.h"
 
 #include "DebugGame.h"
+#include "DebugScriptContext.h"
 // #include "TestHttpGetPost.h"
 #include "TrustCheck.h"
 #include "VerifySignatureBase64.h"
@@ -26,6 +27,7 @@
 
 START_PATCH_LIST()
 ADD_PATCH(Game__construct, Game__construct_hook)
+// ADD_PATCH(ScriptContext__execute, ScriptContext__execute_hook)
 // ADD_PATCH(Http_httpGetPostWinInet, Http_httpGetPostWinInet_hook)
 
 ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)

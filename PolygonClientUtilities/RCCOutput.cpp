@@ -44,15 +44,45 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 
     if (message->compare("NewGame") == 0)
     {
+        printf("\n");
+
         printf("Attempting to create new Game...\n");
-        int v2;
-        void* v3;
-        void* v4;
-        
-        // v3 = operator new(104u);
-        v3 = new Game();
-        v4 = Game__initializeConstruct(v3, 0);
-        v2 = Game__construct_hook((Game*)v4);
+
+        Game* game = new Game();
+        int result = Game__construct(Game__initializeClass(game, 0));
+
+        if (result)
+        {
+            printf("Failed to create new Game! (returned %d)\n", result);
+        }
+        else
+        {
+            // int datamodel = game[4];
+            printf("Successfully created new Game! (%p)\n", game);
+            // printf("Address of DataModel: %08X\n", game->dataModel);
+            // printf("Attempting to set DataModel Job ID to 'deez nuts'...\n");
+            // game->dataModel->jobId = "deez nuts";
+            printf("Length of DataModel Job ID: %d\n", game->dataModel->jobId.length());
+
+            printf("Attempting to create service provider...\n");
+
+            void* dataModelPointer = game->dataModel.get();
+            printf("Address of dataModelPointer: %p\n", dataModelPointer);
+
+            printf("Calling ServiceProvider::create<ScriptContext>()...\n");
+            void* scriptContext = ServiceProvider__createScriptContext(dataModelPointer);
+            printf("Address of scriptContext: %p\n", scriptContext);
+
+            printf("Calling ScriptContext::execute()...\n");
+            // void* arg;
+            // ScriptContext__execute(scriptContext, &arg, 1, "print('hi')", "hi", 0);
+            ScriptContext__execute(scriptContext, 1, "print('hi')", "hi");
+
+            // printf("Calling ScriptContext::setTimeout()...\n");
+            // ScriptContext__setTimeout(scriptContext, 5);
+
+            printf("\n");
+        }
     }
 
     switch (type)
