@@ -93,6 +93,7 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(SolutionDir)Detours\include</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -116,6 +117,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)Detours\include</AdditionalIncludeDirectories>
       <Optimization>Disabled</Optimization>
       <WholeProgramOptimization>false</WholeProgramOptimization>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -176,7 +178,7 @@
     <ClInclude Include="Classes.h" />
     <ClInclude Include="Hooks.h" />
     <ClInclude Include="Util.h" />
-    <ClInclude Include="VerifySignatureBase64.h" />
+    <ClInclude Include="Crypt.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DebugScriptContext.cpp" />
@@ -200,7 +202,7 @@
     <ClCompile Include="TestHttpGetPost.cpp" />
     <ClCompile Include="TrustCheck.cpp" />
     <ClCompile Include="Util.cpp" />
-    <ClCompile Include="VerifySignatureBase64.cpp" />
+    <ClCompile Include="Crypt.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

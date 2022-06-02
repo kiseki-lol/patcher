@@ -45,7 +45,7 @@
     <ClInclude Include="TrustCheck.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="VerifySignatureBase64.h">
+    <ClInclude Include="Crypt.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
     <ClInclude Include="MFCCommandLine.h">
@@ -89,7 +89,7 @@
     <ClCompile Include="TrustCheck.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="VerifySignatureBase64.cpp">
+    <ClCompile Include="Crypt.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
     <ClCompile Include="MFCCommandLine.cpp">

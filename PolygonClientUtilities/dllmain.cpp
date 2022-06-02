@@ -6,7 +6,7 @@
 #include "DebugScriptContext.h"
 // #include "TestHttpGetPost.h"
 #include "TrustCheck.h"
-#include "VerifySignatureBase64.h"
+#include "Crypt.h"
 
 #ifdef ARBITERBUILD
 #include "RCCOutput.h"

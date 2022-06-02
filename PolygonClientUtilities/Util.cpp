@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Util.h"
+#include <string_view>
 
 const std::vector<std::string> Util::allowedHosts
 {
@@ -68,4 +69,46 @@ std::string Util::toLower(std::string s)
 {
     std::transform(s.begin(), s.end(), s.begin(), [](unsigned char c) { return std::tolower(c); });
     return s;
+}
+
+// https://stackoverflow.com/a/44562527
+std::vector<BYTE> Util::base64Decode(const std::string_view data)
+{
+    // table from '+' to 'z'
+    const uint8_t lookup[] = {
+        62,  255, 62,  255, 63,  52,  53, 54, 55, 56, 57, 58, 59, 60, 61, 255,
+        255, 0,   255, 255, 255, 255, 0,  1,  2,  3,  4,  5,  6,  7,  8,  9,
+        10,  11,  12,  13,  14,  15,  16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+        255, 255, 255, 255, 63,  255, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35,
+        36,  37,  38,  39,  40,  41,  42, 43, 44, 45, 46, 47, 48, 49, 50, 51
+    };
+
+    static_assert(sizeof(lookup) == 'z' - '+' + 1);
+
+    std::vector<unsigned char> out;
+    int val = 0, valb = -8;
+    for (uint8_t c : data)
+    {
+        if (c < '+' || c > 'z')
+        {
+            break;
+        }
+        
+        c -= '+';
+        if (lookup[c] >= 64)
+        {
+            break;
+        }
+
+        val = (val << 6) + lookup[c];
+        valb += 6;
+
+        if (valb >= 0)
+        {
+            out.push_back(char((val >> valb) & 0xFF));
+            valb -= 8;
+        }
+    }
+
+    return out;
 }
