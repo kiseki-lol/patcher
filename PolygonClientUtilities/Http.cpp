@@ -10,22 +10,19 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 	LUrlParser::ParseURL parsedUrl = LUrlParser::ParseURL::parseURL(_this->url);
 	std::string urlPath = Util::toLower(parsedUrl.path_);
 	
-	bool flip = false;
-	Http _changed;
+	Http _changed = *_this;
 
 	if (parsedUrl.host_ == "roblox.com" || parsedUrl.host_ == "www.roblox.com")
 	{
 		if (urlPath == "asset" || urlPath == "asset/" || urlPath == "asset/default.ashx")
 		{
-			flip = true;
 			_changed.url = "https://assetdelivery.roblox.com/v1/asset/?" + parsedUrl.query_;
 		}
 	}
 
 	printf("\n");
 
-	if (flip)
-		Http__httpGetPostWinInet(&_changed, isPost, a3, compressData, additionalHeaders, a6);
-	else
-		Http__httpGetPostWinInet(_this, isPost, a3, compressData, additionalHeaders, a6);
+	_this = &_changed;
+
+	Http__httpGetPostWinInet(_this, isPost, a3, compressData, additionalHeaders, a6);
 }
