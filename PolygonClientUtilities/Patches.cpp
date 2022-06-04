@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Patches.h"
 
-#include <detours.h>
+#include <detours/detours.h>
 
 int addressOffset;
 

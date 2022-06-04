@@ -170,7 +170,7 @@
     <ClInclude Include="PlayerCommandLine.h" />
     <ClInclude Include="RCCOutput.h" />
     <ClInclude Include="ReplicatorSecurity.h" />
-    <ClInclude Include="TestHttpGetPost.h" />
+    <ClInclude Include="Http.h" />
     <ClInclude Include="TrustCheck.h" />
     <ClInclude Include="LUrlParser.h" />
     <ClInclude Include="Patches.h" />
@@ -199,7 +199,7 @@
     <ClCompile Include="RCCOutput.cpp" />
     <ClCompile Include="ReplicatorSecurity.cpp" />
     <ClCompile Include="Hooks.cpp" />
-    <ClCompile Include="TestHttpGetPost.cpp" />
+    <ClCompile Include="Http.cpp" />
     <ClCompile Include="TrustCheck.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Crypt.cpp" />
