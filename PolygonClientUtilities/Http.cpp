@@ -7,10 +7,10 @@ Http__httpGetPostWinInet_t Http__httpGetPostWinInet = (Http__httpGetPostWinInet_
 
 void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, int a3, bool compressData, LPCSTR additionalHeaders, int a6)
 {
+	Http _changed = *_this;
+
 	LUrlParser::ParseURL parsedUrl = LUrlParser::ParseURL::parseURL(_this->url);
 	std::string urlPath = Util::toLower(parsedUrl.path_);
-	
-	Http _changed = *_this;
 
 	if (parsedUrl.host_ == "roblox.com" || parsedUrl.host_ == "www.roblox.com")
 	{
@@ -19,8 +19,6 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 			_changed.url = "https://assetdelivery.roblox.com/v1/asset/?" + parsedUrl.query_;
 		}
 	}
-
-	printf("\n");
 
 	_this = &_changed;
 
