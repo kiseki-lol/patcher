@@ -2,6 +2,11 @@
 #include "Util.h"
 #include <string_view>
 
+const std::string Util::publicKey = "BgIAAACkAABSU0ExAAQAAAEAAQABmKy9m0NxBRoXTuQPZU8BeM"
+        "fwBisHcYBy93KSlQB3emeiW/pEMj9YWn2k7JkHiqcjuH+XE5PW"
+        "K+q9s8oLQsnXTdTYa2l+1BhypP5jefgq0ZHITTIMBfE7rTI39p"
+        "pzs0ayXKINQMIsBzXaJm25v5gP+vlz4cupJPq+jy9De+kcyw==";
+
 const std::vector<std::string> Util::allowedHosts
 {
     "polygon.pizzaboxer.xyz",
