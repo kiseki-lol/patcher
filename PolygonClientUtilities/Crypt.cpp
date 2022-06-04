@@ -51,7 +51,10 @@ void Crypt::verifySignatureBase64(std::string message, std::string signatureBase
 
     if (!CryptCreateHash(context, CALG_SHA_256, NULL, 0, &hash))
     {
-        throw std::runtime_error("");
+        if (!CryptCreateHash(context, CALG_SHA1, NULL, 0, &hash))
+        {
+            throw std::runtime_error("");
+        }
     }
 
     try
