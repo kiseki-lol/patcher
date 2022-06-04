@@ -30,9 +30,8 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
     StandardOut__print(_this, type, message);
 
 #ifdef NDEBUG
-    // i have absolutely no clue why but the location of the message pointer is offset 4 bytes when the dll compiled as release
-    int messagePtr = (int)message + 4;
-    message = reinterpret_cast<std::string*>(messagePtr);
+    // Message pointer is offset 4 bytes when the DLL is compiled as release
+    message = reinterpret_cast<std::string*>((int)message + 4);
 #endif
 
     if (message->compare("NewGame") == 0 || message->compare("NewGame2") == 0)
@@ -64,19 +63,20 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 
     switch (type)
     {
-    case 1: // RBX::MESSAGE_OUTPUT:
-        SetConsoleTextAttribute(outputHandle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-        break;
-    case 0: // RBX::MESSAGE_INFO:
-        SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-        break;
-    case 2: // RBX::MESSAGE_WARNING:
-        SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN);
-        break;
-    case 3: // RBX::MESSAGE_ERROR:
-        SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_INTENSITY);
-        break;
+        case RBX__MESSAGE_OUTPUT:
+            SetConsoleTextAttribute(outputHandle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+            break;
+        case RBX__MESSAGE_INFO:
+            SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+            break;
+        case RBX__MESSAGE_WARNING:
+            SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN);
+            break;
+        case RBX__MESSAGE_ERROR:
+            SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_INTENSITY);
+            break;
     }
+
     printf("%s\n", message->c_str());
     SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 }

@@ -3,19 +3,20 @@
 #define MFC2010
 #define PLAYERBUILD
 #define ARBITERBUILD
-
 // #define DEBUG_SERVERREPLICATOR__PROCESSPACKET
 
-// when PLAYERBUILD is defined, the following changes occur for 2010 and 2012 only:
-// the -jobId arg is parsed
-
-// when ARBITERBUILD is defined, the following changes occur:
-// DataModel::getJobId is hooked
-// DataModel::~DataModel is hooked
-// StandardOut::print is hooked
-// Network::RakNetAddressToString is hooked
-// -jobId arg becomes available
-// HTTP requests and output messages are logged to a file
+/*
+* PLAYERBUILD (2010 and 2012):
+* - The "-jobId" argument is parsed
+* 
+* ARBITERBUILD:
+* - DataModel::getJobId is hooked
+* - DataModel::~DataModel is hooked
+* - StandardOut::print is hooked
+* - Network::RakNetAddressToString is hooked
+* - The "-jobId" argument becomes available
+* - HTTP requests and console output is logged to a file
+*/
 
 // RobloxApp (2010)
 #ifdef MFC2010
