@@ -79,11 +79,19 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, int 
         
         std::copy(message.begin(), message.end(), data);
 
-        int result = EVP_PKEY_verify(ctx, signature, strlen((char*)signature), data, strlen((char*)data));
+        int result = EVP_PKEY_verify(ctx, signature, sizeof(signature), data, strlen((char*)data));
 
+        // Dispose objects
+        EVP_PKEY_free(key);
+        EVP_PKEY_CTX_free(ctx);
+
+        delete[] signature;
+        delete[] data;
+
+        // Check
         if (result != 1)
         {
-            // throw std::runtime_error("");
+            throw std::runtime_error("");
         }
     }
     catch (...)
