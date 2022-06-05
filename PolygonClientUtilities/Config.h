@@ -32,7 +32,7 @@
 #define ADDRESS_DATAMODEL__CREATEDATAMODEL         0x005DC150
 #define ADDRESS_GAME__CONSTRUCT                    0x0047DBF0
 #define ADDRESS_HTTP__HTTPGETPOSTWININET           0x006A9210
-#define ADDRESS_HTTP__TRUSTCHECK                   0x005A2680
+#define ADDRESS_HTTP__TRUSTCHECK                   0x005A2680 
 
 // MFC specific definitions
 #define CLASSLOCATION_CROBLOXAPP                   0x00BFF898
