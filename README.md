@@ -15,9 +15,8 @@ Test signature check:
 Test command line parameter reimplementation (2010/2011 builds only):  
 > `> RobloxApp.exe -a http://polygondev.pizzaboxer.xyz/login/negotiate.ashx -t 0 -j http://polygondev.pizzaboxer.xyz/game/visit.ashx`
 
-Test output and jobId (Arbiter builds only):  
-> `> RobloxApp.exe -jobId ExampleJobId` - Should open an output console  
-> Run `print(game.jobId)` - Should print "ExampleJobId" in the console  
+Test DataModel creation (Arbiter builds only):  
+> Run `print("NewGame")` - Should create a new DataModel with an executed script  
 
 # vcpkg
 ```
