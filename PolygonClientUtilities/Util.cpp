@@ -2,10 +2,13 @@
 #include "Util.h"
 #include <string_view>
 
-const std::string Util::publicKey = "BgIAAACkAABSU0ExAAQAAAEAAQABmKy9m0NxBRoXTuQPZU8BeM"
+const std::string Util::publicKey = 
+        "-----BEGIN RSA PUBLIC KEY-----"
+        "BgIAAACkAABSU0ExAAQAAAEAAQABmKy9m0NxBRoXTuQPZU8BeM"
         "fwBisHcYBy93KSlQB3emeiW/pEMj9YWn2k7JkHiqcjuH+XE5PW"
         "K+q9s8oLQsnXTdTYa2l+1BhypP5jefgq0ZHITTIMBfE7rTI39p"
-        "pzs0ayXKINQMIsBzXaJm25v5gP+vlz4cupJPq+jy9De+kcyw==";
+        "pzs0ayXKINQMIsBzXaJm25v5gP+vlz4cupJPq+jy9De+kcyw=="
+        "-----END RSA PUBLIC KEY-----";
 
 const std::vector<std::string> Util::allowedHosts
 {
@@ -77,7 +80,7 @@ std::string Util::toLower(std::string s)
 }
 
 // https://stackoverflow.com/a/44562527
-std::vector<BYTE> Util::base64Decode(const std::string_view data)
+std::vector<unsigned char> Util::base64Decode(const std::string_view data)
 {
     // table from '+' to 'z'
     const uint8_t lookup[] = {

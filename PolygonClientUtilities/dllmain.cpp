@@ -1,27 +1,26 @@
 #include "pch.h"
 #include "Config.h"
 #include "Patches.h"
-//#include "RobloxMFCHooks.h"
 
-#include "DebugScriptContext.h"
+#include "ScriptContext.h"
 #include "Http.h"
 #include "TrustCheck.h"
 #include "Crypt.h"
 
 #ifdef ARBITERBUILD
-#include "RCCOutput.h"
+#include "StandardOut.h"
 
 #ifdef MFC2011
 #include "ReplicatorSecurity.h"
 #endif
 
 #ifdef PLAYER2012
-#include "PlayerCommandLine.h"
+#include "Application.h"
 #endif
 #endif
 
 #if defined(MFC2010) || defined(MFC2011)
-#include "MFCCommandLine.h"
+#include "CRoblox.h"
 #endif
 
 START_PATCH_LIST()

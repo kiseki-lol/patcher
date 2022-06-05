@@ -36,34 +36,28 @@
     <ClInclude Include="Config.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="LUrlParser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Util.h">
       <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="TrustCheck.h">
-      <Filter>Header Files\Hooks</Filter>
     </ClInclude>
     <ClInclude Include="Crypt.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="MFCCommandLine.h">
+    <ClInclude Include="CRoblox.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerCommandLine.h">
+    <ClInclude Include="Application.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
     <ClInclude Include="ReplicatorSecurity.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="RCCOutput.h">
+    <ClInclude Include="StandardOut.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
     <ClInclude Include="Http.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="DebugScriptContext.h">
+    <ClInclude Include="ScriptContext.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
   </ItemGroup>
@@ -80,34 +74,28 @@
     <ClCompile Include="Patches.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="LUrlParser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Util.cpp">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TrustCheck.cpp">
-      <Filter>Source Files\Hooks</Filter>
     </ClCompile>
     <ClCompile Include="Crypt.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="MFCCommandLine.cpp">
+    <ClCompile Include="CRoblox.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerCommandLine.cpp">
+    <ClCompile Include="Application.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
     <ClCompile Include="ReplicatorSecurity.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="RCCOutput.cpp">
+    <ClCompile Include="StandardOut.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
     <ClCompile Include="Http.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="DebugScriptContext.cpp">
+    <ClCompile Include="ScriptContext.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
   </ItemGroup>

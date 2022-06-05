@@ -18,3 +18,11 @@ Test command line parameter reimplementation (2010/2011 builds only):
 Test output and jobId (Arbiter builds only):  
 > `> RobloxApp.exe -jobId ExampleJobId` - Should open an output console  
 > Run `print(game.jobId)` - Should print "ExampleJobId" in the console  
+
+# vcpkg
+```
+> git clone https://github.com/microsoft/vcpkg
+> .\vcpkg\bootstrap-vcpkg.bat
+> .\vcpkg\vcpkg integrate install
+> .\vcpkg\vcpkg integrate project
+```

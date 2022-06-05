@@ -4,9 +4,6 @@
 #include "Config.h"
 #include "Util.h"
 #include "LUrlParser.h"
-#ifdef ARBITERBUILD
-// #include "Logger.h"
-#endif
 
 static bool hasJobId = false;
 static bool setJobId = false;
@@ -34,10 +31,14 @@ ServerReplicator__processPacket_t ServerReplicator__processPacket = (ServerRepli
 #ifdef ARBITERBUILD
 int __fastcall DataModel__getJobId_hook(DataModel* _this, void*, int a2)
 {
-    // the actual function signature is (DataModel* _this)
-    // this only sets the job id when game.jobId is called by lua
-    // so the gameserver script must call game.jobId at the beginning for this to take effect
-    // also, this only applies to the first datamodel that is created
+    /*
+        This only sets the job ID when game.jobId is read from Lua.
+        
+        Thus, the gameserver script must call game.jobId when it starts
+        in order for this to take effect.
+
+        This also only applies to the first DataModel that is created.
+    */
 
     if (!setJobId && hasJobId && !jobId.empty())
     {
@@ -114,7 +115,8 @@ INT __fastcall ServerReplicator__processPacket_hook(int _this, void*, Packet* pa
     default:
         if (true)
         {
-            Logger::Print(2, "Player not authenticated s");
+            printf("Player not authenticated s");
+            // Logger::Print(2, "Player not authenticated s");
             return RR_STOP_PROCESSING_AND_DEALLOCATE;
         }
         return ServerReplicator__processPacket(_this, packet);
