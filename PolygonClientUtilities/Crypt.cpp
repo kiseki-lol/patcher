@@ -36,5 +36,66 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, int 
     signatureBase64 = std::string(reinterpret_cast<const char*>(v21), a14);
 
     // Verify the signature
+    try
+    {
+        // Read public key
+        EVP_PKEY* key = NULL;
+        BIO* bio = BIO_new_mem_buf((void*)Util::publicKey.c_str(), Util::publicKey.length());
 
+        if (bio == NULL)
+        {
+            throw std::runtime_error("");
+        }
+
+        key = PEM_read_bio_PUBKEY(bio, NULL, NULL, NULL);
+        BIO_free(bio);
+
+        // Create context
+        EVP_PKEY_CTX* ctx = EVP_PKEY_CTX_new(key, NULL);
+
+        if (!ctx)
+        {
+            throw std::runtime_error("");
+        }
+
+        if (EVP_PKEY_verify_init(ctx) <= 0)
+        {
+            throw std::runtime_error("");
+        }
+
+        if (EVP_PKEY_CTX_set_rsa_padding(ctx, RSA_PKCS1_PADDING) <= 0)
+        {
+            throw std::runtime_error("");
+        }
+
+        if (EVP_PKEY_CTX_set_signature_md(ctx, EVP_sha1()) <= 0)
+        {
+            throw std::runtime_error("");
+        }
+
+        // Verify signature against the message
+        unsigned char* signature = Util::base64Decode(signatureBase64);
+        unsigned char* data = new unsigned char[message.length()];
+        
+        std::copy(message.begin(), message.end(), data);
+
+        int result = EVP_PKEY_verify(ctx, signature, sizeof(signature), data, strlen((char*)data));
+
+        // Dispose objects
+        EVP_PKEY_free(key);
+        EVP_PKEY_CTX_free(ctx);
+
+        delete[] signature;
+        delete[] data;
+
+        // Check
+        if (result != 1)
+        {
+            throw std::runtime_error("");
+        }
+    }
+    catch (...)
+    {
+        throw std::runtime_error("");
+    }
 }
