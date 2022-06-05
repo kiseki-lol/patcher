@@ -3,7 +3,6 @@
 #include "Patches.h"
 #include "Config.h"
 #include "Util.h"
-#include "LUrlParser.h"
 
 static bool hasJobId = false;
 static bool setJobId = false;

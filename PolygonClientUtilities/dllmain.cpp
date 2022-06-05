@@ -4,7 +4,6 @@
 
 #include "ScriptContext.h"
 #include "Http.h"
-#include "TrustCheck.h"
 #include "Crypt.h"
 
 #ifdef ARBITERBUILD
