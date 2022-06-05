@@ -24,7 +24,7 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, int 
         v18 = (const BYTE*)&pbData;
     }
 
-    message = std::string(reinterpret_cast<char const*>(pbData), dwDataLen);
+    message = std::string(reinterpret_cast<const char*>(pbData), dwDataLen);
 
     // Get signatureBase64
     int* v21 = (int*)a10;
@@ -74,24 +74,22 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, int 
         }
 
         // Verify signature against the message
-        unsigned char* signature = Util::base64Decode(signatureBase64);
-        unsigned char* data = new unsigned char[message.length()];
-        
-        std::copy(message.begin(), message.end(), data);
+        const char* signature = Util::base64Decode(signatureBase64).c_str();
+        const char* data = message.c_str();
 
-        int result = EVP_PKEY_verify(ctx, signature, sizeof(signature), data, strlen((char*)data));
+        int result = EVP_PKEY_verify(ctx, (unsigned char*)signature, strlen(signature), (unsigned char*)data, strlen(data));
 
         // Dispose objects
         EVP_PKEY_free(key);
         EVP_PKEY_CTX_free(ctx);
 
-        delete[] signature;
-        delete[] data;
+        delete signature;
+        delete data;
 
         // Check
         if (result != 1)
         {
-            throw std::runtime_error("");
+            // throw std::runtime_error("");
         }
     }
     catch (...)

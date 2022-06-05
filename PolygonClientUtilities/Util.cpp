@@ -80,7 +80,7 @@ std::string Util::toLower(std::string s)
 }
 
 // https://stackoverflow.com/a/44562527
-unsigned char* Util::base64Decode(const std::string_view data)
+std::string Util::base64Decode(const std::string_view data)
 {
     // table from '+' to 'z'
     const uint8_t lookup[] = {
@@ -93,7 +93,7 @@ unsigned char* Util::base64Decode(const std::string_view data)
 
     static_assert(sizeof(lookup) == 'z' - '+' + 1);
 
-    std::vector<unsigned char> out;
+    std::string out;
     int val = 0, valb = -8;
     for (uint8_t c : data)
     {
@@ -117,9 +117,6 @@ unsigned char* Util::base64Decode(const std::string_view data)
             valb -= 8;
         }
     }
-
-    unsigned char* blob = new unsigned char[out.size()];
-    std::copy(out.begin(), out.end(), blob);
-
-    return blob;
+    
+    return out;
 }
