@@ -2,13 +2,7 @@
 #include "Util.h"
 #include <string_view>
 
-const std::string Util::publicKey =
-    "-----BEGIN PUBLIC KEY-----\n"
-    "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDLHOl7Qy+Pvvokqcvhc/n6D5i/\n"
-    "uW0m2jUHLMJADaJcskazc5r2NzKtO/EFDDJNyJHRKvh5Y/6kchjUfmlr2NRN18lC\n"
-    "C8qzveor1pMTl3+4I6eKB5nspH1aWD8yRPpbomd6dwCVknL3coBxBysG8Md4AU9l\n"
-    "D+ROFxoFcUObvayYAQIDAQAB\n"
-    "-----END PUBLIC KEY-----";
+const std::string Util::publicKey = "BgIAAACkAABSU0ExAAQAAAEAAQABmKy9m0NxBRoXTuQPZU8BeMfwBisHcYBy93KSlQB3emeiW/pEMj9YWn2k7JkHiqcjuH+XE5PWK+q9s8oLQsnXTdTYa2l+1BhypP5jefgq0ZHITTIMBfE7rTI39ppzs0ayXKINQMIsBzXaJm25v5gP+vlz4cupJPq+jy9De+kcyw==";
 
 const std::vector<std::string> Util::allowedHosts
 {
@@ -21,6 +15,7 @@ const std::vector<std::string> Util::allowedHosts
     "www.roblox.com",
     "api.roblox.com",
     "assetdelivery.roblox.com",
+    "assetgame.roblox.com",
 
     "rbxcdn.com",
     "www.rbxcdn.com",
@@ -36,18 +31,6 @@ const std::vector<std::string> Util::allowedHosts
     "t7.rbxcdn.com",
     "t8.rbxcdn.com",
     "t9.rbxcdn.com",
-
-    "cr.rbxcdn.com",
-    "c0.rbxcdn.com",
-    "c1.rbxcdn.com",
-    "c2.rbxcdn.com",
-    "c3.rbxcdn.com",
-    "c4.rbxcdn.com",
-    "c5.rbxcdn.com",
-    "c6.rbxcdn.com",
-    "c7.rbxcdn.com",
-    "c8.rbxcdn.com",
-    "c9.rbxcdn.com",
 
     "tadah.rocks",
     "www.tadah.rocks"
@@ -108,7 +91,7 @@ std::string Util::toLower(std::string s)
 }
 
 // https://stackoverflow.com/a/44562527
-std::string Util::base64Decode(const std::string_view data)
+std::vector<BYTE> Util::base64Decode(const std::string_view data)
 {
     // table from '+' to 'z'
     const uint8_t lookup[] = {
@@ -121,7 +104,7 @@ std::string Util::base64Decode(const std::string_view data)
 
     static_assert(sizeof(lookup) == 'z' - '+' + 1);
 
-    std::string out;
+    std::vector<unsigned char> out;
     int val = 0, valb = -8;
     for (uint8_t c : data)
     {
@@ -129,7 +112,7 @@ std::string Util::base64Decode(const std::string_view data)
         {
             break;
         }
-        
+
         c -= '+';
         if (lookup[c] >= 64)
         {
@@ -145,6 +128,6 @@ std::string Util::base64Decode(const std::string_view data)
             valb -= 8;
         }
     }
-    
+
     return out;
 }

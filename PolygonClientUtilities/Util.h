@@ -13,5 +13,5 @@ public:
     static std::map<std::string, std::string> parseArgs(std::string args);
     static bool isASCII(const std::string& s);
     static std::string toLower(std::string s);
-    static std::string base64Decode(const std::string_view data);
+    static std::vector<BYTE> base64Decode(const std::string_view data);
 };
