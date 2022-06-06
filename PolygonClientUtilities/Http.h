@@ -2,6 +2,7 @@
 
 #include "Classes.h"
 #include <curl/curl.h>
+#include <rapidjson/document.h>
 
 typedef void (__thiscall* Http__httpGetPostWinInet_t)(Http* _this, bool isPost, int a3, bool compressData, LPCSTR additionalHeaders, int a6);
 typedef BOOL(__thiscall* Http__trustCheck_t)(const char* url);

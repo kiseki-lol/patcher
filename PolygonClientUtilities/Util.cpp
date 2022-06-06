@@ -19,7 +19,35 @@ const std::vector<std::string> Util::allowedHosts
 
     "roblox.com",
     "www.roblox.com",
+    "api.roblox.com",
     "assetdelivery.roblox.com",
+
+    "rbxcdn.com",
+    "www.rbxcdn.com",
+
+    "tr.rbxcdn.com",
+    "t0.rbxcdn.com",
+    "t1.rbxcdn.com",
+    "t2.rbxcdn.com",
+    "t3.rbxcdn.com",
+    "t4.rbxcdn.com",
+    "t5.rbxcdn.com",
+    "t6.rbxcdn.com",
+    "t7.rbxcdn.com",
+    "t8.rbxcdn.com",
+    "t9.rbxcdn.com",
+
+    "cr.rbxcdn.com",
+    "c0.rbxcdn.com",
+    "c1.rbxcdn.com",
+    "c2.rbxcdn.com",
+    "c3.rbxcdn.com",
+    "c4.rbxcdn.com",
+    "c5.rbxcdn.com",
+    "c6.rbxcdn.com",
+    "c7.rbxcdn.com",
+    "c8.rbxcdn.com",
+    "c9.rbxcdn.com",
 
     "tadah.rocks",
     "www.tadah.rocks"

@@ -5,10 +5,16 @@
 Http__httpGetPostWinInet_t Http__httpGetPostWinInet = (Http__httpGetPostWinInet_t)ADDRESS_HTTP__HTTPGETPOSTWININET;
 Http__trustCheck_t Http__trustCheck = (Http__trustCheck_t)ADDRESS_HTTP__TRUSTCHECK;
 
+size_t write(char* contents, size_t size, size_t memory, void* pointer)
+{
+	((std::string*)pointer)->append((char*)contents, size * memory);
+	return size * memory;
+}
+
 void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, int a3, bool compressData, LPCSTR additionalHeaders, int a6)
 {
 	CURLU* curl = curl_url();
-	CURLUcode result = curl_url_set(curl, CURLUPART_URL, _this->url.c_str(), CURLU_NON_SUPPORT_SCHEME);
+	CURLUcode result = curl_url_set(curl, CURLUPART_URL, _this->url.c_str(), 0);
 
 	Http _changed = *_this;
 
@@ -21,6 +27,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 		curl_url_get(curl, CURLUPART_PATH, &path, 0);
 		curl_url_get(curl, CURLUPART_HOST, &host, 0);
 		curl_url_get(curl, CURLUPART_QUERY, &query, 0);
+		curl_url_cleanup(curl);
 
 		if (path != NULL && host != NULL && query != NULL)
 		{
@@ -35,14 +42,76 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 					_changed.url = "https://assetdelivery.roblox.com/v1/asset/?" + _query;
 					_this = &_changed;
 				}
-				else if (_path == "/thumbs/asset.ashx")
+				else if (_path == "/thumbs/asset.ashx" || _path == "/thumbs/avatar.ashx")
 				{
-					// hmmm
 					// https://www.roblox.com/asset/request-thumbnail-fix?assetId=1818&assetVersionId=0&width=420&height=420&imageFormat=Png&thumbnailFormatId=296&overrideModeration=false
-					// instead of proxying requests through the webserver, can we fetch this response in the client and parse the json?
-					// we can do the same thing for /avatar/request/thumbnail-fix (https://www.roblox.com/avatar/request-thumbnail-fix?userId=86890093&width=100&height=100&imageFormat=Png&thumbnailFormatId=41&dummy=false)
+					// https://www.roblox.com/avatar/request-thumbnail-fix?userId=86890093&width=100&height=100&imageFormat=Png&thumbnailFormatId=41&dummy=false
+					// https://www.roblox.com/asset/request-thumbnail-fix for asset.ashx ; needs assetId
+					// https://www.roblox.com/avatar/request-thumbnail-fix for avatar.ashx ; needs userId 
 
-					_changed.url = "http://polygon.pizzaboxer.xyz/Thumbs/Asset.ashx?" + _query + "&roblox=true";
+					std::string replaceWith = _path == "/thumbs/asset.ashx" ? "assetId" : "userId";
+					std::string apiUrl = "https://www.roblox.com/" + std::string(_path == "/thumbs/asset.ashx" ? "asset" : "avatar") + "/request-thumbnail-fix?";
+
+					// parse query stuff here
+					std::string query = "";
+					apiUrl += query;
+
+					printf("\napiUrl: %s\n", apiUrl.c_str());
+
+					// get the api response
+					CURL* curl = curl_easy_init();
+					CURLcode result;
+					long response = 0;
+					std::string data;
+
+					if (!curl)
+					{
+						throw std::runtime_error("Failed to initialize cURL");
+					}
+
+					curl_easy_setopt(curl, CURLOPT_URL, apiUrl);
+					curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write);
+					curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
+
+					result = curl_easy_perform(curl);
+					curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response);
+
+					curl_easy_cleanup(curl);
+
+					if (result != CURLE_OK || response != 200)
+					{
+						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x1");
+					}
+
+					rapidjson::Document document;
+					document.Parse(data.c_str());
+
+					if (document.HasParseError())
+					{
+						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x02");
+					}
+
+					if (!document.HasMember("d"))
+					{
+						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x03");
+					}
+
+					if (!document["d"].IsObject())
+					{
+						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x04");
+					}
+
+					if (!document["d"].HasMember("url"))
+					{
+						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x05");
+					}
+
+					if (!document["d"]["url"].IsString())
+					{
+						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x06");
+					}
+
+					_changed.url = document["d"]["url"].GetString();
 					_this = &_changed;
 				}
 			}
@@ -64,11 +133,6 @@ BOOL __fastcall Http__trustCheck_hook(const char* url)
 		url = *(char**)url;
 	}
 
-	printf("Http::trustCheck() %s\n", url);
-
-	CURLU* curl = curl_url();
-	CURLUcode result = curl_url_set(curl, CURLUPART_URL, url, 0);
-
 	std::string _url = std::string(url);
 
 	// checking for embedded schemes must come BEFORE checking if it's valid
@@ -81,13 +145,16 @@ BOOL __fastcall Http__trustCheck_hook(const char* url)
 
 	for (std::string allowedEmbeddedScheme : Util::allowedEmbeddedSchemes)
 	{
-		if (_url.find(allowedEmbeddedScheme + ":") == 0)
+		if (_url.rfind(allowedEmbeddedScheme + ":", 0) == 0)
 		{
 			return true;
 		}
 	}
 
-	if (result != 0)
+	CURLU* curl = curl_url();
+	CURLUcode result = curl_url_set(curl, CURLUPART_URL, url, 0);
+
+	if (result != CURLE_OK)
 	{
 		return false;
 	}
@@ -97,6 +164,7 @@ BOOL __fastcall Http__trustCheck_hook(const char* url)
 
 	curl_url_get(curl, CURLUPART_SCHEME, &scheme, 0);
 	curl_url_get(curl, CURLUPART_HOST, &host, 0);
+	curl_url_cleanup(curl);
 
 	if (std::find(Util::allowedSchemes.begin(), Util::allowedSchemes.end(), std::string(scheme)) != Util::allowedSchemes.end())
 	{

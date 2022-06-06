@@ -79,6 +79,13 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
             ExitProcess(EXIT_FAILURE);
         }
+
+        curl_global_init(CURL_GLOBAL_DEFAULT);
+    }
+
+    if (ul_reason_for_call == DLL_PROCESS_DETACH)
+    {
+        curl_global_cleanup();
     }
 
     return TRUE;

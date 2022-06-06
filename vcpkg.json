@@ -5,6 +5,7 @@
     "dependencies": [
         "curl",
         "detours",
-        "openssl"
+        "openssl",
+        "rapidjson"
     ]
 }
