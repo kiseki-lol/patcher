@@ -14,4 +14,6 @@ public:
     static bool isASCII(const std::string& s);
     static std::string toLower(std::string s);
     static std::vector<BYTE> base64Decode(const std::string_view data);
+    static std::map<std::string, std::string> parseQueryString(std::string query);
+    static std::string joinQueryString(std::map<std::string, std::string> query);
 };

@@ -50,7 +50,7 @@ bool Crypt::verifySignatureBase64(std::string message, std::string signatureBase
 
     if (!CryptCreateHash(context, algorithm, NULL, 0, &hash))
     {
-        return false;
+        throw std::runtime_error("");
     }
 
     try
@@ -88,6 +88,8 @@ bool Crypt::verifySignatureBase64(std::string message, std::string signatureBase
     }
 
     ::CryptDestroyHash(hash);
+
+    return true;
 }
 
 Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64 = (Crypt__verifySignatureBase64_t)ADDRESS_CRYPT__VERIFYSIGNATUREBASE64;

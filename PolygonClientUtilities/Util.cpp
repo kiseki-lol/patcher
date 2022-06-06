@@ -131,3 +131,39 @@ std::vector<BYTE> Util::base64Decode(const std::string_view data)
 
     return out;
 }
+
+// https://stackoverflow.com/a/28269049
+std::map<std::string, std::string> Util::parseQueryString(std::string query)
+{
+    std::istringstream stream(query);
+    std::map<std::string, std::string> parsed;
+    std::string pair, key, value;
+
+    while (std::getline(stream, pair, '&')) // split each term
+    {
+        std::istringstream term(pair);
+
+        if (std::getline(std::getline(term, key, '='), value))
+        {
+            parsed[key] = value;
+        }
+    }
+    
+    return parsed;
+}
+
+std::string Util::joinQueryString(std::map<std::string, std::string> query)
+{
+    std::stringstream stream;
+    stream << "?";
+
+    for (auto const& pair : query)
+    {
+        stream << pair.first << "=" << pair.second << "&";
+    }
+
+    std::string result = stream.str();
+    result.pop_back(); // remove ending ampersand
+
+    return result;
+}

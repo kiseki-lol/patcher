@@ -51,20 +51,45 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 				}
 				else if (_path == "/thumbs/asset.ashx" || _path == "/thumbs/avatar.ashx")
 				{
-					// https://www.roblox.com/asset/request-thumbnail-fix?assetId=1818&assetVersionId=0&width=420&height=420&imageFormat=Png&thumbnailFormatId=296&overrideModeration=false
-					// https://www.roblox.com/avatar/request-thumbnail-fix?userId=86890093&width=100&height=100&imageFormat=Png&thumbnailFormatId=41&dummy=false
-					// https://www.roblox.com/asset/request-thumbnail-fix for asset.ashx ; needs assetId
-					// https://www.roblox.com/avatar/request-thumbnail-fix for avatar.ashx ; needs userId 
+					/*
+						Both Roblox endpoints require thumbnailFormatId to be set. We will make the default value for it as 0.
 
-					std::string replaceWith = _path == "/thumbs/asset.ashx" ? "assetId" : "userId";
-					std::string apiUrl = "https://www.roblox.com/" + std::string(_path == "/thumbs/asset.ashx" ? "asset" : "avatar") + "/request-thumbnail-fix?";
+						Asset.ashx -> requires overrideModeration (default false) -> /asset/request-thumbnail-fix
+						Avatar.ashx -> requires dummy (default false) -> /avatar/request-thumbnail-fix
 
-					// parse query stuff here
-					std::string query = "";
-					apiUrl += query;
+						1. Parse query
+						2. Construct a brand new blank query with thumbnailFormatId as 0 and dummy/overrideModeration as false (if Avatar.ashx or Asset.ashx)
+						3. Merge the old query with priority over the old query so that if they declared any of the special variables, ours gets overwritten
+						4. Rename id (if found) to assetId or userId (specific to the endpoint)
+						5. Append to the Roblox url (specific to the endpoint)
+						6. Fetch Roblox API
+						7. Parse JSON
+						8. Set the URL as the given url
+					*/
 
-					printf("\napiUrl: %s\n", apiUrl.c_str());
+					std::string api = "https://www.roblox.com/" + std::string(_path == "/thumbs/asset.ashx" ? "asset" : "avatar") + "/request-thumbnail-fix";
 
+					std::map<std::string, std::string> source = Util::parseQueryString(query);
+					std::map<std::string, std::string> fixed = {
+						{ _path == "/thumbs/asset.ashx" ? "overrideModeration" : "dummy", "false" },
+						{ "thumbnailFormatId", "0" }
+					};
+					
+					for (auto& pair : source)
+					{
+						fixed[pair.first] = pair.second;
+					}
+
+					if (fixed.find("id") != fixed.end())
+					{
+						auto handler = fixed.extract("id");
+						handler.key() = _path == "/thumbs/asset.ashx" ? "assetId" : "userId";
+						
+						fixed.insert(std::move(handler));
+					}
+
+					api += Util::joinQueryString(fixed);
+					
 					// get the api response
 					CURL* curl = curl_easy_init();
 					CURLcode result;
@@ -76,7 +101,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 						throw std::runtime_error("Failed to initialize cURL");
 					}
 
-					curl_easy_setopt(curl, CURLOPT_URL, apiUrl);
+					curl_easy_setopt(curl, CURLOPT_URL, api);
 					curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write);
 					curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
 
