@@ -2,6 +2,13 @@
 #include "Http.h"
 #include "Util.h"
 
+#define CHECK(condition, code) \
+	if(!error) {               \
+		if ((condition)) {     \
+			error = code;      \
+		}                      \
+	}
+
 Http__httpGetPostWinInet_t Http__httpGetPostWinInet = (Http__httpGetPostWinInet_t)ADDRESS_HTTP__HTTPGETPOSTWININET;
 Http__trustCheck_t Http__trustCheck = (Http__trustCheck_t)ADDRESS_HTTP__TRUSTCHECK;
 
@@ -86,29 +93,18 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 					rapidjson::Document document;
 					document.Parse(data.c_str());
 
-					if (document.HasParseError())
-					{
-						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x02");
-					}
+					// Ryelow should fucking kill herself
+					int error = 0;
 
-					if (!document.HasMember("d"))
-					{
-						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x03");
-					}
+					CHECK(document.HasParseError(), 0x02);
+					CHECK(!document.HasMember("d"), 0x03);
+					CHECK(!document["d"].IsObject(), 0x04);
+					CHECK(!document["d"].HasMember("url"), 0x04);
+					CHECK(!document["d"]["url"].IsString(), 0x04);
 
-					if (!document["d"].IsObject())
+					if (error != 0)
 					{
-						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x04");
-					}
-
-					if (!document["d"].HasMember("url"))
-					{
-						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x05");
-					}
-
-					if (!document["d"]["url"].IsString())
-					{
-						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x06");
+						throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x0" + std::to_string(error));
 					}
 
 					_changed.url = document["d"]["url"].GetString();
@@ -130,7 +126,7 @@ BOOL __fastcall Http__trustCheck_hook(const char* url)
 		// no idea if thats a detours quirk (i doubt it) or if thats how its just actually handled
 		// practically no url is ever going to be seven characters long so it doesn't really matter
 
-		url = *(char**)url;
+		url = *(char**)url; // wHOEVER DID THIS FUCKING CAST NEEDS TO GET RAPED BY 10 GORILLION GRIGRGERS
 	}
 
 	std::string _url = std::string(url);

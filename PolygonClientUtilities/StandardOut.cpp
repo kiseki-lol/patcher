@@ -53,6 +53,7 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
             game->dataModel->jobId = "deez nuts";
             auto scriptContext = ServiceProvider__createScriptContext(game->dataModel.get());
 
+            // BELOW NEEDS TO DIE NOW  (PUt tat shit on debug mode)
             ScriptContext__execute(scriptContext, 5, "print(\"hi this should be inside the dll's created datamodel i think\")", "hi");
             ScriptContext__execute(scriptContext, 5, "print(\"job id: \" .. game.jobId)", "hi");
             ScriptContext__execute(scriptContext, 5, "printidentity()", "hi");
