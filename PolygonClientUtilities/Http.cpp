@@ -77,7 +77,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 					
 					for (auto& pair : source)
 					{
-						fixed[pair.first] = pair.second;
+						fixed[Util::toLower(pair.first)] = pair.second;
 					}
 
 					if (fixed.find("id") != fixed.end())
