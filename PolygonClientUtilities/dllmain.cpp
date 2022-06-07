@@ -88,9 +88,14 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
             ExitProcess(EXIT_FAILURE);
         }
 
-        CURLcode result = curl_global_init(CURL_GLOBAL_DEFAULT);
-        if (result != CURLE_OK)
+        CURLcode error = curl_global_init(CURL_GLOBAL_DEFAULT);
+        if (error != CURLE_OK)
         {
+#ifdef _DEBUG
+            std::string message = "curl_global_init returned " + std::to_string(error);
+            MessageBoxA(nullptr, message.c_str(), nullptr, MB_ICONERROR);
+#endif
+
             ExitProcess(EXIT_FAILURE);
         }
     }
