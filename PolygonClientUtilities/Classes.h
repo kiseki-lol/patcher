@@ -3,6 +3,8 @@
 #include "Config.h"
 #include <oaidl.h>
 
+// TODO: Split everything here into individual files
+
 struct Tuple 
 {
 	void* padding1[4];
@@ -30,6 +32,8 @@ const auto Game__construct = (int(__thiscall*)(Game* _this))0x47DBF0;
 const auto ServiceProvider__createScriptContext = (void * (__thiscall*)(void* _this))0x4282E0;
 // const auto ScriptContext__execute = (void * (__thiscall*)(void* _this, void* a1, int identity, const char* script, const char* name, int arguments))0x617CF0;
 const auto ScriptContext__execute = (void (__thiscall*)(void* _this, int identity, const char* script, const char* name))0x617C80;
+
+const auto Context__isInRole = (bool (__cdecl*)(int identity, int permission))ADDRESS_CONTEXT__ISINROLE;
 
 struct Http
 {

@@ -20,19 +20,22 @@
 
 // RobloxApp (2010)
 #ifdef MFC2010
+
 #define CLASSPADDING_DATAMODEL__JOBID              728
 
-#define ADDRESS_DATAMODEL__GETJOBID                0x005CACC0
+// #define ADDRESS_DATAMODEL__GETJOBID                0x005CACC0
 #define ADDRESS_STANDARDOUT__PRINT                 0x0059F340
 // #define ADDRESS_NETWORK__RAKNETADDRESSTOSTRING     0x004FC1A0
 #define ADDRESS_CRYPT__VERIFYSIGNATUREBASE64       0x0079ECF0
 #define ADDRESS_SERVERREPLICATOR__SENDTOP          0x00506910
 #define ADDRESS_SERVERREPLICATOR__PROCESSPACKET    0x00507420
 #define ADDRESS_SERVERREPLICATOR__PROCESSTICKET    0x0
-#define ADDRESS_DATAMODEL__CREATEDATAMODEL         0x005DC150
+// #define ADDRESS_DATAMODEL__CREATEDATAMODEL         0x005DC150
 #define ADDRESS_GAME__CONSTRUCT                    0x0047DBF0
 #define ADDRESS_HTTP__HTTPGETPOSTWININET           0x006A9210
 #define ADDRESS_HTTP__TRUSTCHECK                   0x005A2680 
+#define ADDRESS_CONTEXT__REQUIREPERMISSION         0x004A2360
+#define ADDRESS_CONTEXT__ISINROLE                  0x0065E550
 
 // MFC specific definitions
 #define CLASSLOCATION_CROBLOXAPP                   0x00BFF898
@@ -57,10 +60,12 @@
 #define ID_REQUEST_CHARACTER                       96
 #define ID_DATA                                    98
 #define ID_SUBMIT_TICKET                           104
+
 #endif
 
 // RobloxApp (2011)
 #ifdef MFC2011
+
 #define CLASSPADDING_DATAMODEL__JOBID              739
 
 #define ADDRESS_DATAMODEL__GETJOBID                0x005E70C0
@@ -99,16 +104,20 @@
 #define ID_REPORT_ABUSE                            134
 #define ID_SUBMIT_TICKET                           135
 #define ID_CHAT_GAME                               136
+
 #endif
 
-// RobloxApp/RobloxPlayer (2012)
+// RobloxApp/RobloxPlayer/RobloxStudio (2012)
 #ifdef MFC2012
+
 #define ADDRESS_HTTP__TRUSTCHECK                   0x006D5D20
 #define ADDRESS_CRYPT__VERIFYSIGNATUREBASE64       0x009B1D20
+
 #endif
 
 // RobloxPlayerBeta (2012)
 #ifdef PLAYER2012
+
 /*
 	2012 is a bit different in that the player executable is protected with
 	VMProtect. VMProtect offsets the memory locations randomly on startup.
@@ -150,12 +159,15 @@
 
 // Player specific definitions
 #define ADDRESS_APPLICATION__PARSEARGUMENTS        Patches::GetAddressByOffset(0x00004E60)
+
 #endif
 
 // RobloxStudioBeta (2012)
 #ifdef STUDIO2012
+
 #define ADDRESS_HTTP__TRUSTCHECK                   Patches::GetAddressByOffset(0x001931A0)
 #define ADDRESS_CRYPT__VERIFYSIGNATUREBASE64       Patches::GetAddressByOffset(0x004CD250)
+
 #endif
 
 #define RR_STOP_PROCESSING_AND_DEALLOCATE 0
