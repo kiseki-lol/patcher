@@ -135,6 +135,7 @@
     <ClInclude Include="Include\Classes.h" />
     <ClInclude Include="Include\Util.h" />
     <ClInclude Include="Include\Hooks\Crypt.h" />
+    <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Hooks\Context.cpp" />
@@ -151,6 +152,9 @@
     <ClCompile Include="Hooks\Http.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Hooks\Crypt.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PolygonDLL.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
