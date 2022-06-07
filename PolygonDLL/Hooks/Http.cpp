@@ -26,7 +26,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 
     Http _changed = *_this;
 
-    if (!result)
+    if (result == CURLE_OK)
     {
         char* path;
         char* host;
