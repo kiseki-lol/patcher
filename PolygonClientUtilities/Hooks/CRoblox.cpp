@@ -1,5 +1,6 @@
 #include "pch.h"
-#include "CRoblox.h"
+
+#include "Hooks/CRoblox.h"
 
 #if defined(MFC2010) || defined(MFC2011)
 

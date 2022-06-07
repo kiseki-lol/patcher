@@ -1,6 +1,7 @@
 #include "pch.h"
-#include "StandardOut.h"
+
 #include "Patches.h"
+#include "Hooks/StandardOut.h"
 
 HANDLE outputHandle;
 

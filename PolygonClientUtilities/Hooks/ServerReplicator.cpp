@@ -1,5 +1,6 @@
 #include "pch.h"
-#include "ServerReplicator.h"
+
+#include "Hooks/ServerReplicator.h"
 
 #if defined(ARBITERBUILD) && defined(MFC2011)
 

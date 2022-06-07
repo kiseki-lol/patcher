@@ -1,8 +1,9 @@
 #pragma once
 
-#include "Classes.h"
 #include <curl/curl.h>
 #include <rapidjson/document.h>
+
+#include "Classes.h"
 
 struct Http
 {

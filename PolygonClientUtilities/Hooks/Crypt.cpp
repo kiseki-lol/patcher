@@ -1,7 +1,9 @@
 #include "pch.h"
-#include "Crypt.h"
+
 #include "Patches.h"
 #include "Util.h"
+#include "Hooks/Crypt.h"
+
 
 Crypt::Crypt()
 {

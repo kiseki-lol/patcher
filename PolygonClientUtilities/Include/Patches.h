@@ -1,5 +1,7 @@
 #pragma once
 
+#include <detours/detours.h>
+
 namespace Patches
 {
     typedef std::pair<void**, void*> Patch;

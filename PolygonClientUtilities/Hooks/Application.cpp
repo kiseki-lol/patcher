@@ -1,7 +1,8 @@
 #include "pch.h"
-#include "Application.h"
+
 #include "Patches.h"
 #include "Util.h"
+#include "Hooks/Application.h"
 
 #if defined(ARBITERBUILD) && defined(PLAYER2012)
 

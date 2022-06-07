@@ -2,27 +2,27 @@
 #include "Config.h"
 #include "Patches.h"
 
-#include "Http.h"
-#include "Crypt.h"
+#include "Hooks/Http.h"
+#include "Hooks/Crypt.h"
 
 #ifdef _DEBUG
-#include "Context.h"
+#include "Hooks/Context.h"
 #endif
 
 #if defined(ARBITERBUILD)
-#include "StandardOut.h"
+#include "Hooks/StandardOut.h"
 #endif
 
 #if defined(ARBITERBUILD) && defined(MFC2011)
-#include "ReplicatorSecurity.h"
+#include "Hooks/ReplicatorSecurity.h"
 #endif
 
 #if defined(ARBITERBUILD) && defined(PLAYER2012)
-#include "Application.h"
+#include "Hooks/Application.h"
 #endif
 
 #if defined(MFC2010) || defined(MFC2011)
-#include "CRoblox.h"
+#include "Hooks/CRoblox.h"
 #endif
 
 START_PATCH_LIST()

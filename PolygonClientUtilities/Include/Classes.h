@@ -1,7 +1,8 @@
 #pragma once
 
-#include "Config.h"
 #include <oaidl.h>
+
+#include "Config.h"
 
 // TODO: These need a place
 
