@@ -4,7 +4,6 @@
 #include "Util.h"
 #include "Hooks/Crypt.h"
 
-
 Crypt::Crypt()
 {
     if (!CryptAcquireContext(&context, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
@@ -22,18 +21,29 @@ Crypt::Crypt()
         }
     }
 
+    try
+    {
 #ifdef _DEBUG
-    std::vector<BYTE> publicKey = Util::base64Decode(Util::publicKey);
+        std::vector<BYTE> publicKey = Util::base64Decode(Util::publicKey);
 #else
-    std::vector<BYTE> publicKey = Util::publicKey;
+        std::vector<BYTE> publicKey = Util::publicKey;
 #endif
 
-    BYTE* blob = new BYTE[publicKey.size()];
-    std::copy(publicKey.begin(), publicKey.end(), blob);
+        BYTE* blob = new BYTE[publicKey.size()];
+        std::copy(publicKey.begin(), publicKey.end(), blob);
 
-    if (!CryptImportKey(context, blob, publicKey.size(), 0, 0, &key))
+        if (!CryptImportKey(context, blob, publicKey.size(), 0, 0, &key))
+        {
+            throw std::runtime_error("");
+        }
+    }
+    catch (...)
     {
+#ifdef _DEBUG
+        throw std::runtime_error("Failed to import public key");
+#else
         throw std::runtime_error("Error during CryptImportKey");
+#endif
     }
 }
 
