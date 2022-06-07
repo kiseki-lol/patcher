@@ -76,6 +76,8 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
                         { "thumbnailFormatId", "0" }
                     };
                     
+                    // the modern Roblox API doesn't care about parameter capitalization because of asp.net quirks
+                    // thus, we are able to do this :-)
                     for (auto& pair : source)
                     {
                         fixed[Util::toLower(pair.first)] = pair.second;
@@ -113,7 +115,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 
                     if (result != CURLE_OK || response != 200)
                     {
-                        throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x1");
+                        throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x0");
                     }
 
                     rapidjson::Document document;
@@ -122,11 +124,11 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
                     // Ryelow should fucking kill herself
                     int error = 0;
 
-                    CHECK(document.HasParseError(), 0x02);
-                    CHECK(!document.HasMember("d"), 0x03);
-                    CHECK(!document["d"].IsObject(), 0x04);
+                    CHECK(document.HasParseError(), 0x01);
+                    CHECK(!document.HasMember("d"), 0x02);
+                    CHECK(!document["d"].IsObject(), 0x03);
                     CHECK(!document["d"].HasMember("url"), 0x04);
-                    CHECK(!document["d"]["url"].IsString(), 0x04);
+                    CHECK(!document["d"]["url"].IsString(), 0x05);
 
                     if (error != 0)
                     {
