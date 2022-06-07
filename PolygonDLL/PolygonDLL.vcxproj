@@ -135,7 +135,7 @@
     <ClInclude Include="Include\Classes.h" />
     <ClInclude Include="Include\Util.h" />
     <ClInclude Include="Include\Hooks\Crypt.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="Include\resource.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Hooks\Context.cpp" />
