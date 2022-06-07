@@ -9,11 +9,11 @@ extern Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64;
 
 class Crypt
 {
-	HCRYPTPROV context;
-	HCRYPTKEY key;
+    HCRYPTPROV context;
+    HCRYPTKEY key;
 
 public:
-	Crypt();
-	~Crypt();
-	bool verifySignatureBase64(std::string message, std::string signatureBase64, ALG_ID algorithm);
+    Crypt();
+    ~Crypt();
+    bool verifySignatureBase64(std::string message, std::string signatureBase64, ALG_ID algorithm);
 };

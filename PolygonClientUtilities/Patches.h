@@ -2,13 +2,13 @@
 
 namespace Patches
 {
-	typedef std::pair<void**, void*> Patch;
+    typedef std::pair<void**, void*> Patch;
 
-	extern std::vector<Patch> patchList;
+    extern std::vector<Patch> patchList;
 
-	LONG Apply();
-	VOID ResolveOffset();
-	INT GetAddressByOffset(int address);
+    LONG Apply();
+    VOID ResolveOffset();
+    INT GetAddressByOffset(int address);
 }
 
 #define START_PATCH_LIST() std::vector<Patches::Patch> Patches::patchList = {

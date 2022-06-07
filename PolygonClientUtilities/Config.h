@@ -110,18 +110,18 @@
 // RobloxPlayerBeta (2012)
 #ifdef PLAYER2012
 /*
-	2012 is a bit different in that the player executable is protected with
-	VMProtect. VMProtect offsets the memory locations randomly on startup.
-	This causes address definitions (such as the ones below) to look a bit off.
+    2012 is a bit different in that the player executable is protected with
+    VMProtect. VMProtect offsets the memory locations randomly on startup.
+    This causes address definitions (such as the ones below) to look a bit off.
 
-	For example, if the beginning of the program is located at 0x00BF1000 and
-	you have a TrustCheck hook that is at 0x00DF20A0, VMProtect will offset the
-	memory location from 0x00000000 - 0x00FF0000. Thus, the 0x00BF0000 in
-	0x00BF1000 is actually an offset.
+    For example, if the beginning of the program is located at 0x00BF1000 and
+    you have a TrustCheck hook that is at 0x00DF20A0, VMProtect will offset the
+    memory location from 0x00000000 - 0x00FF0000. Thus, the 0x00BF0000 in
+    0x00BF1000 is actually an offset.
 
-	With that offset, the address you'd have to put for your TrustCheck hook will
-	be (0x00DF20A0 - 0x00BF0000) = 0x002020A0. Then, you just put that address
-	into the function.
+    With that offset, the address you'd have to put for your TrustCheck hook will
+    be (0x00DF20A0 - 0x00BF0000) = 0x002020A0. Then, you just put that address
+    into the function.
 */
 
 // MFC specific definitions

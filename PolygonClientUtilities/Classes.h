@@ -5,23 +5,23 @@
 
 struct Tuple 
 {
-	void* padding1[4];
-	bool padding2;
-	bool padding3;
+    void* padding1[4];
+    bool padding2;
+    bool padding3;
 };
 
 struct DataModel
 {
-	void* padding1[CLASSPADDING_DATAMODEL__JOBID + PADDING_STRUCT];
-	std::string jobId;
+    void* padding1[CLASSPADDING_DATAMODEL__JOBID + PADDING_STRUCT];
+    std::string jobId;
 };
 
 struct Game
 {
-	// 2010 has a class size of 104 bytes
-	void* padding1[8];
-	std::shared_ptr<DataModel> dataModel;
-	void* padding2[9];
+    // 2010 has a class size of 104 bytes
+    void* padding1[8];
+    std::shared_ptr<DataModel> dataModel;
+    void* padding2[9];
 };
 
 const auto Game__initializeClass = (Game * (__thiscall*)(Game* _this, int a2))0x455D40;
@@ -34,21 +34,21 @@ const auto ScriptContext__execute = (void (__thiscall*)(void* _this, int identit
 struct Http
 {
 #if PADDING_STRUCT != 0
-	void* padding1[1];
+    void* padding1[1];
 #endif
-	std::string alternateUrl;
-	void* padding2[3 + PADDING_STRUCT];
-	std::string url;
+    std::string alternateUrl;
+    void* padding2[3 + PADDING_STRUCT];
+    std::string url;
 };
 
 // const auto DataModel__createDataModel = (std::shared_ptr<void>(__thiscall*)(bool startHeartbeat))ADDRESS_DATAMODEL__CREATEDATAMODEL;
 
 struct Packet
 {
-	void* padding1[7];
-	unsigned int length;
-	void* padding2[1];
-	unsigned char* data;
+    void* padding1[7];
+    unsigned int length;
+    void* padding2[1];
+    unsigned char* data;
 };
 
 struct ConcurrentRakPeer {};
@@ -56,9 +56,9 @@ struct RakPeerInterface {};
 
 struct ServerReplicator
 {
-	void* padding1[1869]; // offset of 0 -> 7476
-	bool padding2;        // offset of 7476 -> 7477
-	bool isAuthenticated; // offset of 7477 -> 7478
+    void* padding1[1869]; // offset of 0 -> 7476
+    bool padding2;        // offset of 7476 -> 7477
+    bool isAuthenticated; // offset of 7477 -> 7478
 };
 
 // 2010 struct definitions:
@@ -71,8 +71,8 @@ const auto CWorkspace__ExecUrlScript = (HRESULT(__stdcall*)(CWorkspace * workspa
 
 struct CRobloxDoc
 {
-	void* padding1[CLASSPADDING_CROBLOXDOC__WORKSPACE];
-	CWorkspace* workspace;
+    void* padding1[CLASSPADDING_CROBLOXDOC__WORKSPACE];
+    CWorkspace* workspace;
 };
 
 struct CApp;
@@ -91,8 +91,8 @@ const auto CRobloxApp__CreateDocument = (CRobloxDoc * (__thiscall*)(CRobloxApp *
 
 struct CCommandLineInfo
 {
-	void* padding1[3];
-	BOOL m_bRunAutomated;
+    void* padding1[3];
+    BOOL m_bRunAutomated;
 };
 
 class CRobloxCommandLineInfo : public CCommandLineInfo {};
