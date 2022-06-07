@@ -52,6 +52,4 @@ Several preprocessor flags are available that modify how the DLL operates. They 
 You may read the code for further information.
 
 ## License
-Copyright (c) Project Polygon and Tadah 2022. All rights reserved.
-
-Forked with permission. Not for public use.
+Copyright (c) Project Polygon and Tadah 2022. All rights reserved. Not for public use.
