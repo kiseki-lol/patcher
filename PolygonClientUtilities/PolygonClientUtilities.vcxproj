@@ -112,6 +112,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Config.h" />
+    <ClInclude Include="Context.h" />
     <ClInclude Include="ScriptContext.h" />
     <ClInclude Include="CRoblox.h" />
     <ClInclude Include="Application.h" />
@@ -121,11 +122,11 @@
     <ClInclude Include="Patches.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Classes.h" />
-    <ClInclude Include="Hooks.h" />
     <ClInclude Include="Util.h" />
     <ClInclude Include="Crypt.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Context.cpp" />
     <ClCompile Include="ScriptContext.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="CRoblox.cpp" />
@@ -139,7 +140,6 @@
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="StandardOut.cpp" />
     <ClCompile Include="ReplicatorSecurity.cpp" />
-    <ClCompile Include="Hooks.cpp" />
     <ClCompile Include="Http.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Crypt.cpp" />

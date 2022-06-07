@@ -6,6 +6,10 @@
 #include "Http.h"
 #include "Crypt.h"
 
+#ifdef _DEBUG
+#include "Context.h"
+#endif
+
 #ifdef ARBITERBUILD
 #include "StandardOut.h"
 
@@ -28,6 +32,10 @@ ADD_PATCH(Http__httpGetPostWinInet, Http__httpGetPostWinInet_hook)
 
 ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
 ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)
+
+#ifdef _DEBUG
+ADD_PATCH(Context__requirePermission, Context__requirePermission_hook)
+#endif
 
 #ifdef ARBITERBUILD
 // ADD_PATCH(DataModel__getJobId, DataModel__getJobId_hook)

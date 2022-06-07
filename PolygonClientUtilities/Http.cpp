@@ -142,7 +142,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
     Http__httpGetPostWinInet(_this, isPost, a3, compressData, additionalHeaders, a6);
 }
 
-BOOL __fastcall Http__trustCheck_hook(const char* url)
+bool __fastcall Http__trustCheck_hook(const char* url)
 {
     if (strlen(url) == 7 && !Util::isASCII(url))
     {
