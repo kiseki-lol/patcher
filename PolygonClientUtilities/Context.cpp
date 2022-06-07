@@ -2,6 +2,8 @@
 #include "Context.h"
 #include "Util.h"
 
+#ifdef _DEBUG
+
 Context__requirePermission_t Context__requirePermission = (Context__requirePermission_t)ADDRESS_CONTEXT__REQUIREPERMISSION;
 
 void __fastcall Context__requirePermission_hook(void* _this, void*, int permission, const char* operation)
@@ -16,3 +18,5 @@ void __fastcall Context__requirePermission_hook(void* _this, void*, int permissi
 			throw std::runtime_error("The current identity (" + std::to_string(identity) + ") cannot perform the requested operation (requires " + std::to_string(permission) + ")");
 	}
 }
+
+#endif

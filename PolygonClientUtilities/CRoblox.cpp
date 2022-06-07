@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "CRoblox.h"
 
+#if defined(MFC2010) || defined(MFC2011)
+
 static bool hasAuthUrlArg = false;
 static bool hasAuthTicketArg = false;
 static bool hasJoinArg = false;
@@ -116,3 +118,5 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 
     CRobloxCommandLineInfo__ParseParam(_this, pszParam, bFlag, bLast);
 }
+
+#endif

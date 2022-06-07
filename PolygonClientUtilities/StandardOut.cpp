@@ -11,7 +11,7 @@ void InitializeOutput()
     outputHandle = CreateFileA("CONOUT$", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     SetStdHandle(STD_OUTPUT_HANDLE, outputHandle);
 
-#ifndef NDEBUG
+#ifdef _DEBUG
     printf("[[[ DLL COMPILED AS DEBUG ]]]\n");
 #endif
 
@@ -29,7 +29,7 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 {
     StandardOut__print(_this, type, message);
 
-#ifdef NDEBUG
+#ifndef _DEBUG
     // Message pointer is offset 4 bytes when the DLL is compiled as release
     message = reinterpret_cast<std::string*>((int)message + 4);
 #endif
@@ -64,18 +64,18 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
 
     switch (type)
     {
-    case RBX__MESSAGE_OUTPUT:
-        SetConsoleTextAttribute(outputHandle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
-        break;
-    case RBX__MESSAGE_INFO:
-        SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
-        break;
-    case RBX__MESSAGE_WARNING:
-        SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN);
-        break;
-    case RBX__MESSAGE_ERROR:
-        SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_INTENSITY);
-        break;
+        case RBX__MESSAGE_OUTPUT:
+            SetConsoleTextAttribute(outputHandle, FOREGROUND_BLUE | FOREGROUND_INTENSITY);
+            break;
+        case RBX__MESSAGE_INFO:
+            SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+            break;
+        case RBX__MESSAGE_WARNING:
+            SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN);
+            break;
+        case RBX__MESSAGE_ERROR:
+            SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_INTENSITY);
+            break;
     }
 
     printf("%s\n", message->c_str());

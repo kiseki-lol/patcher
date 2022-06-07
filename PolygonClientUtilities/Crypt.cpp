@@ -3,7 +3,6 @@
 #include "Patches.h"
 #include "Util.h"
 
-
 Crypt::Crypt()
 {
     if (!CryptAcquireContext(&context, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))
@@ -21,9 +20,13 @@ Crypt::Crypt()
         }
     }
 
+#ifdef _DEBUG
     std::vector<BYTE> publicKey = Util::base64Decode(Util::publicKey);
-    BYTE* blob = new BYTE[publicKey.size()];
+#else
+    std::vector<BYTE> publicKey = Util::publicKey;
+#endif
 
+    BYTE* blob = new BYTE[publicKey.size()];
     std::copy(publicKey.begin(), publicKey.end(), blob);
 
     if (!CryptImportKey(context, blob, publicKey.size(), 0, 0, &key))
@@ -127,6 +130,7 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, int 
     // Verify signature
     if (!Crypt().verifySignatureBase64(message, signatureBase64, CALG_SHA_256))
     {
+        // backwards compatibility for sha1 signatures
         if (!Crypt().verifySignatureBase64(message, signatureBase64, CALG_SHA1))
         {
             throw std::runtime_error("");

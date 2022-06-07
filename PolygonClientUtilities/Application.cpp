@@ -3,6 +3,8 @@
 #include "Patches.h"
 #include "Util.h"
 
+#if defined(ARBITERBUILD) && defined(PLAYER2012)
+
 Application__ParseArguments_t Application__ParseArguments = (Application__ParseArguments_t)ADDRESS_APPLICATION__PARSEARGUMENTS;
 
 BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const char* argv)
@@ -26,3 +28,5 @@ BOOL __fastcall Application__ParseArguments_hook(int _this, void*, int a2, const
 
     return Application__ParseArguments(_this, a2, argv);
 }
+
+#endif

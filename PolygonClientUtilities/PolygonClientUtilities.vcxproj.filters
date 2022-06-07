@@ -45,16 +45,13 @@
     <ClInclude Include="Application.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="ReplicatorSecurity.h">
+    <ClInclude Include="ServerReplicator.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
     <ClInclude Include="StandardOut.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
     <ClInclude Include="Http.h">
-      <Filter>Header Files\Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="ScriptContext.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
     <ClInclude Include="Context.h">
@@ -83,16 +80,13 @@
     <ClCompile Include="Application.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="ReplicatorSecurity.cpp">
+    <ClCompile Include="ServerReplicator.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
     <ClCompile Include="StandardOut.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
     <ClCompile Include="Http.cpp">
-      <Filter>Source Files\Hooks</Filter>
-    </ClCompile>
-    <ClCompile Include="ScriptContext.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
     <ClCompile Include="Context.cpp">

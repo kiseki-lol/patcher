@@ -113,11 +113,10 @@
   <ItemGroup>
     <ClInclude Include="Config.h" />
     <ClInclude Include="Context.h" />
-    <ClInclude Include="ScriptContext.h" />
     <ClInclude Include="CRoblox.h" />
     <ClInclude Include="Application.h" />
     <ClInclude Include="StandardOut.h" />
-    <ClInclude Include="ReplicatorSecurity.h" />
+    <ClInclude Include="ServerReplicator.h" />
     <ClInclude Include="Http.h" />
     <ClInclude Include="Patches.h" />
     <ClInclude Include="pch.h" />
@@ -127,7 +126,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Context.cpp" />
-    <ClCompile Include="ScriptContext.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="CRoblox.cpp" />
     <ClCompile Include="Patches.cpp" />
@@ -139,7 +137,7 @@
     </ClCompile>
     <ClCompile Include="Application.cpp" />
     <ClCompile Include="StandardOut.cpp" />
-    <ClCompile Include="ReplicatorSecurity.cpp" />
+    <ClCompile Include="ServerReplicator.cpp" />
     <ClCompile Include="Http.cpp" />
     <ClCompile Include="Util.cpp" />
     <ClCompile Include="Crypt.cpp" />

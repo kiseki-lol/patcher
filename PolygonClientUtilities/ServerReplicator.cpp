@@ -1,5 +1,7 @@
 #include "pch.h"
-#include "ReplicatorSecurity.h"
+#include "ServerReplicator.h"
+
+#if defined(ARBITERBUILD) && defined(MFC2011)
 
 static std::map<ServerReplicator*, RakPeerInterface*> rakPeers;
 
@@ -44,3 +46,5 @@ void __fastcall ServerReplicator__processTicket_hook(ServerReplicator* _this, vo
         // printf("ServerReplicator::sendTop called: player is not authenticated\n");
     }
 }
+
+#endif
