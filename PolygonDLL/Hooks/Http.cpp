@@ -113,9 +113,14 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 
                     curl_easy_cleanup(curl);
 
-                    if (result != CURLE_OK || response != 200)
+                    if (result != CURLE_OK)
                     {
                         throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x0");
+                    }
+
+                    if (response != 200)
+                    {
+                        throw std::runtime_error("Unexpected error occurred when fetching Roblox API: Response code was " + std::to_string(response));
                     }
 
                     rapidjson::Document document;
