@@ -12,8 +12,10 @@ void InitializeOutput()
     outputHandle = CreateFileA("CONOUT$", GENERIC_READ | GENERIC_WRITE, FILE_SHARE_READ | FILE_SHARE_WRITE, NULL, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);
     SetStdHandle(STD_OUTPUT_HANDLE, outputHandle);
 
+    printf("PolygonDLL v1.0.0\n");
 #ifdef _DEBUG
-    printf("[[[ DLL COMPILED AS DEBUG ]]]\n");
+    SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN);
+    printf("Compiled as Debug\n\n");
 #endif
 
     // lol
@@ -35,6 +37,7 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
     message = reinterpret_cast<std::string*>((int)message + 4);
 #endif
 
+#ifdef _DEBUG
     if (message->compare("NewGame") == 0 || message->compare("NewGame2") == 0)
     {
         printf("\n");
@@ -54,7 +57,6 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
             game->dataModel->jobId = "deez nuts";
             auto scriptContext = ServiceProvider__createScriptContext(game->dataModel.get());
 
-            // BELOW NEEDS TO DIE NOW  (PUt tat shit on debug mode)
             ScriptContext__execute(scriptContext, 5, "print(\"hi this should be inside the dll's created datamodel i think\")", "hi");
             ScriptContext__execute(scriptContext, 5, "print(\"job id: \" .. game.jobId)", "hi");
             ScriptContext__execute(scriptContext, 5, "printidentity()", "hi");
@@ -62,6 +64,7 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
             printf("\n");
         }
     }
+#endif
 
     switch (type)
     {
