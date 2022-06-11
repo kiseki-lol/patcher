@@ -126,7 +126,6 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
                     rapidjson::Document document;
                     document.Parse(data.c_str());
 
-                    // Ryelow should fucking kill herself
                     int error = 0;
 
                     CHECK(document.HasParseError(), 0x01);
@@ -159,7 +158,7 @@ bool __fastcall Http__trustCheck_hook(const char* url)
         // no idea if thats a detours quirk (i doubt it) or if thats how its just actually handled
         // practically no url is ever going to be seven characters long so it doesn't really matter
 
-        url = *(char**)url; // wHOEVER DID THIS FUCKING CAST NEEDS TO GET RAPED BY 10 GORILLION GRIGRGERS
+        url = *(char**)url;
     }
 
     std::string _url = std::string(url);
