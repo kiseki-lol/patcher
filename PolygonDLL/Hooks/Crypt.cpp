@@ -112,22 +112,12 @@ Crypt__verifySignatureBase64_t Crypt__verifySignatureBase64 = (Crypt__verifySign
 // Crypt::verifySignatureBase64(std::string message, std::string signatureBase64)
 void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, int a2, BYTE* pbData, int a4, int a5, int a6, DWORD dwDataLen, int a8, int a9, int a10, int a11, int a12, int a13, int a14, int a15)
 {
-    /*
-        Ideally, we would be able to just use the function signature as-is.
-        However, it causes inexplicable crashes. Thus, we must reconstruct
-        the strings by hand given the manual parameters.
-    */
+    // We have to reconstruct the parameters by hand since using the original function signature causes crashes
 
     std::string message;
     std::string signatureBase64;
 
     // Get message
-    const BYTE* v18 = pbData;
-    if ((unsigned int)a8 < 0x10)
-    {
-        v18 = (const BYTE*)&pbData;
-    }
-
     message = std::string(reinterpret_cast<const char*>(pbData), dwDataLen);
 
     // Get signatureBase64
@@ -142,7 +132,7 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, int 
     // Verify signature
     if (!Crypt().verifySignatureBase64(message, signatureBase64, CALG_SHA_256))
     {
-        // backwards compatibility for sha1 signatures
+        // Backwards compatibility for sha1 signatures
         if (!Crypt().verifySignatureBase64(message, signatureBase64, CALG_SHA1))
         {
             throw std::runtime_error("");
