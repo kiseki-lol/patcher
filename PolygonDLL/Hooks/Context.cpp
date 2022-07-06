@@ -9,7 +9,7 @@ Context__requirePermission_t Context__requirePermission = (Context__requirePermi
 
 void __fastcall Context__requirePermission_hook(void* _this, void*, int permission, const char* operation)
 {
-	int identity = *(int*)_this;
+	int identity = ((int*)_this)[0];
 
 	if (!Context__isInRole(identity, permission))
 	{

@@ -158,7 +158,7 @@ bool __fastcall Http__trustCheck_hook(const char* url)
         // no idea if thats a detours quirk (i doubt it) or if thats how its just actually handled
         // practically no url is ever going to be seven characters long so it doesn't really matter
 
-        url = *(char**)url;
+        url = ((char**)url)[0];
     }
 
     std::string _url = std::string(url);
