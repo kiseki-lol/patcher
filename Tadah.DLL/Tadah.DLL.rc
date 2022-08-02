@@ -67,12 +67,12 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "CompanyName", "Project Polygon and Tadah"
+            VALUE "CompanyName", "Tadah"
             VALUE "FileDescription", "Client Functionality Library"
             VALUE "FileVersion", "1.0.0.0"
-            VALUE "InternalName", "Polygon.dll"
-            VALUE "LegalCopyright", "Copyright (C) Project Polygon and Tadah 2022"
-            VALUE "OriginalFilename", "Polygon.dll"
+            VALUE "InternalName", "Tadah.dll"
+            VALUE "LegalCopyright", "Copyright (C) Tadah and Project Polygon 2022"
+            VALUE "OriginalFilename", "Tadah.dll"
             VALUE "ProductName", "Client Functionality Library"
             VALUE "ProductVersion", "1.0.0.0"
         END
