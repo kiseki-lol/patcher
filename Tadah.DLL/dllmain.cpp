@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Config.h"
+#include "Configuration.h"
 #include "Patches.h"
 
 #include "Hooks/Http.h"

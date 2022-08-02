@@ -13,6 +13,7 @@ void InitializeOutput()
     SetStdHandle(STD_OUTPUT_HANDLE, outputHandle);
 
     printf("Tadah.DLL v1.0.0\n");
+
 #ifdef _DEBUG
     SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN);
     printf("Compiled as Debug\n\n");

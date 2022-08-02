@@ -27,10 +27,10 @@
     <ClInclude Include="Include\Patches.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Config.h">
+    <ClInclude Include="Include\Configuration.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Util.h">
+    <ClInclude Include="Include\Helpers.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\Hooks\Crypt.h">
@@ -65,7 +65,7 @@
     <ClCompile Include="Patches.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Util.cpp">
+    <ClCompile Include="Helpers.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Hooks\Crypt.cpp">

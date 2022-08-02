@@ -1,6 +1,6 @@
 #include "pch.h"
 
-#include "Util.h"
+#include "Helpers.h"
 #include "Hooks/Http.h"
 
 #define CHECK(condition, code) \
@@ -39,7 +39,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 
         if (path != NULL && host != NULL && query != NULL)
         {
-            std::string _path = Util::toLower(std::string(path));
+            std::string _path = Helpers::toLower(std::string(path));
             std::string _host = std::string(host);
             std::string _query = std::string(query);
 
@@ -70,7 +70,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 
                     std::string api = "https://www.roblox.com/" + std::string(_path == "/thumbs/asset.ashx" ? "asset" : "avatar") + "/request-thumbnail-fix";
 
-                    std::map<std::string, std::string> source = Util::parseQueryString(query);
+                    std::map<std::string, std::string> source = Helpers::parseQueryString(query);
                     std::map<std::string, std::string> fixed = {
                         { _path == "/thumbs/asset.ashx" ? "overrideModeration" : "dummy", "false" },
                         { "thumbnailFormatId", "0" }
@@ -80,7 +80,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
                     // thus, we are able to do this :-)
                     for (auto& pair : source)
                     {
-                        fixed[Util::toLower(pair.first)] = pair.second;
+                        fixed[Helpers::toLower(pair.first)] = pair.second;
                     }
 
                     if (fixed.find("id") != fixed.end())
@@ -91,7 +91,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
                         fixed.insert(std::move(handler));
                     }
 
-                    api += Util::joinQueryString(fixed);
+                    api += Helpers::joinQueryString(fixed);
                     
                     // get the api response
                     CURL* curl = curl_easy_init();
@@ -151,7 +151,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 
 bool __fastcall Http__trustCheck_hook(const char* url)
 {
-    if (strlen(url) == 7 && !Util::isASCII(url))
+    if (strlen(url) == 7 && !Helpers::isASCII(url))
     {
         // so the client does this really fucking stupid thing where if it opens an ie window,
         // it passes a char**, and not a char*
@@ -171,7 +171,7 @@ bool __fastcall Http__trustCheck_hook(const char* url)
         return true;
     }
 
-    for (std::string allowedEmbeddedScheme : Util::allowedEmbeddedSchemes)
+    for (std::string allowedEmbeddedScheme : Helpers::allowedEmbeddedSchemes)
     {
         if (_url.rfind(allowedEmbeddedScheme + ":", 0) == 0)
         {
@@ -194,9 +194,20 @@ bool __fastcall Http__trustCheck_hook(const char* url)
     curl_url_get(curl, CURLUPART_HOST, &host, 0);
     curl_url_cleanup(curl);
 
-    if (std::find(Util::allowedSchemes.begin(), Util::allowedSchemes.end(), std::string(scheme)) != Util::allowedSchemes.end())
+    if (std::find(Helpers::allowedSchemes.begin(), Helpers::allowedSchemes.end(), std::string(scheme)) != Helpers::allowedSchemes.end())
     {
-        return std::find(Util::allowedHosts.begin(), Util::allowedHosts.end(), std::string(host)) != Util::allowedHosts.end();
+        std::string _host = std::string(host);
+
+        // this is crude and inefficient but I don't care
+        for (std::string wildcard : Helpers::allowedWildcardDomains)
+        {
+            if (_host.size() >= wildcard.size() && 0 == wildcard.compare(_host.size() - wildcard.size(), wildcard.size(), wildcard))
+            {
+                return true;
+            }
+        }
+
+        return std::find(Helpers::allowedDomains.begin(), Helpers::allowedDomains.end(), _host) != Helpers::allowedDomains.end();
     }
 
     return false;

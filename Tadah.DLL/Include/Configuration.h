@@ -1,5 +1,16 @@
 #pragma once
 
+#define ALLOWED_WILDCARD_DOMAINS "tadah.rocks", "rbxcdn.com", "roblox.com"
+#define ALLOWED_DOMAINS
+#define ALLOWED_SCHEMES "http", "https"
+#define ALLOWED_EMBEDDED_SCHEMES "javascript", "jscript", "res"
+
+#ifdef _DEBUG
+#define PUBLIC_KEY ""
+#else
+#define PUBLIC_KEY 0x0
+#endif
+
 #define PLAYERBUILD
 // #define ARBITERBUILD
 

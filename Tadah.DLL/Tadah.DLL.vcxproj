@@ -123,7 +123,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Include\Config.h" />
+    <ClInclude Include="Include\Configuration.h" />
     <ClInclude Include="Include\Hooks\Context.h" />
     <ClInclude Include="Include\Hooks\CRoblox.h" />
     <ClInclude Include="Include\Hooks\StandardOut.h" />
@@ -131,7 +131,7 @@
     <ClInclude Include="Include\Hooks\Http.h" />
     <ClInclude Include="Include\Patches.h" />
     <ClInclude Include="Include\pch.h" />
-    <ClInclude Include="Include\Util.h" />
+    <ClInclude Include="Include\Helpers.h" />
     <ClInclude Include="Include\Hooks\Crypt.h" />
     <ClInclude Include="Include\resource.h" />
   </ItemGroup>
@@ -147,7 +147,7 @@
     <ClCompile Include="Hooks\StandardOut.cpp" />
     <ClCompile Include="Hooks\ServerReplicator.cpp" />
     <ClCompile Include="Hooks\Http.cpp" />
-    <ClCompile Include="Util.cpp" />
+    <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="Hooks\Crypt.cpp" />
   </ItemGroup>
   <ItemGroup>

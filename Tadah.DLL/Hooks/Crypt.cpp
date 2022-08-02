@@ -1,7 +1,7 @@
 #include "pch.h"
 
 #include "Patches.h"
-#include "Util.h"
+#include "Helpers.h"
 #include "Hooks/Crypt.h"
 
 Crypt::Crypt()
@@ -23,16 +23,10 @@ Crypt::Crypt()
 
     try
     {
-#ifdef _DEBUG
-        std::vector<BYTE> publicKey = Util::base64Decode(Util::publicKey);
-#else
-        std::vector<BYTE> publicKey = Util::publicKey;
-#endif
+        BYTE* blob = new BYTE[Helpers::publicKey.size()];
+        std::copy(Helpers::publicKey.begin(), Helpers::publicKey.end(), blob);
 
-        BYTE* blob = new BYTE[publicKey.size()];
-        std::copy(publicKey.begin(), publicKey.end(), blob);
-
-        if (!CryptImportKey(context, blob, publicKey.size(), 0, 0, &key))
+        if (!CryptImportKey(context, blob, Helpers::publicKey.size(), 0, 0, &key))
         {
             throw std::runtime_error("");
         }
@@ -75,7 +69,7 @@ bool Crypt::verifySignatureBase64(std::string message, std::string signatureBase
             return false;
         }
 
-        std::vector<BYTE> signature = Util::base64Decode(signatureBase64);
+        std::vector<BYTE> signature = Helpers::base64Decode(signatureBase64);
 
         /*
             The native cryptography API uses little-endian byte order

@@ -3,7 +3,7 @@
 #include <curl/curl.h>
 #include <rapidjson/document.h>
 
-#include "Config.h"
+#include "Configuration.h"
 
 struct Http
 {
