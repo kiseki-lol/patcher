@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Classes.h"
+#include "Config.h"
 
-#if defined(ARBITERBUILD) && defined(MFC2011)
+#if defined(ARBITERBUILD)
 
 struct Packet
 {

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Classes.h"
+#include "Config.h"
 
 void InitializeOutput();
 

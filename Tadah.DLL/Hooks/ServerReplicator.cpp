@@ -2,7 +2,7 @@
 
 #include "Hooks/ServerReplicator.h"
 
-#if defined(ARBITERBUILD) && defined(MFC2011)
+#if defined(ARBITERBUILD)
 
 static std::map<ServerReplicator*, RakPeerInterface*> rakPeers;
 
@@ -13,12 +13,10 @@ void __fastcall ServerReplicator__sendTop_hook(ServerReplicator* _this, void*, R
 {
     if (_this->isAuthenticated)
     {
-        // printf("ServerReplicator::sendTop called: player is authenticated\n");
         ServerReplicator__sendTop(_this, peer);
     }
     else if (rakPeers.find(_this) == rakPeers.end())
     {
-        // printf("ServerReplicator::sendTop called: player is not authenticated\n");
         rakPeers.insert(std::pair<ServerReplicator*, RakPeerInterface*>(_this, peer));
     }
 }
@@ -27,24 +25,10 @@ void __fastcall ServerReplicator__processTicket_hook(ServerReplicator* _this, vo
 {
     ServerReplicator__processTicket(_this, packet);
 
-    // THIS IS TEMPORARY
-    // i literally cant find a way to obtain rakpeerinterface from _this, like it's really damn hard
-    // so i'm cheating on doing that by getting rakpeerinterface from the first sendtop call,
-    // throwing that into a lookup table and then using that here
-
     auto pos = rakPeers.find(_this);
-    if (pos == rakPeers.end())
+    if (_this->isAuthenticated)
     {
-        // printf("ServerReplicator::sendTop called: could not find rakpeer for %08X\n", (int)_this);
-    }
-    else if (_this->isAuthenticated)
-    {
-        // printf("ServerReplicator::sendTop called: Value of peer: %08X - associated with %08X\n", (int)pos->second, (int)_this);
         ServerReplicator__sendTop_hook(_this, nullptr, pos->second);
-    }
-    else
-    {
-        // printf("ServerReplicator::sendTop called: player is not authenticated\n");
     }
 }
 

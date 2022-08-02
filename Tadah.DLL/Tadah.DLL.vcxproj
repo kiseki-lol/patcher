@@ -48,7 +48,7 @@
     <EnableManagedIncrementalBuild>true</EnableManagedIncrementalBuild>
     <TargetName>Tadah</TargetName>
     <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
-    <IntDir>obj\$(Configuration)</IntDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -126,13 +126,11 @@
     <ClInclude Include="Include\Config.h" />
     <ClInclude Include="Include\Hooks\Context.h" />
     <ClInclude Include="Include\Hooks\CRoblox.h" />
-    <ClInclude Include="Include\Hooks\Application.h" />
     <ClInclude Include="Include\Hooks\StandardOut.h" />
     <ClInclude Include="Include\Hooks\ServerReplicator.h" />
     <ClInclude Include="Include\Hooks\Http.h" />
     <ClInclude Include="Include\Patches.h" />
     <ClInclude Include="Include\pch.h" />
-    <ClInclude Include="Include\Classes.h" />
     <ClInclude Include="Include\Util.h" />
     <ClInclude Include="Include\Hooks\Crypt.h" />
     <ClInclude Include="Include\resource.h" />
@@ -146,7 +144,6 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Hooks\Application.cpp" />
     <ClCompile Include="Hooks\StandardOut.cpp" />
     <ClCompile Include="Hooks\ServerReplicator.cpp" />
     <ClCompile Include="Hooks\Http.cpp" />

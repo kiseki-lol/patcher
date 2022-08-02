@@ -14,9 +14,13 @@ void __fastcall Context__requirePermission_hook(void* _this, void*, int permissi
 	if (!Context__isInRole(identity, permission))
 	{
 		if (operation != 0)
+		{
 			throw std::runtime_error("The current identity (" + std::to_string(identity) + ") cannot " + std::string(operation) + " (requires " + std::to_string(permission) + ")");
+		}
 		else
+		{
 			throw std::runtime_error("The current identity (" + std::to_string(identity) + ") cannot perform the requested operation (requires " + std::to_string(permission) + ")");
+		}
 	}
 }
 

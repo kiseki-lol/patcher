@@ -132,10 +132,6 @@ void __fastcall Crypt__verifySignatureBase64_hook(HCRYPTPROV* _this, void*, int 
     // Verify signature
     if (!Crypt().verifySignatureBase64(message, signatureBase64, CALG_SHA_256))
     {
-        // Backwards compatibility for sha1 signatures
-        if (!Crypt().verifySignatureBase64(message, signatureBase64, CALG_SHA1))
-        {
-            throw std::runtime_error("");
-        }
+        throw std::runtime_error("");
     }
 }

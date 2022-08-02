@@ -9,8 +9,6 @@ namespace Patches
     extern std::vector<Patch> patchList;
 
     LONG Apply();
-    VOID ResolveOffset();
-    INT GetAddressByOffset(int address);
 }
 
 #define START_PATCH_LIST() std::vector<Patches::Patch> Patches::patchList = {

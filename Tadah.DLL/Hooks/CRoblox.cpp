@@ -2,8 +2,6 @@
 
 #include "Hooks/CRoblox.h"
 
-#if defined(MFC2010) || defined(MFC2011)
-
 static bool hasAuthUrlArg = false;
 static bool hasAuthTicketArg = false;
 static bool hasJoinArg = false;
@@ -27,29 +25,16 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
         CApp__RobloxAuthenticate(app, nullptr, authenticationUrl.c_str(), authenticationTicket.c_str());
     }
 
-    // DataModel* datamodel = reinterpret_cast<DataModel*>(CLASSLOCATION_CAPP);
-
-    // printf("Attempting to create DataModel...\n");
-    // char* v27;
-    // DataModel__createDataModel((int)&v27, 1);
-
 #ifdef PLAYERBUILD
     if (hasJoinArg && !joinScriptUrl.empty())
     {
         try
         {
-            // so... i would've wanted to just use CApp::CreateGame instead but there's a few issues
-            // in the typelib, CreateGame is exposed as being IApp::CreateGame(string p) - 'p' is "44340105256"
-            // however internally the function is actually CApp::CreateGame(int something, LPCWSTR p)
-            // it's obvious that 'something' is a pointer to a class but i have no clue what the class is
-            // until i figure out wtf its supposed to be we've gotta stick to doing CRobloxApp::CreateDocument for now
-
             CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
             CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
         }
-        catch (std::runtime_error)// & exception)
+        catch (std::runtime_error)
         {
-            // MessageBoxA(nullptr, exception.what(), nullptr, MB_ICONERROR);
             return FALSE;
         }
     }
@@ -119,5 +104,3 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 
     CRobloxCommandLineInfo__ParseParam(_this, pszParam, bFlag, bLast);
 }
-
-#endif

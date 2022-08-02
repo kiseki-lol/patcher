@@ -11,19 +11,10 @@
 
 #if defined(ARBITERBUILD)
 #include "Hooks/StandardOut.h"
+#include "Hooks/ServerReplicator.h"
 #endif
 
-#if defined(ARBITERBUILD) && defined(MFC2011)
-#include "Hooks/ReplicatorSecurity.h"
-#endif
-
-#if defined(ARBITERBUILD) && defined(PLAYER2012)
-#include "Hooks/Application.h"
-#endif
-
-#if defined(MFC2010) || defined(MFC2011)
 #include "Hooks/CRoblox.h"
-#endif
 
 START_PATCH_LIST()
 
@@ -56,11 +47,7 @@ ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam
 
 END_PATCH_LIST()
 
-// DLLs for release will be loaded with VMProtect, so this isn't necessary
-// Arbiter will still use Stud_PE for ease in swapping DLLs however
-// #ifdef ARBITERBUILD
 void __declspec(dllexport) import() {}
-// #endif
 
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {

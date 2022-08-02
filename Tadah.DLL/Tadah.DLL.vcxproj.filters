@@ -39,9 +39,6 @@
     <ClInclude Include="Include\Hooks\CRoblox.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
-    <ClInclude Include="Include\Hooks\Application.h">
-      <Filter>Header Files\Hooks</Filter>
-    </ClInclude>
     <ClInclude Include="Include\Hooks\ServerReplicator.h">
       <Filter>Header Files\Hooks</Filter>
     </ClInclude>
@@ -53,9 +50,6 @@
     </ClInclude>
     <ClInclude Include="Include\Hooks\Context.h">
       <Filter>Header Files\Hooks</Filter>
-    </ClInclude>
-    <ClInclude Include="Include\Classes.h">
-      <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Include\resource.h">
       <Filter>Header Files</Filter>
@@ -80,9 +74,6 @@
     <ClCompile Include="Hooks\CRoblox.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
-    <ClCompile Include="Hooks\Application.cpp">
-      <Filter>Source Files\Hooks</Filter>
-    </ClCompile>
     <ClCompile Include="Hooks\ServerReplicator.cpp">
       <Filter>Source Files\Hooks</Filter>
     </ClCompile>
@@ -97,7 +88,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="PolygonDLL.rc">
+    <ResourceCompile Include="Tadah.DLL.rc">
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
