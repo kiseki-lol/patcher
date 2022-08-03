@@ -27,7 +27,7 @@ void __fastcall StandardOut__print_hook(int _this, void*, int type, std::string*
     StandardOut__print(_this, type, message);
 
 #ifndef _DEBUG
-    // Message pointer is offset 4 bytes when the DLL is compiled as release
+    // Message pointer is offset 4 bytes when the DLL is compiled as release.
     message = reinterpret_cast<std::string*>((int)message + 4);
 #endif
 
