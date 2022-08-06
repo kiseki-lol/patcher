@@ -65,8 +65,8 @@
     <VcpkgTriplet>x86-windows-static-md</VcpkgTriplet>
   </PropertyGroup>
   <PropertyGroup Label="Vcpkg" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <VcpkgUseStatic>true</VcpkgUseStatic>
     <VcpkgInstalledDir>$(SolutionDir)packages</VcpkgInstalledDir>
+    <VcpkgTriplet>x86-windows-static-md</VcpkgTriplet>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
