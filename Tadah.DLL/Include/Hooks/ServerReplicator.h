@@ -2,7 +2,7 @@
 
 #include "Configuration.h"
 
-#if defined(ARBITERBUILD)
+#if defined(ARBITER)
 
 struct Packet
 {

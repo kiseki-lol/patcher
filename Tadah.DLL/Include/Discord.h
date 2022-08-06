@@ -8,9 +8,7 @@
 #include "Configuration.h"
 #include "Hooks/CRoblox.h"
 
-#ifndef ARBITERBUILD
-
-std::thread updater;
+#ifndef ARBITER
 
 void InitializeDiscord();
 void UpdatePresence();

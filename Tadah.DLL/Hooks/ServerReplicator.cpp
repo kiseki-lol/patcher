@@ -2,7 +2,7 @@
 
 #include "Hooks/ServerReplicator.h"
 
-#if defined(ARBITERBUILD)
+#if defined(ARBITER)
 
 static std::map<ServerReplicator*, RakPeerInterface*> rakPeers;
 
