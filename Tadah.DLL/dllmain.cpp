@@ -2,7 +2,7 @@
 #include "Configuration.h"
 #include "Patches.h"
 
-#ifndef ARBITER
+#ifndef SERVER
 #include "Discord.h"
 #endif
 
@@ -13,7 +13,7 @@
 #include "Hooks/Context.h"
 #endif
 
-#ifdef ARBITER
+#ifdef SERVER
 #include "Hooks/StandardOut.h"
 #include "Hooks/ServerReplicator.h"
 #endif
@@ -31,16 +31,16 @@ ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)
 ADD_PATCH(Context__requirePermission, Context__requirePermission_hook)
 #endif
 
-#ifdef ARBITER
+#ifdef SERVER
 ADD_PATCH(StandardOut__print, StandardOut__print_hook)
 #endif
 
-#if defined(ARBITER) && defined(MFC2011)
+#if defined(SERVER) && defined(MFC2011)
 ADD_PATCH(ServerReplicator__sendTop, ServerReplicator__sendTop_hook)
 ADD_PATCH(ServerReplicator__processTicket, ServerReplicator__processTicket_hook)
 #endif
 
-#if defined(ARBITER) && defined(PLAYER2012)
+#if defined(SERVER) && defined(PLAYER2012)
 ADD_PATCH(Application__ParseArguments, Application__ParseArguments_hook)
 #endif
 
@@ -57,7 +57,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
     {
-#ifdef ARBITER
+#ifdef SERVER
         InitializeOutput();
 #endif
 
@@ -83,7 +83,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
             ExitProcess(EXIT_FAILURE);
         }
 
-#ifndef ARBITER
+#ifndef SERVER
         InitializeDiscord();
 #endif
     }
@@ -92,7 +92,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     {
         curl_global_cleanup();
 
-#ifndef ARBITER
+#ifndef SERVER
         CleanupDiscord();
 #endif
     }

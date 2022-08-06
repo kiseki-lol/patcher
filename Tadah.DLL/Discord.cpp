@@ -2,7 +2,7 @@
 
 #include "Discord.h"
 
-#ifndef ARBITER
+#ifndef SERVER
 
 std::string username;
 int placeId;

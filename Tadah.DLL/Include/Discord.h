@@ -8,7 +8,7 @@
 #include "Configuration.h"
 #include "Hooks/CRoblox.h"
 
-#ifndef ARBITER
+#ifndef SERVER
 
 void InitializeDiscord();
 void UpdatePresence();
