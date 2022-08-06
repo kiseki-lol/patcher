@@ -16,7 +16,7 @@ void InitializeOutput()
 
 #ifdef _DEBUG
     SetConsoleTextAttribute(outputHandle, FOREGROUND_RED | FOREGROUND_GREEN);
-    printf("Compiled as Debug\n\n");
+    printf("Compiled as Debug\n\n"); //
 #endif
 }
 
