@@ -4,6 +4,7 @@
 #include <rapidjson/document.h>
 
 #include "Configuration.h"
+#include "Helpers.h"
 
 struct Http
 {

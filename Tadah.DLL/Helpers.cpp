@@ -105,3 +105,20 @@ std::string Helpers::joinQueryString(std::map<std::string, std::string> query)
 
     return result;
 }
+
+// https://stackoverflow.com/a/12097772
+std::string Helpers::ws2s(std::wstring widestring)
+{
+    std::string string;
+    std::transform(widestring.begin(), widestring.end(), std::back_inserter(string), [](wchar_t c) {
+        return (char)c;
+    });
+
+    return string;
+}
+
+size_t Helpers::write(char* contents, size_t size, size_t memory, void* pointer)
+{
+    ((std::string*)pointer)->append((char*)contents, size * memory);
+    return size * memory;
+}

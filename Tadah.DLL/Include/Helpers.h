@@ -15,4 +15,6 @@ public:
     static std::vector<BYTE> base64Decode(const std::string_view data);
     static std::map<std::string, std::string> parseQueryString(std::string query);
     static std::string joinQueryString(std::map<std::string, std::string> query);
+    static std::string ws2s(std::wstring widestring);
+    static size_t write(char* contents, size_t size, size_t memory, void* pointer);
 };

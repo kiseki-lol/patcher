@@ -2,6 +2,8 @@
 
 #include "Hooks/CRoblox.h"
 
+static std::string ticket;
+
 static bool hasAuthUrlArg = false;
 static bool hasAuthTicketArg = false;
 static bool hasJoinArg = false;
@@ -55,6 +57,36 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         _this->m_bRunAutomated = TRUE;
 
         CCommandLineInfo__ParseLast(_this, bLast);
+        
+        // Parse the joinScriptUrl for it's placeId here
+        try
+        {
+            CURLU* curl = curl_url();
+            CURLUcode result = curl_url_set(curl, CURLUPART_URL, Helpers::ws2s(joinScriptUrl).c_str(), 0);
+
+            if (result == CURLE_OK)
+            {
+                char* query;
+                curl_url_get(curl, CURLUPART_QUERY, &query, 0);
+                curl_url_cleanup(curl);
+
+                std::map<std::string, std::string> parameters = Helpers::parseQueryString(std::string(query));
+                if (parameters.find("ticket") != parameters.end())
+                {
+                    ticket = parameters["ticket"];
+                }
+            }
+        }
+        catch (...)
+        {
+            //
+        }
+
+        if (ticket.empty())
+        {
+            ExitProcess(EXIT_FAILURE);
+        }
+
         return;
     }
 #endif

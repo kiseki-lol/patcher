@@ -1,6 +1,5 @@
 #include "pch.h"
 
-#include "Helpers.h"
 #include "Hooks/Http.h"
 
 #define CHECK(condition, code) \
@@ -12,12 +11,6 @@
 
 Http__httpGetPostWinInet_t Http__httpGetPostWinInet = (Http__httpGetPostWinInet_t)ADDRESS_HTTP__HTTPGETPOSTWININET;
 Http__trustCheck_t Http__trustCheck = (Http__trustCheck_t)ADDRESS_HTTP__TRUSTCHECK;
-
-size_t write(char* contents, size_t size, size_t memory, void* pointer)
-{
-    ((std::string*)pointer)->append((char*)contents, size * memory);
-    return size * memory;
-}
 
 void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, int a3, bool compressData, LPCSTR additionalHeaders, int a6)
 {
@@ -105,7 +98,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
                     }
 
                     curl_easy_setopt(curl, CURLOPT_URL, api);
-                    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write);
+                    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Helpers::write);
                     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
 
                     result = curl_easy_perform(curl);

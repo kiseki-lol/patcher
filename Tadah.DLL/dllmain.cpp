@@ -2,6 +2,10 @@
 #include "Configuration.h"
 #include "Patches.h"
 
+#ifndef ARBITERBUILD
+#include "Discord.h"
+#endif
+
 #include "Hooks/Http.h"
 #include "Hooks/Crypt.h"
 
@@ -9,7 +13,7 @@
 #include "Hooks/Context.h"
 #endif
 
-#if defined(ARBITERBUILD)
+#ifdef ARBITERBUILD
 #include "Hooks/StandardOut.h"
 #include "Hooks/ServerReplicator.h"
 #endif
@@ -78,11 +82,19 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
             ExitProcess(EXIT_FAILURE);
         }
+
+#ifndef ARBITERBUILD
+        InitializeDiscord();
+#endif
     }
 
     if (ul_reason_for_call == DLL_PROCESS_DETACH)
     {
         curl_global_cleanup();
+
+#ifndef ARBITERBUILD
+        CleanupDiscord();
+#endif
     }
 
     return TRUE;

@@ -124,6 +124,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Include\Configuration.h" />
+    <ClInclude Include="Include\Discord.h" />
     <ClInclude Include="Include\Hooks\Context.h" />
     <ClInclude Include="Include\Hooks\CRoblox.h" />
     <ClInclude Include="Include\Hooks\StandardOut.h" />
@@ -136,6 +137,7 @@
     <ClInclude Include="Include\resource.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Discord.cpp" />
     <ClCompile Include="Hooks\Context.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Hooks\CRoblox.cpp" />
