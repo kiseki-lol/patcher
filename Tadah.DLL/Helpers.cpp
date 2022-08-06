@@ -122,3 +122,90 @@ size_t Helpers::write(char* contents, size_t size, size_t memory, void* pointer)
     ((std::string*)pointer)->append((char*)contents, size * memory);
     return size * memory;
 }
+
+std::string Helpers::getModulePath()
+{
+    char buffer[MAX_PATH];
+    GetModuleFileNameA(NULL, buffer, MAX_PATH);
+
+    return std::string(buffer);
+}
+
+std::string Helpers::getISOTimestamp()
+{
+    time_t now = time(0);
+    struct tm now_gmt {};
+
+    gmtime_s(&now_gmt, &now);
+
+    char buffer[20];
+    strftime(buffer, sizeof(buffer), "%FT%TZ", &now_gmt);
+
+    return std::string(buffer);
+}
+
+std::pair<bool, std::map<std::string, std::string>> Helpers::parseURL(std::string url)
+{
+    CURLU* curl = curl_url();
+    CURLUcode result = curl_url_set(curl, CURLUPART_URL, url.c_str(), 0);
+
+    std::map<std::string, std::string> map;
+    bool success = false;
+
+    if (result == CURLE_OK)
+    {
+        success = true;
+
+        char* path;
+        char* host;
+        char* query;
+
+        curl_url_get(curl, CURLUPART_PATH, &path, 0);
+        curl_url_get(curl, CURLUPART_HOST, &host, 0);
+        curl_url_get(curl, CURLUPART_QUERY, &query, 0);
+        curl_url_cleanup(curl);
+
+        map = {
+            { "path", std::string(path) },
+            { "host", std::string(host) },
+            { "query", std::string(query) }
+        };
+
+        curl_free(path);
+        curl_free(host);
+        curl_free(query);
+    }
+
+    return std::make_pair(success, map);
+}
+
+std::pair<bool, std::string> Helpers::httpGet(std::string url)
+{
+    bool success = false;
+    std::string data;
+
+    CURL* curl = curl_easy_init();
+    CURLcode result;
+    long response = 0;
+
+    if (!curl)
+    {
+        return std::make_pair(false, "");
+    }
+
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Helpers::write);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
+
+    result = curl_easy_perform(curl);
+    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response);
+
+    curl_easy_cleanup(curl);
+
+    if (result != CURLE_OK || response != 200)
+    {
+        return std::make_pair(false, "");
+    }
+
+    return std::make_pair(true, data);
+}

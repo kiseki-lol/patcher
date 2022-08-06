@@ -14,63 +14,34 @@ Http__trustCheck_t Http__trustCheck = (Http__trustCheck_t)ADDRESS_HTTP__TRUSTCHE
 
 void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, int a3, bool compressData, LPCSTR additionalHeaders, int a6)
 {
-    CURLU* curl = curl_url();
-    CURLUcode result = curl_url_set(curl, CURLUPART_URL, _this->url.c_str(), 0);
-
+    std::pair<bool, std::map<std::string, std::string>> parsed = Helpers::parseURL(_this->url);
     Http _changed = *_this;
 
-    if (result == CURLE_OK)
+    if (parsed.first)
     {
-        char* path;
-        char* host;
-        char* query;
+        std::map<std::string, std::string> url = parsed.second;
 
-        curl_url_get(curl, CURLUPART_PATH, &path, 0);
-        curl_url_get(curl, CURLUPART_HOST, &host, 0);
-        curl_url_get(curl, CURLUPART_QUERY, &query, 0);
-        curl_url_cleanup(curl);
-
-        if (path != NULL && host != NULL && query != NULL)
+        if (!url["path"].empty() && !url["host"].empty() && !url["query"].empty())
         {
-            std::string _path = Helpers::toLower(std::string(path));
-            std::string _host = std::string(host);
-            std::string _query = std::string(query);
+            url["path"] = Helpers::toLower(url["path"]);
 
-            if (_host == "roblox.com" || _host == "www.roblox.com")
+            if (url["host"] == "roblox.com" || url["host"] == "www.roblox.com")
             {
-                if (_path == "/asset" || _path == "/asset/" || _path == "/asset/default.ashx")
+                if (url["path"] == "/asset" || url["path"] == "/asset/" || url["path"] == "/asset/default.ashx")
                 {
-                    _changed.url = "https://assetdelivery.roblox.com/v1/asset/?" + _query;
+                    _changed.url = "https://assetdelivery.roblox.com/v1/asset/?" + url["query"];
                     _this = &_changed;
                 }
-                else if (_path == "/thumbs/asset.ashx" || _path == "/thumbs/avatar.ashx")
+                else if (url["path"] == "/thumbs/asset.ashx" || url["path"] == "/thumbs/avatar.ashx")
                 {
-                    /*
-                        Both Roblox endpoints require thumbnailFormatId to be set. We will make the default value for it as 0.
+                    std::string api = "https://www.roblox.com/" + std::string(url["path"] == "/thumbs/asset.ashx" ? "asset" : "avatar") + "/request-thumbnail-fix";
 
-                        Asset.ashx -> requires overrideModeration (default false) -> /asset/request-thumbnail-fix
-                        Avatar.ashx -> requires dummy (default false) -> /avatar/request-thumbnail-fix
-
-                        1. Parse query
-                        2. Construct a brand new blank query with thumbnailFormatId as 0 and dummy/overrideModeration as false (if Avatar.ashx or Asset.ashx)
-                        3. Merge the old query with priority over the old query so that if they declared any of the special variables, ours gets overwritten
-                        4. Rename id (if found) to assetId or userId (specific to the endpoint)
-                        5. Append to the Roblox url (specific to the endpoint)
-                        6. Fetch Roblox API
-                        7. Parse JSON
-                        8. Set the URL as the given url
-                    */
-
-                    std::string api = "https://www.roblox.com/" + std::string(_path == "/thumbs/asset.ashx" ? "asset" : "avatar") + "/request-thumbnail-fix";
-
-                    std::map<std::string, std::string> source = Helpers::parseQueryString(query);
+                    std::map<std::string, std::string> source = Helpers::parseQueryString(url["query"]);
                     std::map<std::string, std::string> fixed = {
-                        { _path == "/thumbs/asset.ashx" ? "overrideModeration" : "dummy", "false" },
+                        { url["path"] == "/thumbs/asset.ashx" ? "overrideModeration" : "dummy", "false" },
                         { "thumbnailFormatId", "0" }
                     };
-                    
-                    // the modern Roblox API doesn't care about parameter capitalization because of asp.net quirks
-                    // thus, we are able to do this :-)
+
                     for (auto& pair : source)
                     {
                         fixed[Helpers::toLower(pair.first)] = pair.second;
@@ -79,42 +50,21 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
                     if (fixed.find("id") != fixed.end())
                     {
                         auto handler = fixed.extract("id");
-                        handler.key() = _path == "/thumbs/asset.ashx" ? "assetId" : "userId";
+                        handler.key() = url["path"] == "/thumbs/asset.ashx" ? "assetId" : "userId";
                         
                         fixed.insert(std::move(handler));
                     }
 
                     api += Helpers::joinQueryString(fixed);
                     
-                    // get the api response
-                    CURL* curl = curl_easy_init();
-                    CURLcode result;
-                    long response = 0;
-                    std::string data;
-
-                    if (!curl)
-                    {
-                        throw std::runtime_error("Failed to initialize cURL");
-                    }
-
-                    curl_easy_setopt(curl, CURLOPT_URL, api);
-                    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Helpers::write);
-                    curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
-
-                    result = curl_easy_perform(curl);
-                    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response);
-
-                    curl_easy_cleanup(curl);
-
-                    if (result != CURLE_OK)
+                    // Get the API response
+                    std::pair<bool, std::string> response = Helpers::httpGet(api);
+                    if (!response.first)
                     {
                         throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x0");
                     }
 
-                    if (response != 200)
-                    {
-                        throw std::runtime_error("Unexpected error occurred when fetching Roblox API: Response code was " + std::to_string(response));
-                    }
+                    std::string data = response.second;
 
                     rapidjson::Document document;
                     document.Parse(data.c_str());
@@ -139,6 +89,12 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
         }
     }
 
+#ifdef SERVER
+    httpLog.open(httpLogPath, std::ios::out);
+    httpLog << "[" << Helpers::getISOTimestamp << "] [" << (isPost ? "POST" : "GET") << "] '" << _this->url << "'" << std::endl;
+    httpLog.close();
+#endif
+
     Http__httpGetPostWinInet(_this, isPost, a3, compressData, additionalHeaders, a6);
 }
 
@@ -146,18 +102,10 @@ bool __fastcall Http__trustCheck_hook(const char* url)
 {
     if (strlen(url) == 7 && !Helpers::isASCII(url))
     {
-        // so the client does this really fucking stupid thing where if it opens an ie window,
-        // it passes a char**, and not a char*
-        // no idea if thats a detours quirk (i doubt it) or if thats how its just actually handled
-        // practically no url is ever going to be seven characters long so it doesn't really matter
-
         url = ((char**)url)[0];
     }
 
     std::string _url = std::string(url);
-
-    // checking for embedded schemes must come BEFORE checking if it's valid
-    // cURL does not treat embedded resources as URLs
 
     if (_url == "about:blank")
     {
@@ -172,35 +120,28 @@ bool __fastcall Http__trustCheck_hook(const char* url)
         }
     }
 
-    CURLU* curl = curl_url();
-    CURLUcode result = curl_url_set(curl, CURLUPART_URL, url, 0);
-
-    if (result != CURLE_OK)
+    std::pair<bool, std::map<std::string, std::string>> result = Helpers::parseURL(url);
+    if (!result.first)
     {
         return false;
     }
 
-    char* scheme;
-    char* host;
+    std::map<std::string, std::string> parsed = result.second;
 
-    curl_url_get(curl, CURLUPART_SCHEME, &scheme, 0);
-    curl_url_get(curl, CURLUPART_HOST, &host, 0);
-    curl_url_cleanup(curl);
-
-    if (std::find(Helpers::allowedSchemes.begin(), Helpers::allowedSchemes.end(), std::string(scheme)) != Helpers::allowedSchemes.end())
+    if (!parsed["scheme"].empty() && !parsed["host"].empty())
     {
-        std::string _host = std::string(host);
-
-        // this is crude and inefficient but I don't care
-        for (std::string wildcard : Helpers::allowedWildcardDomains)
+        if (std::find(Helpers::allowedSchemes.begin(), Helpers::allowedSchemes.end(), std::string(parsed["scheme"])) != Helpers::allowedSchemes.end())
         {
-            if (_host.size() >= wildcard.size() && 0 == wildcard.compare(_host.size() - wildcard.size(), wildcard.size(), wildcard))
+            for (std::string wildcard : Helpers::allowedWildcardDomains)
             {
-                return true;
+                if (parsed["host"].size() >= wildcard.size() && 0 == wildcard.compare(parsed["host"].size() - wildcard.size(), wildcard.size(), wildcard))
+                {
+                    return true;
+                }
             }
-        }
 
-        return std::find(Helpers::allowedDomains.begin(), Helpers::allowedDomains.end(), _host) != Helpers::allowedDomains.end();
+            return std::find(Helpers::allowedDomains.begin(), Helpers::allowedDomains.end(), parsed["host"]) != Helpers::allowedDomains.end();
+        }
     }
 
     return false;

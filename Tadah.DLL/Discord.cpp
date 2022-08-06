@@ -10,10 +10,7 @@ int placeId;
 void InitializeDiscord()
 {
 	// Check if Discord should be enabled by checking if the binary is the client as well as if the binary's containing folder contains a ".nodiscord" file
-	char buffer[MAX_PATH];
-	GetModuleFileNameA(NULL, buffer, MAX_PATH);
-
-	std::string path = std::string(buffer);
+	std::string path = Helpers::getModulePath();
 
 	if (fs::path(path).stem() != "TadahPlayer")
 	{
@@ -26,32 +23,14 @@ void InitializeDiscord()
 	}
 
 	// Get the username and placeId
-	CURL* curl = curl_easy_init();
-	CURLcode result;
-	long response = 0;
-	std::string data;
-
-	if (!curl)
-	{
-		return;
-	}
-
-	curl_easy_setopt(curl, CURLOPT_URL, std::string(BASE_URL + std::string("/api/places/information?ticket=") + ticket));
-	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Helpers::write);
-	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
-
-	result = curl_easy_perform(curl);
-	curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response);
-
-	curl_easy_cleanup(curl);
-
-	if (result != CURLE_OK || response != 200)
+	std::pair<bool, std::string> response = Helpers::httpGet(BASE_URL + std::string("/api/places/information?ticket=") + ticket);
+	if (!response.first)
 	{
 		return;
 	}
 
 	rapidjson::Document document;
-	document.Parse(data.c_str());
+	document.Parse(response.second.c_str());
 
 	if (document.HasParseError() || !document.HasMember("username") || !document.HasMember("placeId"))
 	{
@@ -79,32 +58,14 @@ void UpdatePresence()
 		int max = 0;
 
 		// Get title, size, and max
-		CURL* curl = curl_easy_init();
-		CURLcode result;
-		long response = 0;
-		std::string data;
-
-		if (!curl)
-		{
-			return;
-		}
-
-		curl_easy_setopt(curl, CURLOPT_URL, std::string(BASE_URL + std::string("/api/places/information?id=") + std::to_string(placeId)));
-		curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Helpers::write);
-		curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
-
-		result = curl_easy_perform(curl);
-		curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response);
-
-		curl_easy_cleanup(curl);
-
-		if (result != CURLE_OK || response != 200)
+		std::pair<bool, std::string> response = Helpers::httpGet(BASE_URL + std::string("/api/places/information?id=") + std::to_string(placeId));
+		if (!response.first)
 		{
 			return;
 		}
 
 		rapidjson::Document document;
-		document.Parse(data.c_str());
+		document.Parse(response.second.c_str());
 
 		if (document.HasParseError() || !document.HasMember("title") || !document.HasMember("size") || !document.HasMember("max"))
 		{

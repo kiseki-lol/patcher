@@ -6,6 +6,10 @@
 #include "Configuration.h"
 #include "Helpers.h"
 
+#ifdef SERVER
+#include "Hooks/StandardOut.h"
+#endif
+
 struct Http
 {
 #if PADDING_STRUCT != 0
