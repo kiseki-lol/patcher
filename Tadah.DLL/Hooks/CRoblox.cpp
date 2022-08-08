@@ -59,27 +59,16 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         CCommandLineInfo__ParseLast(_this, bLast);
         
         // Parse the joinScriptUrl for it's placeId here
-        try
+        std::pair<bool, std::map<std::string, std::string>> result = Helpers::parseURL(Helpers::ws2s(joinScriptUrl));
+        if (!result.first)
         {
-            CURLU* curl = curl_url();
-            CURLUcode result = curl_url_set(curl, CURLUPART_URL, Helpers::ws2s(joinScriptUrl).c_str(), 0);
-
-            if (result == CURLE_OK)
-            {
-                char* query;
-                curl_url_get(curl, CURLUPART_QUERY, &query, 0);
-                curl_url_cleanup(curl);
-
-                std::map<std::string, std::string> parameters = Helpers::parseQueryString(std::string(query));
-                if (parameters.find("ticket") != parameters.end())
-                {
-                    ticket = parameters["ticket"];
-                }
-            }
+            ExitProcess(EXIT_FAILURE);
         }
-        catch (...)
+
+        std::map<std::string, std::string> parameters = result.second;
+        if (parameters.find("ticket") != parameters.end())
         {
-            //
+            ticket = parameters["ticket"];
         }
 
         if (ticket.empty())
