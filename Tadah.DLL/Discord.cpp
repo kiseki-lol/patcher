@@ -4,6 +4,7 @@
 
 #ifndef SERVER
 
+bool isRunning = false;
 std::string username;
 int placeId;
 
@@ -49,7 +50,9 @@ void InitializeDiscord()
 
 void UpdatePresence()
 {
-	while (true)
+	isRunning = true;
+
+	while (isRunning)
 	{
 		std::this_thread::sleep_for(std::chrono::milliseconds(60 * 1000));
 
@@ -93,6 +96,7 @@ void UpdatePresence()
 
 void CleanupDiscord()
 {
+	isRunning = false;
 	Discord_Shutdown();
 }
 
