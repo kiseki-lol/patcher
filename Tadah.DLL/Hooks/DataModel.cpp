@@ -10,7 +10,7 @@ DataModel__getJobId_t DataModel__getJobId = (DataModel__getJobId_t)ADDRESS_DATAM
 
 int __fastcall DataModel__getJobId_hook(DataModel* _this, void*, int a2)
 {
-	if (!setJobId && hasJobIdArg && !jobId.empty())
+	if (!setJobId && hasJobId && !jobId.empty())
 	{
 		_this->jobId = Helpers::ws2s(jobId);
 		setJobId = true;
