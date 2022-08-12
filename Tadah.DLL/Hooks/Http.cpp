@@ -90,9 +90,10 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
     }
 
 #ifdef SERVER
-    httpLog.open(httpLogPath, std::ios::out);
-    httpLog << "[" << Helpers::getISOTimestamp << "] [" << (isPost ? "POST" : "GET") << "] '" << _this->url << "'" << std::endl;
-    httpLog.close();
+    if (Server::Handle)
+    {
+        Server::Log::Http((RequestType)isPost, _this->url);
+    }
 #endif
 
     Http__httpGetPostWinInet(_this, isPost, a3, compressData, additionalHeaders, a6);

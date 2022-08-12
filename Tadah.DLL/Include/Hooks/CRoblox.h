@@ -4,6 +4,7 @@
 
 #include "Configuration.h"
 #include "Helpers.h"
+#include "Discord.h"
 
 class CWorkspace;
 
@@ -42,4 +43,5 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 extern CRobloxApp__InitInstance_t CRobloxApp__InitInstance;
 extern CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam;
 
-extern std::string ticket;
+extern std::wstring jobId;
+extern bool hasJobIdArg;

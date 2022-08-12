@@ -1,4 +1,5 @@
 #include "pch.h"
+
 #include "Configuration.h"
 #include "Patches.h"
 
@@ -6,19 +7,23 @@
 #include "Discord.h"
 #endif
 
+#ifdef SERVER
+#include "Server.h"
+#endif
+
 #include "Hooks/Http.h"
 #include "Hooks/Crypt.h"
+#include "Hooks/CRoblox.h"
 
 #ifdef _DEBUG
 #include "Hooks/Context.h"
 #endif
 
 #ifdef SERVER
+#include "Hooks/DataModel.h"
 #include "Hooks/StandardOut.h"
 #include "Hooks/ServerReplicator.h"
 #endif
-
-#include "Hooks/CRoblox.h"
 
 START_PATCH_LIST()
 
@@ -27,26 +32,20 @@ ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
 
 ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)
 
+ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
+ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
+
 #ifdef _DEBUG
 ADD_PATCH(Context__requirePermission, Context__requirePermission_hook)
 #endif
 
 #ifdef SERVER
-ADD_PATCH(StandardOut__print, StandardOut__print_hook)
-#endif
+ADD_PATCH(DataModel__getJobId, DataModel__getJobId_hook)
 
-#if defined(SERVER) && defined(MFC2011)
+ADD_PATCH(StandardOut__print, StandardOut__print_hook)
+
 ADD_PATCH(ServerReplicator__sendTop, ServerReplicator__sendTop_hook)
 ADD_PATCH(ServerReplicator__processTicket, ServerReplicator__processTicket_hook)
-#endif
-
-#if defined(SERVER) && defined(PLAYER2012)
-ADD_PATCH(Application__ParseArguments, Application__ParseArguments_hook)
-#endif
-
-#if defined(MFC2010) || defined(MFC2011)
-ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
-ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
 #endif
 
 END_PATCH_LIST()
@@ -57,10 +56,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
     {
-#ifdef SERVER
-        InitializeOutput();
-#endif
-
         LONG patchesError = Patches::Apply();
         if (patchesError != NO_ERROR)
         {
@@ -82,10 +77,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
             ExitProcess(EXIT_FAILURE);
         }
-
-#ifndef SERVER
-        InitializeDiscord();
-#endif
     }
 
     if (ul_reason_for_call == DLL_PROCESS_DETACH)
@@ -93,7 +84,14 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         curl_global_cleanup();
 
 #ifndef SERVER
-        CleanupDiscord();
+        Discord::Cleanup();
+#endif
+
+#ifdef SERVER
+        if (Server::Handle)
+        {
+            Server::Cleanup();
+        }
 #endif
     }
 

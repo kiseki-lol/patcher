@@ -2,15 +2,19 @@
 
 #include "Hooks/CRoblox.h"
 
-std::string ticket = "";
+#ifdef SERVER
+#include "Server.h"
+#endif
 
-static bool hasAuthUrlArg = false;
-static bool hasAuthTicketArg = false;
-static bool hasJoinArg = false;
+bool hasAuthUrlArg = false;
+bool hasAuthTicketArg = false;
+bool hasJoinArg = false;
+bool hasJobIdArg = false;
 
-static std::wstring authenticationUrl;
-static std::wstring authenticationTicket;
-static std::wstring joinScriptUrl;
+std::wstring authenticationUrl;
+std::wstring authenticationTicket;
+std::wstring joinScriptUrl;
+std::wstring jobId;
 
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
@@ -18,16 +22,19 @@ CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobl
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 {
     if (!CRobloxApp__InitInstance(_this))
+    {
         return FALSE;
+    }
 
     CApp* app = reinterpret_cast<CApp*>(CLASSLOCATION_CAPP);
 
+#ifndef SERVER
     if (hasAuthUrlArg && hasAuthTicketArg && !authenticationUrl.empty() && !authenticationTicket.empty())
     {
         CApp__RobloxAuthenticate(app, nullptr, authenticationUrl.c_str(), authenticationTicket.c_str());
     }
+#endif
 
-#ifndef SERVER
     if (hasJoinArg && !joinScriptUrl.empty())
     {
         try
@@ -40,14 +47,12 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
             return FALSE;
         }
     }
-#endif
 
     return TRUE;
 }
 
 void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* _this, void*, const char* pszParam, BOOL bFlag, BOOL bLast)
 {
-#ifndef SERVER
     if (hasJoinArg && joinScriptUrl.empty())
     {
         int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
@@ -57,29 +62,13 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         _this->m_bRunAutomated = TRUE;
 
         CCommandLineInfo__ParseLast(_this, bLast);
-        
-        // Parse the joinScriptUrl for it's placeId here
-        std::pair<bool, std::map<std::string, std::string>> result = Helpers::parseURL(Helpers::ws2s(joinScriptUrl));
-        if (!result.first)
-        {
-            ExitProcess(EXIT_FAILURE);
-        }
 
-        std::map<std::string, std::string> parameters = result.second;
-        if (parameters.find("ticket") != parameters.end())
-        {
-            ticket = parameters["ticket"];
-        }
-
-        if (ticket.empty())
-        {
-            ExitProcess(EXIT_FAILURE);
-        }
-
-        return;
-    }
+#ifndef SERVER
+        Discord::Initialize(Helpers::ws2s(joinScriptUrl));
 #endif
+    }
 
+#ifndef SERVER
     if (hasAuthUrlArg && authenticationUrl.empty())
     {
         int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
@@ -99,7 +88,21 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
+#endif
 
+#ifdef SERVER
+    if (hasJobIdArg && jobId.empty())
+    {
+        int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
+        jobId.resize(size);
+        MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), &jobId[0], size);
+
+        CCommandLineInfo__ParseLast(_this, bLast);
+        return;
+    }
+#endif
+
+#ifndef SERVER
     if (bFlag && _stricmp(pszParam, "a") == 0)
     {
         hasAuthUrlArg = true;
@@ -113,12 +116,23 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
+#endif
 
-#ifndef SERVER
     if (bFlag && _stricmp(pszParam, "j") == 0)
     {
         hasJoinArg = true;
         CCommandLineInfo__ParseLast(_this, bLast);
+        return;
+    }
+
+#ifdef SERVER
+    if (bFlag && _stricmp(pszParam, "jobId") == 0)
+    {
+        hasJobIdArg = true;
+        CCommandLineInfo__ParseLast(_this, bLast);
+
+        Server::Initialize(jobId);
+
         return;
     }
 #endif

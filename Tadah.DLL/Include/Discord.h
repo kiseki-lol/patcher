@@ -10,8 +10,12 @@
 
 #ifndef SERVER
 
-void InitializeDiscord();
-void UpdatePresence();
-void CleanupDiscord();
+class Discord {
+public:
+	static void Initialize(std::string joinScriptUrl);
+	static void Cleanup();
+private:
+	static void Update();
+};
 
 #endif

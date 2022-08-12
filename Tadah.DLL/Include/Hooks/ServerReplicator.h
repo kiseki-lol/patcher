@@ -12,7 +12,6 @@ struct Packet
     unsigned char* data;
 };
 
-struct ConcurrentRakPeer {};
 struct RakPeerInterface {};
 
 struct ServerReplicator

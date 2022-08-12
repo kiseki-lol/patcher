@@ -127,9 +127,11 @@
     <ClInclude Include="Include\Discord.h" />
     <ClInclude Include="Include\Hooks\Context.h" />
     <ClInclude Include="Include\Hooks\CRoblox.h" />
+    <ClInclude Include="Include\Hooks\DataModel.h" />
     <ClInclude Include="Include\Hooks\StandardOut.h" />
     <ClInclude Include="Include\Hooks\ServerReplicator.h" />
     <ClInclude Include="Include\Hooks\Http.h" />
+    <ClInclude Include="Include\Server.h" />
     <ClInclude Include="Include\Patches.h" />
     <ClInclude Include="Include\pch.h" />
     <ClInclude Include="Include\Helpers.h" />
@@ -141,6 +143,8 @@
     <ClCompile Include="Hooks\Context.cpp" />
     <ClCompile Include="dllmain.cpp" />
     <ClCompile Include="Hooks\CRoblox.cpp" />
+    <ClCompile Include="Hooks\DataModel.cpp" />
+    <ClCompile Include="Server.cpp" />
     <ClCompile Include="Patches.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

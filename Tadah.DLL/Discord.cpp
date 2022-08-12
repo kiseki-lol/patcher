@@ -8,7 +8,7 @@ bool isRunning = false;
 std::string username;
 int placeId;
 
-void InitializeDiscord()
+void Discord::Initialize(std::string joinScriptUrl)
 {
 	// Check if Discord should be enabled by checking if the binary is the client as well as if the binary's containing folder contains a ".nodiscord" file
 	std::string path = Helpers::getModulePath();
@@ -23,8 +23,32 @@ void InitializeDiscord()
 		return;
 	}
 
+	std::pair<bool, std::map<std::string, std::string>> parsed = Helpers::parseURL(joinScriptUrl);
+
+	if (!parsed.first)
+	{
+		return;
+	}
+
+	if (parsed.second["query"].empty())
+	{
+		return;
+	}
+
+	std::map<std::string, std::string> query = Helpers::parseQueryString(parsed.second["query"]);
+
+	if (query.find("ticket") == query.end())
+	{
+		return;
+	}
+
+	if (query["ticket"].empty())
+	{
+		return;
+	}
+
 	// Get the username and placeId
-	std::pair<bool, std::string> response = Helpers::httpGet(BASE_URL + std::string("/api/places/information?ticket=") + ticket);
+	std::pair<bool, std::string> response = Helpers::httpGet(BASE_URL + std::string("/api/places/information?ticket=" + query["ticket"]));
 	if (!response.first)
 	{
 		return;
@@ -41,14 +65,14 @@ void InitializeDiscord()
 	username = document["username"].GetString();
 	placeId = document["placeId"].GetInt();
 
-	UpdatePresence();
+	Discord::Update();
 
 	// Run the updater
-	std::thread updater(UpdatePresence);
+	std::thread updater(Discord::Update);
 	updater.join();
 }
 
-void UpdatePresence()
+void Discord::Update()
 {
 	isRunning = true;
 
@@ -61,7 +85,7 @@ void UpdatePresence()
 		int max = 0;
 
 		// Get title, size, and max
-		std::pair<bool, std::string> response = Helpers::httpGet(BASE_URL + std::string("/api/places/information?id=") + std::to_string(placeId));
+		std::pair<bool, std::string> response = Helpers::httpGet(BASE_URL + std::string("/api/places/information?id=" + placeId));
 		if (!response.first)
 		{
 			return;
@@ -94,7 +118,7 @@ void UpdatePresence()
 	}
 }
 
-void CleanupDiscord()
+void Discord::Cleanup()
 {
 	isRunning = false;
 	Discord_Shutdown();
