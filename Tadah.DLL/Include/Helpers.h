@@ -15,12 +15,12 @@ public:
     static bool isASCII(const std::string& s);
     static std::string toLower(std::string s);
     static std::vector<BYTE> base64Decode(const std::string_view data);
-    static std::map<std::string, std::string> parseQueryString(std::string query);
-    static std::string joinQueryString(std::map<std::string, std::string> query);
-    static std::string ws2s(std::wstring widestring);
+    static std::map<std::string, std::string> parseQueryString(const std::string query);
+    static std::string joinQueryString(const std::map<std::string, std::string> query);
+    static std::string ws2s(const std::wstring widestring);
     static size_t write(char* contents, size_t size, size_t memory, void* pointer);
     static std::string getModulePath();
     static std::string getISOTimestamp();
-    static std::pair<bool, std::map<std::string, std::string>> parseURL(std::string url);
-    static std::pair<bool, std::string> httpGet(std::string url);
+    static std::pair<bool, std::map<std::string, std::string>> parseURL(const std::string url);
+    static std::pair<bool, std::string> httpGet(const std::string url);
 };

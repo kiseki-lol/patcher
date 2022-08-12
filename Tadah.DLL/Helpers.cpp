@@ -18,7 +18,7 @@ bool Helpers::isASCII(const std::string& s)
 {
     return !std::any_of(s.begin(), s.end(), [](char c) {
         return static_cast<unsigned char>(c) > 127;
-        });
+    });
 }
 
 // https://stackoverflow.com/questions/313970/how-to-convert-an-instance-of-stdstring-to-lower-case
@@ -71,7 +71,7 @@ std::vector<BYTE> Helpers::base64Decode(const std::string_view data)
 }
 
 // https://stackoverflow.com/a/28269049
-std::map<std::string, std::string> Helpers::parseQueryString(std::string query)
+std::map<std::string, std::string> Helpers::parseQueryString(const std::string query)
 {
     std::istringstream stream(query);
     std::map<std::string, std::string> parsed;
@@ -90,7 +90,7 @@ std::map<std::string, std::string> Helpers::parseQueryString(std::string query)
     return parsed;
 }
 
-std::string Helpers::joinQueryString(std::map<std::string, std::string> query)
+std::string Helpers::joinQueryString(const std::map<std::string, std::string> query)
 {
     std::stringstream stream;
     stream << "?";
@@ -107,7 +107,7 @@ std::string Helpers::joinQueryString(std::map<std::string, std::string> query)
 }
 
 // https://stackoverflow.com/a/12097772
-std::string Helpers::ws2s(std::wstring widestring)
+std::string Helpers::ws2s(const std::wstring widestring)
 {
     std::string string;
     std::transform(widestring.begin(), widestring.end(), std::back_inserter(string), [](wchar_t c) {
@@ -144,7 +144,7 @@ std::string Helpers::getISOTimestamp()
     return std::string(buffer);
 }
 
-std::pair<bool, std::map<std::string, std::string>> Helpers::parseURL(std::string url)
+std::pair<bool, std::map<std::string, std::string>> Helpers::parseURL(const std::string url)
 {
     CURLU* curl = curl_url();
     CURLUcode result = curl_url_set(curl, CURLUPART_URL, url.c_str(), 0);
@@ -179,7 +179,7 @@ std::pair<bool, std::map<std::string, std::string>> Helpers::parseURL(std::strin
     return std::make_pair(success, map);
 }
 
-std::pair<bool, std::string> Helpers::httpGet(std::string url)
+std::pair<bool, std::string> Helpers::httpGet(const std::string url)
 {
     bool success = false;
     std::string data;

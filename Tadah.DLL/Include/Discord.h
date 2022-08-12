@@ -1,6 +1,5 @@
 #pragma once
 
-#include <curl/curl.h>
 #include <discord_rpc.h>
 #include <discord_register.h>
 #include <rapidjson/document.h>
@@ -12,7 +11,7 @@
 
 class Discord {
 public:
-	static void Initialize(std::string joinScriptUrl);
+	static void Initialize(const std::string joinScriptUrl);
 	static void Cleanup();
 private:
 	static void Update();

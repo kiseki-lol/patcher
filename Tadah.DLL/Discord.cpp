@@ -8,7 +8,7 @@ bool isRunning = false;
 std::string username;
 int placeId;
 
-void Discord::Initialize(std::string joinScriptUrl)
+void Discord::Initialize(const std::string joinScriptUrl)
 {
 	// Check if Discord should be enabled by checking if the binary is the client as well as if the binary's containing folder contains a ".nodiscord" file
 	std::string path = Helpers::getModulePath();
