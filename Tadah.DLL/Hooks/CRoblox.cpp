@@ -6,10 +6,10 @@
 #include "Server.h"
 #endif
 
-bool hasAuthUrlArg = false;
-bool hasAuthTicketArg = false;
-bool hasJoinArg = false;
-bool hasJobIdArg = false;
+bool hasAuthenticationUrl = false;
+bool hasAuthenticationTicket = false;
+bool hasJoinScriptUrl = false;
+bool hasJobId = false;
 
 std::wstring authenticationUrl;
 std::wstring authenticationTicket;
@@ -28,19 +28,17 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 
     CApp* app = reinterpret_cast<CApp*>(CLASSLOCATION_CAPP);
 
-#ifndef SERVER
-    if (hasAuthUrlArg && hasAuthTicketArg && !authenticationUrl.empty() && !authenticationTicket.empty())
+    if (hasAuthenticationUrl && hasAuthenticationTicket && !authenticationUrl.empty() && !authenticationTicket.empty())
     {
         CApp__RobloxAuthenticate(app, nullptr, authenticationUrl.c_str(), authenticationTicket.c_str());
     }
-#endif
 
-    if (hasJoinArg && !joinScriptUrl.empty())
+    if (hasJoinScriptUrl && !joinScriptUrl.empty())
     {
         try
         {
             CRobloxDoc* document = CRobloxApp__CreateDocument(_this);
-            CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANTARG(), VARIANTARG(), VARIANTARG(), VARIANTARG(), nullptr);
+            CWorkspace__ExecUrlScript(document->workspace, joinScriptUrl.c_str(), VARIANT(), VARIANT(), VARIANT(), VARIANT(), nullptr);
         }
         catch (std::runtime_error)
         {
@@ -48,12 +46,26 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
         }
     }
 
+#ifdef PLAYER
+    if (!hasAuthUrl || !hasAuthTicket || !hasJoinScriptUrl)
+    {
+        return FALSE;
+    }
+#endif
+
+#ifdef SERVER
+    if (!hasAuthUrl || !hasAuthTicket || !hasJobId)
+    {
+        return FALSE;
+    }
+#endif
+
     return TRUE;
 }
 
 void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* _this, void*, const char* pszParam, BOOL bFlag, BOOL bLast)
 {
-    if (hasJoinArg && joinScriptUrl.empty())
+    if (hasJoinScriptUrl && joinScriptUrl.empty())
     {
         int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
         joinScriptUrl.resize(size);
@@ -63,13 +75,12 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 
         CCommandLineInfo__ParseLast(_this, bLast);
 
-#ifndef SERVER
+#ifdef PLAYER
         Discord::Initialize(Helpers::ws2s(joinScriptUrl));
 #endif
     }
 
-#ifndef SERVER
-    if (hasAuthUrlArg && authenticationUrl.empty())
+    if (hasAuthenticationUrl && authenticationUrl.empty())
     {
         int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
         authenticationUrl.resize(size);
@@ -79,7 +90,7 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         return;
     }
 
-    if (hasAuthTicketArg && authenticationTicket.empty())
+    if (hasAuthenticationTicket && authenticationTicket.empty())
     {
         int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
         authenticationTicket.resize(size);
@@ -88,10 +99,9 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
-#endif
 
 #ifdef SERVER
-    if (hasJobIdArg && jobId.empty())
+    if (hasJobId && jobId.empty())
     {
         int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
         jobId.resize(size);
@@ -102,25 +112,23 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
     }
 #endif
 
-#ifndef SERVER
     if (bFlag && _stricmp(pszParam, "a") == 0)
     {
-        hasAuthUrlArg = true;
+        hasAuthenticationUrl = true;
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
 
     if (bFlag && _stricmp(pszParam, "t") == 0)
     {
-        hasAuthTicketArg = true;
+        hasAuthenticationTicket = true;
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
-#endif
 
     if (bFlag && _stricmp(pszParam, "j") == 0)
     {
-        hasJoinArg = true;
+        hasJoinScriptUrl = true;
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
@@ -128,7 +136,7 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 #ifdef SERVER
     if (bFlag && _stricmp(pszParam, "jobId") == 0)
     {
-        hasJobIdArg = true;
+        hasJobId = true;
         CCommandLineInfo__ParseLast(_this, bLast);
 
         Server::Initialize(jobId);

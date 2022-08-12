@@ -2,7 +2,7 @@
 
 #include "Discord.h"
 
-#ifndef SERVER
+#ifdef PLAYER
 
 bool isRunning = false;
 std::string username;
@@ -10,19 +10,6 @@ int placeId;
 
 void Discord::Initialize(const std::string joinScriptUrl)
 {
-	// Check if Discord should be enabled by checking if the binary is the client as well as if the binary's containing folder contains a ".nodiscord" file
-	std::string path = Helpers::getModulePath();
-
-	if (fs::path(path).stem() != "TadahPlayer")
-	{
-		return;
-	}
-
-	if (fs::exists(fs::path(path).parent_path() / ".nodiscord"))
-	{
-		return;
-	}
-
 	std::pair<bool, std::map<std::string, std::string>> parsed = Helpers::parseURL(joinScriptUrl);
 
 	if (!parsed.first)
@@ -42,7 +29,17 @@ void Discord::Initialize(const std::string joinScriptUrl)
 		return;
 	}
 
+	if (query.find("discord") == query.end())
+	{
+		return;
+	}
+
 	if (query["ticket"].empty())
+	{
+		return;
+	}
+
+	if (query["discord"] == "0")
 	{
 		return;
 	}

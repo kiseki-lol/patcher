@@ -7,7 +7,7 @@
 #include "Configuration.h"
 #include "Hooks/CRoblox.h"
 
-#ifndef SERVER
+#ifdef PLAYER
 
 class Discord {
 public:

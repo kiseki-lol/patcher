@@ -2,6 +2,7 @@
 
 // This is commented out since our CI defines this automatically
 // #define SERVER
+// #define PLAYER
 
 #define BASE_URL "https://tadah.rocks"
 #define DISCORD_APP_ID 923705431543668736
