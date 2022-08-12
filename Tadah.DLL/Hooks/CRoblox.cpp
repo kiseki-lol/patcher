@@ -47,15 +47,16 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
     }
 
 #ifdef PLAYER
-    if (!hasAuthUrl || !hasAuthTicket || !hasJoinScriptUrl)
+    if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl)
     {
         return FALSE;
     }
 #endif
 
 #ifdef SERVER
-    if (!hasAuthUrl || !hasAuthTicket || !hasJobId)
+    if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl || !hasJobId)
     {
+        ShellExecute(0, 0, L"https://tadah.rocks/games", 0, 0, SW_SHOW);
         return FALSE;
     }
 #endif
