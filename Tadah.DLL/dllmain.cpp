@@ -50,8 +50,6 @@ ADD_PATCH(ServerReplicator__processTicket, ServerReplicator__processTicket_hook)
 
 END_PATCH_LIST()
 
-void __declspec(dllexport) import() {}
-
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
@@ -97,3 +95,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 
     return TRUE;
 }
+
+#ifdef SERVER
+void __declspec(dllexport) melo() {}
+#endif
