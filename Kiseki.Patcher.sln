@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32014.148
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Kiseki.Patcher", "Kiseki.Patcher\Kiseki.Patcher.vcxproj", "{9D232642-FB2F-43DC-B0AC-C56E3B691233}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9D232642-FB2F-43DC-B0AC-C56E3B691233}.Debug|x86.ActiveCfg = Debug|Win32
+		{9D232642-FB2F-43DC-B0AC-C56E3B691233}.Debug|x86.Build.0 = Debug|Win32
+		{9D232642-FB2F-43DC-B0AC-C56E3B691233}.Release|x86.ActiveCfg = Release|Win32
+		{9D232642-FB2F-43DC-B0AC-C56E3B691233}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {01A4798F-B42A-4C9B-BFE7-A6D1BD35C7B3}
+	EndGlobalSection
+EndGlobal
