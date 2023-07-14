@@ -97,5 +97,5 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 }
 
 #ifdef SERVER
-void __declspec(dllexport) melo() {}
+void __declspec(dllexport) entrypoint() {}
 #endif
