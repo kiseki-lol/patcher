@@ -1,6 +1,10 @@
 #pragma once
 
-// This is commented out since our CI defines this automatically
+/*
+ * This is commented out since our CI defines this automatically.
+ * Uncomment this if you want to test locally, but please do not push with these uncommented!
+ */
+
 // #define SERVER
 // #define PLAYER
 
