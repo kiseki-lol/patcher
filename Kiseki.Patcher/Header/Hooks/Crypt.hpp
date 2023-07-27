@@ -1,7 +1,8 @@
 #pragma once
 
-#include <string>
+#include <stdexcept>
 
+#include <windows.h>
 #include <wincrypt.h>
 
 #include "Globals.hpp"

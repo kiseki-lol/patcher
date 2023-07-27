@@ -3,6 +3,7 @@
 #include <vector>
 #include <utility>
 
+#include <windows.h>
 #include <detours/detours.h>
 
 namespace Patcher

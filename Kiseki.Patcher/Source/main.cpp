@@ -29,8 +29,10 @@ ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
 
 ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)
 
+#if defined(PLAYER) or defined(SERVER)
 ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
 ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
+#endif
 
 #ifdef SERVER
 ADD_PATCH(DataModel__getJobId, DataModel__getJobId_hook)
@@ -47,7 +49,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
 {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH)
     {
-        LONG patchesError = Patches::Apply();
+        LONG patchesError = Patcher::Apply();
         if (patchesError != NO_ERROR)
         {
 #ifdef _DEBUG
