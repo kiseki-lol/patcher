@@ -1,5 +1,8 @@
 #pragma once
 
+#include <vector>
+#include <utility>
+
 #include <detours/detours.h>
 
 namespace Patcher

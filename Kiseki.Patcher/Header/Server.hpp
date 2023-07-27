@@ -2,10 +2,10 @@
 
 #pragma once
 
+#include "Hooks/StandardOut.hpp"
+
 #include "Globals.hpp"
 #include "Helpers.hpp"
-
-#include "Hooks/StandardOut.hpp"
 
 enum class RequestType {
 	POST,

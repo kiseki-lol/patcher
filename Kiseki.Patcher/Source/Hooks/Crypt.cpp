@@ -1,8 +1,5 @@
 #include "Hooks/Crypt.hpp"
 
-#include "Helpers.hpp"
-#include "Patcher.hpp"
-
 Crypt::Crypt()
 {
     if (!CryptAcquireContext(&context, NULL, MS_ENH_RSA_AES_PROV, PROV_RSA_AES, CRYPT_VERIFYCONTEXT))

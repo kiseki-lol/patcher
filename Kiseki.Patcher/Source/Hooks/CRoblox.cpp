@@ -2,10 +2,6 @@
 
 #include "Hooks/CRoblox.hpp"
 
-#ifdef SERVER
-#include "Server.h"
-#endif
-
 bool hasAuthenticationUrl = false;
 bool hasAuthenticationTicket = false;
 bool hasJoinScriptUrl = false;

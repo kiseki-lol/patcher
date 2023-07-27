@@ -4,7 +4,7 @@
 #define VERSION_MAJOR_MINOR_PATCH_STR "1.0.0"
 #define VERSION_FULL_STR              "1.0.0.0"
 #define VERSION_RESOURCE              1, 0, 0, 0
-#define VERSION_RESOURCE_STR          VERSION_FULL_STR "\0"
+#define VERSION_RESOURCE_STR          VERSION_FULL_STR
 
 #define APP_NAME                     "Kiseki.Patcher"
 #define APP_DESCRIPTION              "Client Functionality Library"

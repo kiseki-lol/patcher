@@ -6,10 +6,9 @@
 #include <discord_register.h>
 #include <rapidjson/document.h>
 
-#include "Globals.hpp"
-
 #include "Hooks/CRoblox.hpp"
 
+#include "Globals.hpp"
 
 class Discord {
 public:

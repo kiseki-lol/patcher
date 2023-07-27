@@ -1,3 +1,7 @@
+#pragma once
+
+#include <string>
+
 #include <curl/curl.h>
 #include <rapidjson/document.h>
 

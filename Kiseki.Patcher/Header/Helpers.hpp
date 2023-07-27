@@ -1,5 +1,9 @@
 #pragma once
 
+#include <string>
+#include <vector>
+#include <map>
+
 #include <curl/curl.h>
 
 #include "Globals.hpp"

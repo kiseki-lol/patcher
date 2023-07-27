@@ -1,4 +1,6 @@
 
+#include <windows.h>
+
 #include "Globals.hpp"
 #include "Patcher.hpp"
 
