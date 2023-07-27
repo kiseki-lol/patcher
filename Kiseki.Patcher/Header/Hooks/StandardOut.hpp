@@ -2,9 +2,9 @@
 
 #pragma once
 
-#include "Configuration.hpp"
+#include "Globals.hpp"
 #include "Helpers.hpp"
-#include "Patches.hpp"
+#include "Patcher.hpp"
 #include "Server.hpp"
 
 typedef void(__thiscall* StandardOut__print_t)(int _this, int type, std::string* message);

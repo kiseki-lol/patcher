@@ -1,6 +1,6 @@
 
-#include "Configuration.hpp"
-#include "Patches.hpp"
+#include "Globals.hpp"
+#include "Patcher.hpp"
 
 #ifdef PLAYER
 #include "Discord.hpp"
@@ -13,10 +13,6 @@
 #include "Hooks/Http.hpp"
 #include "Hooks/Crypt.hpp"
 #include "Hooks/CRoblox.hpp"
-
-#ifdef _DEBUG
-#include "Hooks/Context.hpp"
-#endif
 
 #ifdef SERVER
 #include "Hooks/DataModel.hpp"
@@ -33,10 +29,6 @@ ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)
 
 ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
 ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
-
-#ifdef _DEBUG
-ADD_PATCH(Context__requirePermission, Context__requirePermission_hook)
-#endif
 
 #ifdef SERVER
 ADD_PATCH(DataModel__getJobId, DataModel__getJobId_hook)

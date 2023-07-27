@@ -4,7 +4,7 @@
 
 #include "Hooks/CRoblox.hpp"
 
-#include "Configuration.hpp"
+#include "Globals.hpp"
 #include "Helpers.hpp"
 
 struct DataModel

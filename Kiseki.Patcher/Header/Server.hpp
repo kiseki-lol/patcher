@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "Configuration.hpp"
+#include "Globals.hpp"
 #include "Helpers.hpp"
 
 #include "Hooks/StandardOut.hpp"

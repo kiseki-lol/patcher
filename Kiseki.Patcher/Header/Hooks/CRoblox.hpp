@@ -2,7 +2,7 @@
 
 #include <curl/curl.h>
 
-#include "Configuration.hpp"
+#include "Globals.hpp"
 #include "Helpers.hpp"
 #include "Discord.hpp"
 

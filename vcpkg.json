@@ -6,7 +6,8 @@
         "curl",
         "detours",
         "discord-rpc",
-        "rapidjson",
-        "pugixml"
+        "openssl",
+        "pugixml",
+        "rapidjson"
     ]
 }

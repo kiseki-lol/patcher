@@ -5,7 +5,7 @@
 #include "Hooks/StandardOut.hpp"
 #endif
 
-#include "Configuration.hpp"
+#include "Globals.hpp"
 #include "Helpers.hpp"
 
 struct Http

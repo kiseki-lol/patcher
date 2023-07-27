@@ -6,7 +6,7 @@
 #include <discord_register.h>
 #include <rapidjson/document.h>
 
-#include "Configuration.hpp"
+#include "Globals.hpp"
 
 #include "Hooks/CRoblox.hpp"
 
