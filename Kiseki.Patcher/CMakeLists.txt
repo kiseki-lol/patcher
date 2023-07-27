@@ -1,3 +1,10 @@
+find_package(curl CONFIG REQUIRED)
+find_package(detours CONFIG REQUIRED)
+find_package(discord-rpc CONFIG REQUIRED)
+find_package(openssl CONFIG REQUIRED)
+find_package(pugixml CONFIG REQUIRED)
+find_package(rapidjson CONFIG REQUIRED)
+
 list(APPEND SOURCE
     Source/main.cpp
     Source/Patcher.cpp
@@ -15,7 +22,7 @@ list(APPEND HEADER
     Header/Hooks/Http.hpp
 
     Resource/Information.h
-    Resource/Script.h
+    Resource/Script.rc
 )
 
 if(COMPILE_PLAYER)
@@ -49,3 +56,14 @@ if(COMPILE_SERVER)
 endif()
 
 add_library(Kiseki.Patcher ${SOURCE} ${HEADER})
+
+target_include_directories(Kiseki.Patcher PRIVATE Header)
+target_link_libraries(Kiseki.Patcher PRIVATE)
+
+if(COMPILE_PLAYER)
+    target_compile_definitions(Kiseki.Patcher PRIVATE PLAYER)
+endif()
+
+if(COMPILE_SERVER)
+    target_compile_definitions(Kiseki.Patcher PRIVATE SERVER)
+endif()
