@@ -1,3 +1,5 @@
+#if defined(PLAYER) || defined(SERVER)
+
 #pragma once
 
 #include <curl/curl.h>
@@ -43,5 +45,9 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 extern CRobloxApp__InitInstance_t CRobloxApp__InitInstance;
 extern CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam;
 
+#ifdef SERVER
 extern std::wstring jobId;
 extern bool hasJobId;
+#endif
+
+#endif

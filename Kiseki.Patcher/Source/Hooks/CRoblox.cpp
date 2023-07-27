@@ -1,3 +1,5 @@
+#if defined(PLAYER) || defined(SERVER)
+
 #include "Hooks/CRoblox.hpp"
 
 #ifdef SERVER
@@ -7,12 +9,15 @@
 bool hasAuthenticationUrl = false;
 bool hasAuthenticationTicket = false;
 bool hasJoinScriptUrl = false;
-bool hasJobId = false;
 
 std::wstring authenticationUrl;
 std::wstring authenticationTicket;
 std::wstring joinScriptUrl;
+
+#ifdef SERVER
+bool hasJobId = false;
 std::wstring jobId;
+#endif
 
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
@@ -44,14 +49,14 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
         }
     }
 
-#ifdef PLAYER
+#ifdef SERVER
     if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl)
     {
         return FALSE;
     }
 #endif
 
-#ifdef SERVER
+#ifdef PLAYER
     if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl || !hasJobId)
     {
         ShellExecute(0, 0, L"https://kiseki.lol/games", 0, 0, SW_SHOW);
@@ -146,3 +151,5 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
 
     CRobloxCommandLineInfo__ParseParam(_this, pszParam, bFlag, bLast);
 }
+
+#endif
