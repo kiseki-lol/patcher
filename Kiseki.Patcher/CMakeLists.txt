@@ -1,10 +1,3 @@
-find_package(curl CONFIG REQUIRED)
-find_package(detours CONFIG REQUIRED)
-find_package(discord-rpc CONFIG REQUIRED)
-find_package(openssl CONFIG REQUIRED)
-find_package(pugixml CONFIG REQUIRED)
-find_package(rapidjson CONFIG REQUIRED)
-
 list(APPEND SOURCE
     Source/main.cpp
     Source/Patcher.cpp
@@ -57,8 +50,17 @@ endif()
 
 add_library(Kiseki.Patcher ${SOURCE} ${HEADER})
 
-target_include_directories(Kiseki.Patcher PRIVATE Header)
-target_link_libraries(Kiseki.Patcher PRIVATE)
+# Packages
+find_package(CURL CONFIG REQUIRED)
+find_package(OpenSSL REQUIRED)
+find_package(pugixml CONFIG REQUIRED)
+find_package(RapidJSON CONFIG REQUIRED)
+
+find_path(DETOURS_INCLUDE_DIRS "detours/detours.h")
+find_library(DETOURS_LIBRARY detours REQUIRED)
+
+target_include_directories(Kiseki.Patcher PRIVATE Header ${DETOURS_INCLUDE_DIRS})
+target_link_libraries(Kiseki.Patcher PRIVATE CURL::libcurl ${DETOURS_LIBRARY} OpenSSL::SSL OpenSSL::Crypto pugixml::shared pugixml::pugixml rapidjson)
 
 if(COMPILE_PLAYER)
     target_compile_definitions(Kiseki.Patcher PRIVATE PLAYER)
