@@ -46,14 +46,14 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
     }
 
 #ifdef SERVER
-    if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl)
+    if (!hasJobId)
     {
         return FALSE;
     }
 #endif
 
 #ifdef PLAYER
-    if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl || !hasJobId)
+    if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl)
     {
         ShellExecute(0, 0, L"https://kiseki.lol/games", 0, 0, SW_SHOW);
         return FALSE;
