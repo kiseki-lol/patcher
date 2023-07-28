@@ -20,6 +20,21 @@ CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobl
 
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 {
+#ifdef PLAYER
+    if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl)
+    {
+        ShellExecute(0, 0, L"https://kiseki.lol/games", 0, 0, SW_SHOW);
+        return FALSE;
+    }
+#endif
+
+#ifdef SERVER
+    if (!hasJobId)
+    {
+        return FALSE;
+    }
+#endif
+
     if (!CRobloxApp__InitInstance(_this))
     {
         return FALSE;
@@ -44,21 +59,6 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
             return FALSE;
         }
     }
-
-#ifdef SERVER
-    if (!hasJobId)
-    {
-        return FALSE;
-    }
-#endif
-
-#ifdef PLAYER
-    if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl)
-    {
-        ShellExecute(0, 0, L"https://kiseki.lol/games", 0, 0, SW_SHOW);
-        return FALSE;
-    }
-#endif
 
     return TRUE;
 }

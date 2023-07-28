@@ -1,5 +1,7 @@
 #ifdef SERVER
 
+#include <map>
+
 #include "Hooks/ServerReplicator.hpp"
 
 static std::map<ServerReplicator*, RakPeerInterface*> rakPeers;

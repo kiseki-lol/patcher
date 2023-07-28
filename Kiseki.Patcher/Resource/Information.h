@@ -9,4 +9,4 @@
 #define APP_NAME                     "Kiseki.Patcher"
 #define APP_DESCRIPTION              "Client Functionality Library"
 #define APP_ORGANIZATION             "Kiseki"
-#define APP_COPYRIGHT                "Copyright (c) Kiseki 2023"
+#define APP_COPYRIGHT                "Copyright (c) Kiseki 2022-2023"

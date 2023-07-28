@@ -144,8 +144,15 @@ std::string Helpers::getISOTimestamp()
 
 std::pair<bool, std::map<std::string, std::string>> Helpers::parseURL(const std::string url)
 {
+    // This is an ugly hack to url-encode the query before CURL actually parses the URL.
+    // We do this because CURL throws a fit if the query is not properly URL encoded; so URLs such as "/Error/Dmp.ashx?filename=C:/Users/..." won't parse correctly.
+    char* encodedQuery = curl_escape(url.substr(url.find("?") + 1).c_str(), url.substr(url.find("?") + 1).length());
+    std::string encodedUrl = url.substr(0, url.find("?")) + encodedQuery;
+    curl_free(encodedQuery);
+
     CURLU* curl = curl_url();
     CURLUcode result = curl_url_set(curl, CURLUPART_URL, url.c_str(), 0);
+    CURLUcode result = curl_url_set(curl, CURLUPART_URL, encodedUrl.c_str(), 0);
 
     std::map<std::string, std::string> map;
     bool success = false;
@@ -154,20 +161,22 @@ std::pair<bool, std::map<std::string, std::string>> Helpers::parseURL(const std:
     {
         success = true;
 
+        char* scheme;
         char* path;
         char* host;
         char* query;
 
+        curl_url_get(curl, CURLUPART_SCHEME, &scheme, 0);
         curl_url_get(curl, CURLUPART_PATH, &path, 0);
         curl_url_get(curl, CURLUPART_HOST, &host, 0);
         curl_url_get(curl, CURLUPART_QUERY, &query, 0);
         curl_url_cleanup(curl);
 
-        map = {
-            { "path", std::string(path) },
-            { "host", std::string(host) },
-            { "query", std::string(query) }
-        };
+        // ugly ternaries to prevent edge-case access violations
+        map["scheme"] = scheme ? std::string(scheme) : "";
+        map["path"] = path ? std::string(path) : "";
+        map["host"] = host ? std::string(host) : "";
+        map["query"] = query ? std::string(query) : "";
 
         curl_free(path);
         curl_free(host);

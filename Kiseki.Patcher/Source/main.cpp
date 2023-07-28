@@ -29,7 +29,7 @@ ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
 
 ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)
 
-#if defined(PLAYER) or defined(SERVER)
+#if defined(PLAYER) || defined(SERVER)
 ADD_PATCH(CRobloxApp__InitInstance, CRobloxApp__InitInstance_hook)
 ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam_hook)
 #endif
