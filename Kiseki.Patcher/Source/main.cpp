@@ -53,8 +53,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         if (patchesError != NO_ERROR)
         {
 #ifdef _DEBUG
-            std::string message = "Patches::Apply returned " + std::to_string(patchesError);
-            MessageBoxA(nullptr, message.c_str(), nullptr, MB_ICONERROR);
+            std::wstring message = "Patches::Apply returned " + std::to_string(patchesError);
+            MessageBoxW(nullptr, message, nullptr, MB_ICONERROR);
 #endif
 
             ExitProcess(EXIT_FAILURE);
@@ -64,8 +64,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
         if (curlError != CURLE_OK)
         {
 #ifdef _DEBUG
-            std::string message = "curl_global_init returned " + std::to_string(curlError);
-            MessageBoxA(nullptr, message.c_str(), nullptr, MB_ICONERROR);
+            std::wstring message = "curl_global_init returned " + std::to_string(curlError);
+            MessageBoxW(nullptr, message, nullptr, MB_ICONERROR);
 #endif
 
             ExitProcess(EXIT_FAILURE);

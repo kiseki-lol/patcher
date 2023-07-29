@@ -29,17 +29,17 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 #ifdef _DEBUG
     if (!hasAuthenticationUrl)
     {
-        MessageBoxA(nullptr, "Missing authentication URL", "Kiseki", MB_OK | MB_ICONERROR);
+        MessageBoxW(nullptr, L"Missing authentication URL", L"Kiseki", MB_OK | MB_ICONERROR);
     }
 
     if (!hasAuthenticationTicket)
     {
-        MessageBoxA(nullptr, "Missing authentication ticket", "Kiseki", MB_OK | MB_ICONERROR);
+        MessageBoxW(nullptr, L"Missing authentication ticket", L"Kiseki", MB_OK | MB_ICONERROR);
     }
 
     if (!hasJoinScriptUrl)
     {
-        MessageBoxA(nullptr, "Missing join script URL", "Kiseki", MB_OK | MB_ICONERROR);
+        MessageBoxW(nullptr, L"Missing join script URL", L"Kiseki", MB_OK | MB_ICONERROR);
     }
 #endif
 
@@ -54,7 +54,7 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
     if (!hasJobId)
     {
 #ifdef _DEBUG
-        MessageBoxA(nullptr, "Missing job ID", "Kiseki", MB_OK | MB_ICONERROR);
+        MessageBoxW(nullptr, L"Missing job ID", L"Kiseki", MB_OK | MB_ICONERROR);
 #endif
         return FALSE;
     }
