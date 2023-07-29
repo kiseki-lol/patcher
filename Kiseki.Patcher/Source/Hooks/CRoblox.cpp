@@ -20,10 +20,32 @@ CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobl
 
 BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 {
+    if (!CRobloxApp__InitInstance(_this))
+    {
+        return FALSE;
+    }
+
 #ifdef PLAYER
+#ifdef _DEBUG
+    if (!hasAuthenticationUrl)
+    {
+        MessageBoxA(nullptr, "Missing authentication URL", "Kiseki", MB_OK | MB_ICONERROR);
+    }
+
+    if (!hasAuthenticationTicket)
+    {
+        MessageBoxA(nullptr, "Missing authentication ticket", "Kiseki", MB_OK | MB_ICONERROR);
+    }
+
+    if (!hasJoinScriptUrl)
+    {
+        MessageBoxA(nullptr, "Missing join script URL", "Kiseki", MB_OK | MB_ICONERROR);
+    }
+#endif
+
     if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl)
     {
-        ShellExecute(0, 0, L"https://kiseki.lol/games", 0, 0, SW_SHOW);
+        ShellExecuteW(0, 0, L"https://kiseki.lol/games", 0, 0, SW_SHOW);
         return FALSE;
     }
 #endif
@@ -31,14 +53,12 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
 #ifdef SERVER
     if (!hasJobId)
     {
+#ifdef _DEBUG
+        MessageBoxA(nullptr, "Missing job ID", "Kiseki", MB_OK | MB_ICONERROR);
+#endif
         return FALSE;
     }
 #endif
-
-    if (!CRobloxApp__InitInstance(_this))
-    {
-        return FALSE;
-    }
 
     CApp* app = reinterpret_cast<CApp*>(CLASSLOCATION_CAPP);
 
