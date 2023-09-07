@@ -1,10 +1,6 @@
 #include "Helpers.hpp"
 
-#ifdef _DEBUG
-const std::vector<BYTE> Helpers::publicKey = Helpers::base64Decode(PUBLIC_KEY);
-#else
 const std::vector<BYTE> Helpers::publicKey { PUBLIC_KEY };
-#endif
 
 const std::vector<std::string> Helpers::allowedWildcardDomains { ALLOWED_WILDCARD_DOMAINS };
 const std::vector<std::string> Helpers::allowedDomains { ALLOWED_DOMAINS };
