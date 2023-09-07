@@ -1,30 +1,18 @@
-
 #include <windows.h>
 
 #include "Globals.hpp"
 #include "Patcher.hpp"
-
-#ifdef PLAYER
-#include "Discord.hpp"
-#endif
-
-#ifdef SERVER
-#include "Server.hpp"
-#endif
 
 #include "Hooks/Http.hpp"
 #include "Hooks/Crypt.hpp"
 #include "Hooks/CRoblox.hpp"
 
 #ifdef SERVER
-#include "Hooks/DataModel.hpp"
-#include "Hooks/StandardOut.hpp"
 #include "Hooks/ServerReplicator.hpp"
 #endif
 
 START_PATCH_LIST()
 
-ADD_PATCH(Http__httpGetPostWinInet, Http__httpGetPostWinInet_hook)
 ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
 
 ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)
@@ -35,10 +23,6 @@ ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam
 #endif
 
 #ifdef SERVER
-ADD_PATCH(DataModel__getJobId, DataModel__getJobId_hook)
-
-ADD_PATCH(StandardOut__print, StandardOut__print_hook)
-
 ADD_PATCH(ServerReplicator__sendTop, ServerReplicator__sendTop_hook)
 ADD_PATCH(ServerReplicator__processTicket, ServerReplicator__processTicket_hook)
 #endif
@@ -75,22 +59,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     if (ul_reason_for_call == DLL_PROCESS_DETACH)
     {
         curl_global_cleanup();
-
-#ifdef PLAYER
-        Discord::Cleanup();
-#endif
-
-#ifdef SERVER
-        if (Server::Handle)
-        {
-            Server::Cleanup();
-        }
-#endif
     }
 
     return TRUE;
 }
 
-#ifdef SERVER
 void __declspec(dllexport) entrypoint() {}
-#endif

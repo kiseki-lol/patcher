@@ -4,10 +4,6 @@
     "version": "1.0.0",
     "dependencies": [
         "curl",
-        "detours",
-        "discord-rpc",
-        "openssl",
-        "pugixml",
-        "rapidjson"
+        "detours"
     ]
 }

@@ -147,7 +147,6 @@ std::pair<bool, std::map<std::string, std::string>> Helpers::parseURL(const std:
     curl_free(encodedQuery);
 
     CURLU* curl = curl_url();
-    CURLUcode result = curl_url_set(curl, CURLUPART_URL, url.c_str(), 0);
     CURLUcode result = curl_url_set(curl, CURLUPART_URL, encodedUrl.c_str(), 0);
 
     std::map<std::string, std::string> map;

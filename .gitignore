@@ -1,8 +1,8 @@
-# GitHub official CMake gitignore template
-# https://github.com/github/gitignore/blob/main/CMake.gitignore
-
 build
 .vscode
+
+# GitHub official CMake gitignore template
+# https://github.com/github/gitignore/blob/main/CMake.gitignore
 
 CMakeLists.txt.user
 CMakeCache.txt

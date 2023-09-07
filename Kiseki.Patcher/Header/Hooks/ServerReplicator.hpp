@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <map>
+
 #include "Globals.hpp"
 
 struct Packet
