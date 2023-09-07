@@ -37,12 +37,13 @@ add_library(Kiseki.Patcher SHARED ${SOURCE} ${HEADER})
 
 # Packages
 find_package(CURL CONFIG REQUIRED)
+find_package(RapidJSON CONFIG REQUIRED)
 
 find_path(DETOURS_INCLUDE_DIRS "detours/detours.h")
 find_library(DETOURS_LIBRARY detours REQUIRED)
 
 target_include_directories(Kiseki.Patcher PRIVATE Header ${DETOURS_INCLUDE_DIRS})
-target_link_libraries(Kiseki.Patcher PRIVATE CURL::libcurl ${DETOURS_LIBRARY})
+target_link_libraries(Kiseki.Patcher PRIVATE CURL::libcurl ${DETOURS_LIBRARY} rapidjson)
 
 # Target-specific linking and compile options
 if(COMPILE_PLAYER)
