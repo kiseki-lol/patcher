@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <thread>
+
 #include <discord_rpc.h>
 #include <discord_register.h>
 #include <rapidjson/document.h>

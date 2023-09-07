@@ -211,3 +211,27 @@ std::pair<bool, std::string> Helpers::httpGet(const std::string url)
 
     return std::make_pair(true, data);
 }
+
+std::string Helpers::getBaseUrl()
+{
+    std::string path = Helpers::getModulePath();
+    path = path.substr(0, path.find_last_of("\\/"));
+
+    pugi::xml_document document;
+    pugi::xml_parse_result result = document.load_file((path + "\\AppSettings.xml").c_str());
+
+    if (!result)
+    {
+        return "";
+    }
+
+    pugi::xml_node settings = document.child("Settings");
+    pugi::xml_node baseUrl = settings.child("BaseUrl");
+
+    if (!baseUrl)
+    {
+        return "";
+    }
+
+    return baseUrl.child_value();
+}
