@@ -4,6 +4,7 @@
     "version": "1.0.0",
     "dependencies": [
         "curl",
-        "detours"
+        "detours",
+        "discord-rpc"
     ]
 }
