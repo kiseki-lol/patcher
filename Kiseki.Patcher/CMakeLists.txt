@@ -26,6 +26,12 @@ if(COMPILE_PLAYER OR COMPILE_SERVER)
     list(APPEND SOURCE Source/Hooks/CRoblox.cpp)
     list(APPEND HEADER Header/Hooks/CRoblox.hpp)
 
+    if(COMPILE_PLAYER)
+        # Discord Rich Presence integration
+        list(APPEND SOURCE Source/Discord.cpp)
+        list(APPEND HEADER Header/Discord.hpp)
+    endif()
+
     if(COMPILE_SERVER)
         # Hook ServerReplicator
         list(APPEND SOURCE Source/Hooks/ServerReplicator.cpp)
@@ -46,6 +52,11 @@ target_link_libraries(Kiseki.Patcher PRIVATE CURL::libcurl ${DETOURS_LIBRARY})
 
 # Target-specific linking and compile options
 if(COMPILE_PLAYER)
+    find_path(DISCORD_RPC_INCLUDE_DIRS "discord_rpc.h")
+    find_library(DISCORD_RPC_LIBRARY discord-rpc REQUIRED)
+
+    target_include_directories(Kiseki.Patcher PRIVATE ${DISCORD_RPC_INCLUDE_DIRS})
+    target_link_libraries(Kiseki.Patcher PRIVATE ${DISCORD_RPC_LIBRARY})
     target_compile_definitions(Kiseki.Patcher PRIVATE PLAYER)
 endif()
 
