@@ -25,7 +25,11 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 
             if (url["host"] == "roblox.com" || url["host"] == "www.roblox.com")
             {
-                if (url["path"] == "/asset" || url["path"] == "/asset/" || url["path"] == "/asset/default.ashx")
+                if (url["path"] == "/game/tools/insertasset.ashx")
+                {
+                    _changed.url = "https://sets.pizzaboxer.xyz/" + url["path"] + "?" + url["query"];
+                }
+                else if (url["path"] == "/asset" || url["path"] == "/asset/" || url["path"] == "/asset/default.ashx")
                 {
                     _changed.url = "https://assetdelivery.roblox.com/v1/asset/?" + url["query"];
                     _this = &_changed;

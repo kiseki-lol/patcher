@@ -1,7 +1,7 @@
 #pragma once
 
 #define ALLOWED_WILDCARD_DOMAINS "kiseki.loc", "kiseki.lol", "rbxcdn.com", "roblox.com"
-#define ALLOWED_DOMAINS
+#define ALLOWED_DOMAINS "sets.pizzaboxer.xyz"
 #define ALLOWED_SCHEMES "http", "https"
 #define ALLOWED_EMBEDDED_SCHEMES "javascript", "jscript", "res"
 
