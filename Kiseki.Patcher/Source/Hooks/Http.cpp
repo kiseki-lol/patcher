@@ -32,13 +32,12 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
                 }
                 else if (url["path"] == "/thumbs/asset.ashx" || url["path"] == "/thumbs/avatar.ashx")
                 {
-                    std::string api = "https://www.roblox.com/" + std::string(url["path"] == "/thumbs/asset.ashx" ? "asset" : "avatar") + "/request-thumbnail-fix";
+                    std::string api = "https://thumbnails.roblox.com";
+
+                    api += url["path"] == "/thumbs/asset.ashx" ? "/v1/assets" : "/v1/users/avatar";
 
                     std::map<std::string, std::string> source = Helpers::parseQueryString(url["query"]);
-                    std::map<std::string, std::string> fixed = {
-                        { url["path"] == "/thumbs/asset.ashx" ? "overrideModeration" : "dummy", "false" },
-                        { "thumbnailFormatId", "0" }
-                    };
+                    std::map<std::string, std::string> fixed = {};
 
                     for (auto& pair : source)
                     {
@@ -48,9 +47,22 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
                     if (fixed.find("id") != fixed.end())
                     {
                         auto handler = fixed.extract("id");
-                        handler.key() = url["path"] == "/thumbs/asset.ashx" ? "assetId" : "userId";
+                        handler.key() = url["path"] == "/thumbs/asset.ashx" ? "assetIds" : "userIds";
                         
                         fixed.insert(std::move(handler));
+                    }
+
+                    if (fixed.find("x") != fixed.end() && fixed.find("y") != fixed.end())
+                    {
+                        fixed["size"] = fixed["x"] + "x" + fixed["y"];
+
+                        fixed.erase("x");
+                        fixed.erase("y");
+                    }
+
+                    if (fixed.find("format") == fixed.end())
+                    {
+                        fixed["format"] = "Png";
                     }
 
                     api += Helpers::joinQueryString(fixed);
@@ -59,7 +71,7 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
                     std::pair<bool, std::string> response = Helpers::httpGet(api);
                     if (!response.first)
                     {
-                        throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x0");
+                        throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0");
                     }
 
                     std::string data = response.second;
@@ -69,18 +81,18 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
 
                     int error = 0;
 
-                    CHECK(document.HasParseError(), 0x01);
-                    CHECK(!document.HasMember("d"), 0x02);
-                    CHECK(!document["d"].IsObject(), 0x03);
-                    CHECK(!document["d"].HasMember("url"), 0x04);
-                    CHECK(!document["d"]["url"].IsString(), 0x05);
+                    CHECK(document.HasParseError(), 1);
+                    CHECK(!document.HasMember("data"), 2);
+                    CHECK(document["data"].Size() == 0, 3);
+                    CHECK(!document["data"][0].HasMember("imageUrl"), 4);
+                    CHECK(!document["data"][0]["imageUrl"].IsString(), 5);
 
                     if (error != 0)
                     {
-                        throw std::runtime_error("Unexpected error occurred when fetching Roblox API: 0x0" + std::to_string(error));
+                        throw std::runtime_error("Unexpected error occurred when fetching Roblox API: " + std::to_string(error));
                     }
 
-                    _changed.url = document["d"]["url"].GetString();
+                    _changed.url = document["data"][0]["imageUrl"].GetString();
                     _this = &_changed;
                 }
             }
