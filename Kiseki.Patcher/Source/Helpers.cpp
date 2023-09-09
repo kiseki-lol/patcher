@@ -189,7 +189,7 @@ std::pair<bool, std::string> Helpers::httpGet(const std::string url)
         return std::make_pair(false, "");
     }
 
-    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Helpers::write);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
 
