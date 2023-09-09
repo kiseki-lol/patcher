@@ -23,11 +23,21 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
         {
             url["path"] = Helpers::toLower(url["path"]);
 
-            if (url["host"] == "roblox.com" || url["host"] == "www.roblox.com")
+            // TODO: This is a weird hack.
+            if (url["host"] == "kiseki.lol" || url["host"] == "www.kiseki.lol" || url["host"] == "kiseki.loc" || url["host"] == "www.kiseki.loc")
+            {
+                if (url["path"] == "/asset" || url["path"] == "/asset/")
+                {
+                    std::string location = Helpers::getRedirectURL(url["scheme"] + "://" + url["host"] + "/asset?" + url["query"]);
+                    _this = &_changed;
+                }
+            }
+            else if (url["host"] == "roblox.com" || url["host"] == "www.roblox.com")
             {
                 if (url["path"] == "/game/tools/insertasset.ashx")
                 {
                     _changed.url = "https://sets.pizzaboxer.xyz/" + url["path"] + "?" + url["query"];
+                    _this = &_changed;
                 }
                 else if (url["path"] == "/asset" || url["path"] == "/asset/" || url["path"] == "/asset/default.ashx")
                 {

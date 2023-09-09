@@ -138,6 +138,51 @@ std::string Helpers::getISOTimestamp()
     return std::string(buffer);
 }
 
+std::string Helpers::getRedirectURL(const std::string url)
+{
+    CURL* curl = curl_easy_init();
+    CURLcode result;
+
+    if (!curl)
+    {
+        return url;
+    }
+
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 0);
+    curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
+    curl_easy_setopt(curl, CURLOPT_HEADER, 1);
+
+    result = curl_easy_perform(curl);
+
+    if (result != CURLE_OK)
+    {
+        return url;
+    }
+
+    long response = 0;
+    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response);
+
+    if (response != 301 && response != 302)
+    {
+        return url;
+    }
+
+    char* redirectURL;
+    curl_easy_getinfo(curl, CURLINFO_REDIRECT_URL, &redirectURL);
+
+    std::string location = redirectURL ? std::string(redirectURL) : "";
+
+    curl_easy_cleanup(curl);
+
+    if (location.empty())
+    {
+        return url;
+    }
+
+    return location;
+}
+
 std::pair<bool, std::map<std::string, std::string>> Helpers::parseURL(const std::string url)
 {
     CURLU* curl = curl_url();
