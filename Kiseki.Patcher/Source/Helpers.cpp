@@ -140,14 +140,8 @@ std::string Helpers::getISOTimestamp()
 
 std::pair<bool, std::map<std::string, std::string>> Helpers::parseURL(const std::string url)
 {
-    // This is an ugly hack to url-encode the query before CURL actually parses the URL.
-    // We do this because CURL throws a fit if the query is not properly URL encoded; so URLs such as "/Error/Dmp.ashx?filename=C:/Users/..." won't parse correctly.
-    char* encodedQuery = curl_escape(url.substr(url.find("?") + 1).c_str(), url.substr(url.find("?") + 1).length());
-    std::string encodedUrl = url.substr(0, url.find("?")) + encodedQuery;
-    curl_free(encodedQuery);
-
     CURLU* curl = curl_url();
-    CURLUcode result = curl_url_set(curl, CURLUPART_URL, encodedUrl.c_str(), 0);
+    CURLUcode result = curl_url_set(curl, CURLUPART_URL, url.c_str(), 0);
 
     std::map<std::string, std::string> map;
     bool success = false;
@@ -195,7 +189,7 @@ std::pair<bool, std::string> Helpers::httpGet(const std::string url)
         return std::make_pair(false, "");
     }
 
-    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Helpers::write);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
 
