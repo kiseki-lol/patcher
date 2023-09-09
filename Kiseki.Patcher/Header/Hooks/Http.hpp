@@ -5,10 +5,6 @@
 #include <curl/curl.h>
 #include <rapidjson/document.h>
 
-#ifdef SERVER
-#include "Hooks/StandardOut.hpp"
-#endif
-
 #include "Globals.hpp"
 #include "Helpers.hpp"
 
