@@ -12,13 +12,11 @@
 #include "Globals.hpp"
 #include "Helpers.hpp"
 
+// TODO: This breaks on Release
 struct Http
 {
-#if PADDING_STRUCT != 0
-    void* padding1[1];
-#endif
     std::string alternateUrl;
-    void* padding2[3 + PADDING_STRUCT];
+    void* padding;
     std::string url;
 };
 
