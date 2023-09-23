@@ -7,6 +7,6 @@
 #define VERSION_RESOURCE_STR          VERSION_FULL_STR
 
 #define APP_NAME                     "Kiseki.Patcher"
-#define APP_DESCRIPTION              "Client Functionality Library"
+#define APP_DESCRIPTION              "Client functionality library"
 #define APP_ORGANIZATION             "Kiseki"
-#define APP_COPYRIGHT                "Copyright (c) Kiseki 2022-2023"
+#define APP_COPYRIGHT                "Copyright (c) Kiseki 2023"
