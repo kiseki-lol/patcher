@@ -22,17 +22,8 @@ void __fastcall Http__httpGetPostWinInet_hook(Http* _this, void*, bool isPost, i
         if (!url["path"].empty() && !url["host"].empty() && !url["query"].empty())
         {
             url["path"] = Helpers::toLower(url["path"]);
-
-            // TODO: This is a weird hack.
-            if (url["host"] == "kiseki.lol" || url["host"] == "www.kiseki.lol" || url["host"] == "kiseki.loc" || url["host"] == "www.kiseki.loc")
-            {
-                if (url["path"] == "/asset" || url["path"] == "/asset/")
-                {
-                    std::string location = Helpers::getRedirectURL(url["scheme"] + "://" + url["host"] + "/asset?" + url["query"]);
-                    _this = &_changed;
-                }
-            }
-            else if (url["host"] == "roblox.com" || url["host"] == "www.roblox.com")
+            
+            if (url["host"] == "roblox.com" || url["host"] == "www.roblox.com")
             {
                 if (url["path"] == "/game/tools/insertasset.ashx")
                 {
