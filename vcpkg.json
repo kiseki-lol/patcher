@@ -5,6 +5,7 @@
     "dependencies": [
         "curl",
         "detours",
+        "discord-rpc",
         "rapidjson"
     ]
 }

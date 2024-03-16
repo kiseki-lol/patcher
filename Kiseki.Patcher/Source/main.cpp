@@ -3,6 +3,10 @@
 #include "Globals.hpp"
 #include "Patcher.hpp"
 
+#ifdef PLAYER
+#include "Discord.hpp"
+#endif
+
 #include "Hooks/Http.hpp"
 #include "Hooks/Crypt.hpp"
 #include "Hooks/CRoblox.hpp"
@@ -60,6 +64,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     if (ul_reason_for_call == DLL_PROCESS_DETACH)
     {
         curl_global_cleanup();
+
+#ifdef PLAYER
+        Discord::Cleanup();
+#endif
     }
 
     return TRUE;
