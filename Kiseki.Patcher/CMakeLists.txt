@@ -26,6 +26,12 @@ if(COMPILE_PLAYER OR COMPILE_SERVER)
     list(APPEND SOURCE Source/Hooks/CRoblox.cpp)
     list(APPEND HEADER Header/Hooks/CRoblox.hpp)
 
+    if(COMPILE_PLAYER)
+        # Discord Rich Presence integration
+        list(APPEND SOURCE Source/Discord.cpp)
+        list(APPEND HEADER Header/Discord.hpp)
+    endif()
+
     if(COMPILE_SERVER)
         # Hook DataModel, ServerReplicator, and StandardOut as well as include our custom server interface
         list(APPEND SOURCE
@@ -50,15 +56,21 @@ add_library(Kiseki.Patcher SHARED ${SOURCE} ${HEADER})
 
 # Packages
 find_package(CURL CONFIG REQUIRED)
+find_package(RapidJSON CONFIG REQUIRED)
 
 find_path(DETOURS_INCLUDE_DIRS "detours/detours.h")
 find_library(DETOURS_LIBRARY detours REQUIRED)
 
 target_include_directories(Kiseki.Patcher PRIVATE Header ${DETOURS_INCLUDE_DIRS})
-target_link_libraries(Kiseki.Patcher PRIVATE CURL::libcurl ${DETOURS_LIBRARY})
+target_link_libraries(Kiseki.Patcher PRIVATE CURL::libcurl ${DETOURS_LIBRARY} rapidjson)
 
 # Target-specific linking and compile options
 if(COMPILE_PLAYER)
+    find_path(DISCORD_RPC_INCLUDE_DIRS "discord_rpc.h")
+    find_library(DISCORD_RPC_LIBRARY discord-rpc REQUIRED)
+
+    target_include_directories(Kiseki.Patcher PRIVATE ${DISCORD_RPC_INCLUDE_DIRS})
+    target_link_libraries(Kiseki.Patcher PRIVATE ${DISCORD_RPC_LIBRARY})
     target_compile_definitions(Kiseki.Patcher PRIVATE PLAYER)
 endif()
 

@@ -7,6 +7,10 @@
 #include "Server.hpp"
 #endif
 
+#ifdef PLAYER
+#include "Discord.hpp"
+#endif
+
 #include "Hooks/Http.hpp"
 #include "Hooks/Crypt.hpp"
 #include "Hooks/CRoblox.hpp"
@@ -18,6 +22,7 @@
 
 START_PATCH_LIST()
 
+ADD_PATCH(Http__httpGetPostWinInet, Http__httpGetPostWinInet_hook)
 ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
 
 ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)
@@ -68,6 +73,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserv
     if (ul_reason_for_call == DLL_PROCESS_DETACH)
     {
         curl_global_cleanup();
+
+#ifdef PLAYER
+        Discord::Cleanup();
+#endif
     }
 
     return TRUE;

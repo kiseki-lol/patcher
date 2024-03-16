@@ -11,6 +11,10 @@
 #include "Server.hpp"
 #endif
 
+#ifdef PLAYER
+#include "Discord.hpp"
+#endif
+
 class CWorkspace;
 
 const auto CWorkspace__ExecUrlScript = (HRESULT(__stdcall*)(CWorkspace * workspace, LPCWSTR, VARIANTARG, VARIANTARG, VARIANTARG, VARIANTARG, LPVOID))ADDRESS_CWORKSPACE__EXECURLSCRIPT;

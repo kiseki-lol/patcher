@@ -94,6 +94,10 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         _this->m_bRunAutomated = TRUE;
 
         CCommandLineInfo__ParseLast(_this, bLast);
+
+#ifdef PLAYER
+        Discord::Initialize(Helpers::ws2s(joinScriptUrl));
+#endif
     }
 
     if (hasAuthenticationUrl && authenticationUrl.empty())

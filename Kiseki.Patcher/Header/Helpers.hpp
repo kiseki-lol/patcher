@@ -8,6 +8,7 @@
 #include <map>
 
 #include <curl/curl.h>
+#include <pugixml.hpp>
 
 #include "Globals.hpp"
 
@@ -29,5 +30,7 @@ public:
     static std::string getModulePath();
     static std::string getISOTimestamp();
     static std::pair<bool, std::map<std::string, std::string>> parseURL(const std::string url);
+    static std::string getRedirectURL(const std::string url);
     static std::pair<bool, std::string> httpGet(const std::string url);
+    static std::string getBaseUrl();
 };
