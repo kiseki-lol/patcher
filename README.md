@@ -1,7 +1,7 @@
 # Kiseki.Patcher
 
 > [!IMPORTANT]
-> This project is currently in the process of being migrated to [@lrre-foss/lure](https://github.com/lrre-foss/lure). This repository will no longer receive updates. Please send all pull requests and bug fixes to that repository instead.
+> This project has been merged into [@lrre-foss/lure](https://github.com/lrre-foss/lure). This repository will no longer receive updates and will remain archived. Please send all pull requests and bug fixes to that repository instead.
 
 Client functionality library
 
