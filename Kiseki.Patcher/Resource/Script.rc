@@ -24,7 +24,7 @@ BEGIN
             VALUE "CompanyName", APP_ORGANIZATION "\0"
             VALUE "FileDescription", APP_DESCRIPTION "\0"
             VALUE "FileVersion", VERSION_FULL_STR "\0"
-            VALUE "LegalCopyright", APP_COPYRIGHT "\0"
+            VALUE "LegalCopyright", APP_LICENSE "\0"
             VALUE "ProductName", APP_NAME "\0"
             VALUE "ProductVersion", VERSION_FULL_STR "\0"
         END

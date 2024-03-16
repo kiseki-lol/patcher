@@ -7,4 +7,6 @@ Client functionality library
 
 ## License
 
-Kiseki.Patcher is a fork of [@lrre-foss/lure](https://github.com/lrre-foss/lure), a project licensed under the [Apache License 2.0](https://github.com/lrre-foss/lure/blob/trunk/LICENSE); Kiseki.Patcher is thereby licensed under the Apache License 2.0 as well.
+Kiseki.Patcher is licensed under the [Apache License 2.0](https://github.com/kiseki-lol/patcher/blob/trunk/LICENSE). A copy of it has been included with Kiseki.Patcher.
+
+Kiseki.Patcher is a fork of [@lrre-foss/lure](https://github.com/lrre-foss/lure), a project licensed also under the Apache License 2.0.

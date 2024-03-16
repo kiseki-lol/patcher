@@ -9,4 +9,4 @@
 #define APP_NAME                     "Kiseki.Patcher"
 #define APP_DESCRIPTION              "Client functionality library"
 #define APP_ORGANIZATION             "Kiseki"
-#define APP_COPYRIGHT                "Copyright (c) Kiseki 2023"
+#define APP_LICENSE                  "This program is licensed under the Apache License 2.0."
