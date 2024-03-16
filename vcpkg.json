@@ -6,7 +6,6 @@
         "curl",
         "detours",
         "discord-rpc",
-        "pugixml",
         "rapidjson"
     ]
 }

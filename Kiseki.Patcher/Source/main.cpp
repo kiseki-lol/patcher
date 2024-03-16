@@ -17,6 +17,7 @@
 
 START_PATCH_LIST()
 
+ADD_PATCH(Http__httpGetPostWinInet, Http__httpGetPostWinInet_hook)
 ADD_PATCH(Http__trustCheck, Http__trustCheck_hook)
 
 ADD_PATCH(Crypt__verifySignatureBase64, Crypt__verifySignatureBase64_hook)

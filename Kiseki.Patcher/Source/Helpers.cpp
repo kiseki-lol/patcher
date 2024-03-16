@@ -138,16 +138,55 @@ std::string Helpers::getISOTimestamp()
     return std::string(buffer);
 }
 
+std::string Helpers::getRedirectURL(const std::string url)
+{
+    CURL* curl = curl_easy_init();
+    CURLcode result;
+
+    if (!curl)
+    {
+        return url;
+    }
+
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
+    curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 0);
+    curl_easy_setopt(curl, CURLOPT_NOBODY, 1);
+    curl_easy_setopt(curl, CURLOPT_HEADER, 1);
+
+    result = curl_easy_perform(curl);
+
+    if (result != CURLE_OK)
+    {
+        return url;
+    }
+
+    long response = 0;
+    curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response);
+
+    if (response != 301 && response != 302)
+    {
+        return url;
+    }
+
+    char* redirectURL;
+    curl_easy_getinfo(curl, CURLINFO_REDIRECT_URL, &redirectURL);
+
+    std::string location = redirectURL ? std::string(redirectURL) : "";
+
+    curl_easy_cleanup(curl);
+
+    if (location.empty())
+    {
+        return url;
+    }
+
+    return location;
+}
+
 std::pair<bool, std::map<std::string, std::string>> Helpers::parseURL(const std::string url)
 {
-    // This is an ugly hack to url-encode the query before CURL actually parses the URL.
-    // We do this because CURL throws a fit if the query is not properly URL encoded; so URLs such as "/Error/Dmp.ashx?filename=C:/Users/..." won't parse correctly.
-    char* encodedQuery = curl_escape(url.substr(url.find("?") + 1).c_str(), url.substr(url.find("?") + 1).length());
-    std::string encodedUrl = url.substr(0, url.find("?")) + encodedQuery;
-    curl_free(encodedQuery);
-
     CURLU* curl = curl_url();
-    CURLUcode result = curl_url_set(curl, CURLUPART_URL, encodedUrl.c_str(), 0);
+    CURLUcode result = curl_url_set(curl, CURLUPART_URL, url.c_str(), 0);
 
     std::map<std::string, std::string> map;
     bool success = false;
@@ -195,7 +234,7 @@ std::pair<bool, std::string> Helpers::httpGet(const std::string url)
         return std::make_pair(false, "");
     }
 
-    curl_easy_setopt(curl, CURLOPT_URL, url);
+    curl_easy_setopt(curl, CURLOPT_URL, url.c_str());
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, Helpers::write);
     curl_easy_setopt(curl, CURLOPT_WRITEDATA, &data);
 
