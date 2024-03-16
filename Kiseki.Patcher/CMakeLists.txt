@@ -33,9 +33,22 @@ if(COMPILE_PLAYER OR COMPILE_SERVER)
     endif()
 
     if(COMPILE_SERVER)
-        # Hook ServerReplicator
-        list(APPEND SOURCE Source/Hooks/ServerReplicator.cpp)
-        list(APPEND HEADER Header/Hooks/ServerReplicator.hpp)
+        # Hook DataModel, ServerReplicator, and StandardOut as well as include our custom server interface
+        list(APPEND SOURCE
+            Source/Server.cpp
+
+            Source/Hooks/DataModel.cpp
+            Source/Hooks/ServerReplicator.cpp
+            Source/Hooks/StandardOut.cpp
+        )
+
+        list(APPEND HEADER
+            Header/Server.hpp
+
+            Header/Hooks/DataModel.hpp
+            Header/Hooks/ServerReplicator.hpp
+            Header/Hooks/StandardOut.hpp
+        )
     endif()
 endif()
 

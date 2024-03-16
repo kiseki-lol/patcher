@@ -10,6 +10,11 @@ std::wstring authenticationUrl;
 std::wstring authenticationTicket;
 std::wstring joinScriptUrl;
 
+#ifdef SERVER
+bool hasJobId = false;
+std::wstring jobId;
+#endif
+
 CRobloxApp__InitInstance_t CRobloxApp__InitInstance = (CRobloxApp__InitInstance_t)ADDRESS_CROBLOXAPP__INITINSTANCE;
 CRobloxCommandLineInfo__ParseParam_t CRobloxCommandLineInfo__ParseParam = (CRobloxCommandLineInfo__ParseParam_t)ADDRESS_CROBLOXCOMMANDLINEINFO__PARSEPARAM;
 
@@ -41,6 +46,16 @@ BOOL __fastcall CRobloxApp__InitInstance_hook(CRobloxApp* _this)
     if (!hasAuthenticationUrl || !hasAuthenticationTicket || !hasJoinScriptUrl)
     {
         ShellExecute(0, 0, "https://kiseki.lol/games", 0, 0, SW_SHOW);
+        return FALSE;
+    }
+#endif
+
+#ifdef SERVER
+    if (!hasJobId)
+    {
+#ifdef _DEBUG
+        MessageBoxW(nullptr, L"Missing job ID", L"Kiseki", MB_OK | MB_ICONERROR);
+#endif
         return FALSE;
     }
 #endif
@@ -104,6 +119,18 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
+
+#ifdef SERVER
+    if (hasJobId && jobId.empty())
+    {
+        int size = MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), nullptr, 0);
+        jobId.resize(size);
+        MultiByteToWideChar(CP_ACP, 0, pszParam, strlen(pszParam), &jobId[0], size);
+
+        CCommandLineInfo__ParseLast(_this, bLast);
+        return;
+    }
+#endif
     
     if (bFlag && _stricmp(pszParam, "a") == 0)
     {
@@ -125,6 +152,18 @@ void __fastcall CRobloxCommandLineInfo__ParseParam_hook(CRobloxCommandLineInfo* 
         CCommandLineInfo__ParseLast(_this, bLast);
         return;
     }
+
+#ifdef SERVER
+    if (bFlag && _stricmp(pszParam, "jobId") == 0)
+    {
+        hasJobId = true;
+        CCommandLineInfo__ParseLast(_this, bLast);
+
+        Server::Initialize(jobId);
+
+        return;
+    }
+#endif
 
     CRobloxCommandLineInfo__ParseParam(_this, pszParam, bFlag, bLast);
 }

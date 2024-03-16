@@ -3,6 +3,10 @@
 #include "Globals.hpp"
 #include "Patcher.hpp"
 
+#ifdef SERVER
+#include "Server.hpp"
+#endif
+
 #ifdef PLAYER
 #include "Discord.hpp"
 #endif
@@ -12,6 +16,7 @@
 #include "Hooks/CRoblox.hpp"
 
 #ifdef SERVER
+#include "Hooks/DataModel.hpp"
 #include "Hooks/ServerReplicator.hpp"
 #endif
 
@@ -28,6 +33,10 @@ ADD_PATCH(CRobloxCommandLineInfo__ParseParam, CRobloxCommandLineInfo__ParseParam
 #endif
 
 #ifdef SERVER
+ADD_PATCH(DataModel__getJobId, DataModel__getJobId_hook)
+
+ADD_PATCH(StandardOut__print, StandardOut__print_hook)
+
 ADD_PATCH(ServerReplicator__sendTop, ServerReplicator__sendTop_hook)
 ADD_PATCH(ServerReplicator__processTicket, ServerReplicator__processTicket_hook)
 #endif
